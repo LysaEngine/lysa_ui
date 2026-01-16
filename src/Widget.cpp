@@ -1,0 +1,706 @@
+/*
+ * Copyright (c) 2024-present Henri Michelon
+ * 
+ * This software is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+*/
+module lysa.ui.widget;
+
+import lysa.log;
+import lysa.rect;
+import lysa.renderers.vector_2d;
+import lysa.resources.font;
+import lysa.ui.event;
+import lysa.ui.uiresource;
+import lysa.ui.style;
+import lysa.ui.window;
+
+namespace lysa::ui {
+
+    Widget::Widget(Context& ctx, const Type T) : ctx(ctx), type{T} {}
+
+    void Widget::_draw(Vector2DRenderer &R) const {
+        if (!isVisible()) {
+            return;
+        }
+        const auto *s = static_cast<Style *>(style);
+        s->draw(*this, *resource, R, true);
+        for (auto &child : children) {
+            child->_draw(R);
+        }
+        s->draw(*this, *resource, R, false);
+    }
+
+    bool Widget::isVisible() const {
+        auto p = this;
+        do {
+            if (!p->visible) {
+                return false;
+            }
+        } while ((p = p->parent) != nullptr);
+        return (window && static_cast<Window *>(window)->isVisible());
+    }
+
+    void Widget::show(const bool S) {
+        if (visible == S)
+            return;
+        visible = S;
+        if (visible) {
+            eventShow();
+        } else {
+            eventHide();
+        }
+    }
+
+    void Widget::enable(const bool isEnabled) {
+        if (enabled == isEnabled)
+            return;
+        enabled = isEnabled;
+        if (enabled) {
+            eventEnable();
+        } else {
+            eventDisable();
+        }
+    }
+
+    void Widget::setPos(const float x, const float y) {
+        if ((x == rect.x) && (y == rect.y)) { return; }
+        eventMove(x, y);
+    }
+
+    void Widget::setSize(const float width, const float height) {
+        if (parent) { parent->refresh(); }
+        defaultRect.width  = width;
+        defaultRect.height = height;
+        rect.width  = width;
+        rect.height = height;
+        eventResize();
+    }
+
+    void Widget::_setSize(const float width, const float height) {
+        if (parent) {
+            parent->refresh();
+        }
+        if ((width != 0) && (height != 0) && (rect.width == 0) && (rect.height == 0)) {
+            defaultRect        = rect;
+            defaultRect.width  = width;
+            defaultRect.height = height;
+        }
+        rect.width  = width;
+        rect.height = height;
+        eventResize();
+    }
+
+    void Widget::setResource(std::shared_ptr<UIResource> R) {
+        resource = std::move(R);
+        refresh();
+    }
+
+    std::shared_ptr<Widget> Widget::setNextFocus() {
+        if (focused) {
+            setFocus(false);
+        } else {
+            auto r = setFocus();
+            if (r) {
+                return r;
+            }
+        }
+
+        if (!parent)
+            return nullptr;
+        /* uint32_t idx;
+         Widget* p = parent;
+         Widget* s = this;
+
+         auto it = children.begin();
+         do {
+             list = p->children;
+             if (!((idx = list.IndexOf(*s)) == p->children.Count())) { break; }
+             s = p;
+             p = p->parent;
+             if (!p) return s->SetFocus();
+         } while (true);
+         return list[idx+1].SetNextFocus();*/
+        throw Exception("Not implemented");
+        return nullptr;
+    }
+
+    std::shared_ptr<Widget> Widget::setFocus(const bool F) {
+        if (!enabled) {
+            return nullptr;
+        }
+        if (F && (!allowFocus)) {
+            for (const auto &child : children) {
+                const auto w = child->setFocus(F);
+                if (w) {
+                    return w;
+                }
+            }
+            return nullptr;
+        }
+
+        if (focused != F) {
+            focused = F;
+            if (F) {
+                if (!freeze) {
+                    refresh();
+                }
+                window->setFocusedWidget(shared_from_this());
+                ctx.events.push({UIEvent::OnGotFocus, {}, id});
+            } else {
+                ctx.events.push({UIEvent::OnLostFocus, {}, id});
+                /*shared_ptr<Widget>p = parent;
+                while (p && (!p->DrawBackground())) p = p->parent;
+                if (p) { p->Refresh(rect); }*/
+            }
+        }
+        return shared_from_this();
+    }
+
+    void Widget::_allowFocus(const bool allow) {
+        allowFocus = allow;
+        for (const auto &child : children) {
+            child->_allowFocus(allow);
+        }
+    }
+
+    std::shared_ptr<Font> Widget::getFont() const {
+        assert([&]{ return window != nullptr;} , "Widget must be added to another widget before use");
+        return (font ? font : window->getFont());
+    }
+
+    void Widget::_init(Widget &child, const Alignment alignment, const std::string &res, const bool overlap) {
+        child.alignment = alignment;
+        child.overlap   = overlap;
+        if (!child.font) { child.font = font; }
+        if (child.fontScale <= 0.0f) { child.fontScale = fontScale; }
+        child.window = window;
+        child.style  = style;
+        child.parent = this;
+        static_cast<Style *>(style)->addResource(child, res);
+        child.eventCreate();
+        child.freeze = false;
+        if (static_cast<Window *>(window)->isVisible() && (resource != nullptr)) {
+            resizeChildren();
+        }
+    }
+
+    void Widget::remove(const std::shared_ptr<Widget>& W) {
+        const auto it = std::ranges::find(children, W);
+        if (it != children.end()) {
+            W->parent = nullptr;
+            // for (const auto& child : W->_getChildren()) {
+            //     W->remove(child);
+            // }
+            children.remove(W);
+            resizeChildren();
+        }
+        refresh();
+    }
+
+    void Widget::removeAll() {
+        for (const auto &child : children) {
+            child->removeAll();
+        }
+        children.clear();
+        refresh();
+    }
+
+    void Widget::eventCreate() {
+        ctx.events.push({UIEvent::OnCreate,  UIEvent{}, id});
+    }
+
+    void Widget::eventDestroy() {
+        for (const auto &child : children) {
+            child->eventDestroy();
+        }
+        ctx.events.push({UIEvent::OnDestroy,  UIEvent{}, id});
+        children.clear();
+    }
+
+    void Widget::eventShow() {
+        if (visible) {
+            ctx.events.push({UIEvent::OnShow,  UIEvent{}, id});
+            for (const auto &child : children) {
+                child->eventShow();
+            }
+            if (parent) {
+                refresh();
+            }
+        }
+    }
+
+    void Widget::eventHide() {
+        if (!visible) {
+            for (const auto &child : children) {
+                child->eventHide();
+            }
+            if (parent) {
+                parent->refresh();
+            }
+            ctx.events.push({UIEvent::OnHide,  UIEvent{}, id});
+        }
+    }
+
+    void Widget::eventEnable() {
+        ctx.events.push({UIEvent::OnEnable,  UIEvent{}, id});
+        for (const auto &child : children) {
+            child->enable();
+        }
+        refresh();
+    }
+
+    void Widget::eventDisable() {
+        for (const auto &child : children) {
+            child->enable(false);
+        }
+        ctx.events.push({UIEvent::OnDisable,  UIEvent{}, id});
+        refresh();
+    }
+
+    void Widget::eventMove(const float X, const float Y) {
+        const float diffX = rect.x - X;
+        const float diffY = rect.y - Y;
+        rect.x            = X;
+        rect.y            = Y;
+        for (const auto &w : children) {
+            w->setPos(w->rect.x - diffX, w->rect.y - diffY);
+        }
+        if (parent) {
+            parent->refresh();
+        }
+        refresh();
+    }
+
+    void Widget::eventResize() {
+        if (freeze) { return; }
+        if (parent) { parent->resizeChildren(); }
+        resizeChildren();
+        freeze = true;
+        refresh();
+        freeze = false;
+    }
+
+    void Widget::resizeChildren() {
+        if (!style || freeze) {
+            return;
+        }
+        freeze = true;
+        Rect r = getRect();
+        static_cast<Style *>(style)->resize(*this, r, *resource);
+
+        Rect clientRect = rect;
+        clientRect.x += hborder + padding;
+        if (clientRect.width > (2 * hborder + 2 * padding)) {
+            clientRect.width -= 2 * hborder + 2 * padding;
+        } else {
+            clientRect.width = 0;
+        }
+        clientRect.y += vborder + padding;
+        if (clientRect.height > (2 * vborder + 2 * padding)) {
+            clientRect.height -= 2 * vborder + 2 * padding;
+        } else {
+            clientRect.height = 0;
+        }
+        if (pushed && moveChildrenOnPush) {
+            clientRect.x += 1;
+            clientRect.y -= 1;
+        }
+        auto it = children.begin();
+        while ((clientRect.width > 0) && (clientRect.height > 0) && (it != children.end())) {
+            auto &child     = *it;
+            Rect  childRect = child->_getDefaultRect();
+            if (childRect.width > (clientRect.width)) {
+                childRect.width = clientRect.width;
+            }
+            if (childRect.height > (clientRect.height)) {
+                childRect.height = clientRect.height;
+            }
+            switch (child->alignment) {
+            case Alignment::FILL:
+                childRect = clientRect;
+                if (!child->overlap) {
+                    clientRect.width  = 0;
+                    clientRect.height = 0;
+                }
+                break;
+            case Alignment::CENTER:
+                childRect.x = clientRect.x + (clientRect.width - childRect.width) / 2;
+                childRect.y = clientRect.y + (clientRect.height - childRect.height) / 2;
+                if (!child->overlap) {
+                    clientRect.width  = 0;
+                    clientRect.height = 0;
+                }
+                break;
+            case Alignment::VCENTER:
+                childRect.x = clientRect.x + (clientRect.width - childRect.width) / 2;
+                childRect.y = clientRect.y;
+                if (!child->overlap) {
+                    childRect.height = clientRect.height;
+                    clientRect.width = 0;
+                }
+                break;
+            case Alignment::HCENTER:
+                childRect.y = clientRect.y + (clientRect.height - childRect.height) / 2;
+                childRect.x = clientRect.x;
+                if (!child->overlap) {
+                    childRect.width  = clientRect.width;
+                    clientRect.width = 0;
+                }
+                break;
+            case Alignment::BOTTOM:
+                childRect.x = clientRect.x;
+                childRect.y = clientRect.y;
+                if (!child->overlap) {
+                    clientRect.y += (childRect.height);
+                    childRect.width   = clientRect.width;
+                    clientRect.height = std::max(0.0f, (clientRect.height - (childRect.height + 2 * padding)));
+                }
+                break;
+            case Alignment::LEFT:
+                childRect.x = clientRect.x;
+                childRect.y = clientRect.y;
+                if (!child->overlap) {
+                    clientRect.x += childRect.width + 1;
+                    childRect.height = clientRect.height;
+                    clientRect.width = std::max(0.0f, (clientRect.width - (childRect.width + 2 * padding) - 1));
+                }
+                break;
+            case Alignment::TOP:
+                childRect.x = clientRect.x;
+                childRect.y = clientRect.y + (clientRect.height - childRect.height);
+                if (!child->overlap) {
+                    clientRect.height = std::max(0.0f, (clientRect.height - (childRect.height + 2 * padding) - 1));
+                    childRect.width   = clientRect.width;
+                }
+                break;
+            case Alignment::RIGHT:
+                childRect.x = clientRect.x + (clientRect.width - childRect.width);
+                childRect.y = clientRect.y;
+                if (!child->overlap) {
+                    childRect.height = clientRect.height;
+                    clientRect.width = std::max(0.0f, (clientRect.width - (childRect.width + 2 * padding) - 1));
+                }
+                break;
+            case Alignment::BOTTOMCENTER:
+                childRect.y = clientRect.y;
+                childRect.x = clientRect.x + (clientRect.width - childRect.width) / 2;
+                if (!child->overlap) {
+                    clientRect.y += (childRect.height) + padding;
+                    clientRect.height -= childRect.height + 2 * padding;
+                }
+                break;
+            case Alignment::TOPCENTER:
+                childRect.y = clientRect.y + (clientRect.height - childRect.height);
+                childRect.x = clientRect.x + (clientRect.width - childRect.width) / 2;
+                if (!child->overlap) {
+                    clientRect.height = std::max(0.0f, clientRect.height - (childRect.height + 2 * padding) - 1);
+                }
+                break;
+            case Alignment::LEFTCENTER:
+                childRect.x = clientRect.x;
+                childRect.y = clientRect.y + (clientRect.height - childRect.height) / 2;
+                if (!child->overlap) {
+                    clientRect.x += (childRect.width) + padding + 1;
+                    clientRect.width = std::max(0.0f, clientRect.width - (childRect.width + 2 * padding) - 1);
+                }
+                break;
+            case Alignment::RIGHTCENTER:
+                childRect.x = clientRect.x + (clientRect.width - childRect.width);
+                childRect.y = clientRect.y + (clientRect.height - childRect.height) / 2;
+                if (!child->overlap) {
+                    clientRect.width = std::max(0.0f, clientRect.width - (childRect.width + 2 * padding) - 1);
+                }
+                break;
+            case Alignment::BOTTOMLEFT:
+                childRect.x = clientRect.x;
+                childRect.y = clientRect.y;
+                if (!child->overlap) {
+                    clientRect.y += (childRect.height) + padding;
+                    clientRect.height -= childRect.height + 2 * padding;
+                }
+                break;
+            case Alignment::TOPLEFT:
+                childRect.x = clientRect.x;
+                childRect.y = clientRect.y + (clientRect.height - childRect.height);
+                if (!child->overlap) {
+                    clientRect.height = std::max(0.0f, (clientRect.height - (childRect.height + 2 * padding) - 1));
+                }
+                break;
+            case Alignment::TOPRIGHT:
+                childRect.x = clientRect.x + (clientRect.width - childRect.width);
+                childRect.y = clientRect.y + (clientRect.height - childRect.height);
+                if (!child->overlap) {
+                    clientRect.height = std::max(0.0f, (clientRect.height - (childRect.height + 2 * padding) - 1));
+                }
+                break;
+            case Alignment::BOTTOMRIGHT:
+                childRect.y = clientRect.y;
+                childRect.x = clientRect.x + (clientRect.width - childRect.width);
+                if (!child->overlap) {
+                    clientRect.height -= childRect.height + 2 * padding;
+                    clientRect.y += (childRect.height) + padding;
+                }
+                break;
+            case Alignment::LEFTBOTTOM:
+                childRect.x = clientRect.x;
+                childRect.y = clientRect.y;
+                if (!child->overlap) {
+                    clientRect.x += childRect.width + padding + 1;
+                    clientRect.width = std::max(0.0f, (clientRect.width - (childRect.width + 2 * padding) - 1));
+                }
+                break;
+            case Alignment::LEFTTOP:
+                childRect.x = clientRect.x;
+                childRect.y = clientRect.y + (clientRect.height - childRect.height);
+                if (!child->overlap) {
+                    clientRect.x += childRect.width + padding + 1;
+                    clientRect.width = std::max(0.0f, (clientRect.width - (childRect.width + 2 * padding) - 1));
+                }
+                break;
+            case Alignment::RIGHTTOP:
+                childRect.x = clientRect.x + (clientRect.width - childRect.width);
+                childRect.y = clientRect.y + (clientRect.height - childRect.height);
+                if (!child->overlap) {
+                    clientRect.width = std::max(0.0f, (clientRect.width - (childRect.width + 2 * padding) - 1));
+                }
+                break;
+            case Alignment::RIGHTBOTTOM:
+                childRect.y = clientRect.y;
+                childRect.x = clientRect.x + (clientRect.width - childRect.width);
+                if (!child->overlap) {
+                    clientRect.width = std::max(0.0f, (clientRect.width - (childRect.width + 2 * padding) - 1));
+                }
+                break;
+            case Alignment::CORNERBOTTOMLEFT:
+                childRect.x = clientRect.x;
+                childRect.y = clientRect.y;
+                if (!child->overlap) {
+                    clientRect.y += (childRect.height) + padding;
+                }
+                break;
+            case Alignment::CORNERTOPLEFT:
+                childRect.x = clientRect.x;
+                childRect.y = clientRect.y + (clientRect.height - childRect.height);
+                break;
+            case Alignment::CORNERTOPRIGHT:
+                childRect.x = clientRect.x + (clientRect.width - childRect.width);
+                childRect.y = clientRect.y + (clientRect.height - childRect.height);
+                break;
+            case Alignment::CORNERBOTTOMRIGHT:
+                childRect.y = clientRect.y;
+                childRect.x = clientRect.x + (clientRect.width - childRect.width);
+                if (!child->overlap) {
+                    clientRect.y += (childRect.height) + padding;
+                }
+                break;
+            default:
+                break;
+            }
+            child->setRect(childRect);
+            ++it;
+        }
+        freeze = false;
+    }
+
+    bool Widget::eventKeyDown(const Key key) {
+        if (!enabled) {
+            return false;
+        }
+        ctx.events.push({UIEvent::OnKeyDown, UIEventKeyb{.key = key}, id});
+        return false;
+    }
+
+    bool Widget::eventKeyUp(const Key key) {
+        if (!enabled) {
+            return false;
+        }
+        if (focused) {
+            ctx.events.push({UIEvent::OnKeyUp, UIEventKeyb{.key = key}, id});
+            return true;
+        }
+        return false;
+    }
+
+    bool Widget::eventMouseDown(const MouseButton button, const float x, const float y) {
+        if (!enabled) { return false;}
+        pushed = true;
+        if (redrawOnMouseEvent) { resizeChildren();   }
+        auto consumed = false;
+        Widget *wfocus = nullptr;
+        for (auto &w : children) {
+            if (w->getRect().contains(x, y)) {
+                consumed = true;
+                w->eventMouseDown(button, x, y);
+                wfocus = w.get();
+                if (w->redrawOnMouseEvent) {
+                    w->refresh();
+                }
+            }
+        }
+        if ((wfocus != nullptr) && (wfocus->allowFocus)) {
+            wfocus->setFocus();
+        }
+        if (redrawOnMouseEvent) {
+            refresh();
+        }
+        ctx.events.push({UIEvent::OnMouseDown, UIEventMouseButton{.button = button, .x = x, .y = y}, id});
+        return consumed;
+    }
+
+    bool Widget::eventMouseUp(const MouseButton button, const float x, const float y) {
+        if (!enabled) { return false; }
+        pushed = false;
+        if (redrawOnMouseEvent) { resizeChildren(); }
+        auto consumed = false;
+        for (const auto &w : children) {
+            if (w->getRect().contains(x, y) || w->isPushed()) {
+                consumed = true;
+                w->eventMouseUp(button, x, y);
+                if (w->redrawOnMouseEvent) {
+                    w->refresh();
+                }
+            }
+        }
+        if (redrawOnMouseEvent) { refresh();}
+        ctx.events.push(Event { UIEvent::OnMouseUp, UIEventMouseButton{
+            .button = button,
+            .x = x,
+            .y = y
+        }, id});
+        return consumed;
+    }
+
+    bool Widget::eventMouseMove(const uint32 B, const float x, const float y) {
+        if (!enabled) {
+            return false;
+        }
+        auto consumed = false;
+        auto p = rect.contains(x, y);
+        for (auto &w : children) {
+            p = w->getRect().contains(x, y);
+            if (w->redrawOnMouseMove && (w->pointed != p)) {
+                w->pointed = p;
+                w->refresh();
+            }
+            if (p) {
+                w->eventMouseMove(B, x, y);
+                consumed = true;
+            }
+        }
+        if (redrawOnMouseMove && (pointed != p)) {
+            refresh();
+        }
+        ctx.events.push({UIEvent::OnMouseMove, UIEventMouseMove{.buttonsState = B, .x = x, .y = y}, id});
+        return consumed;
+    }
+
+    void Widget::eventGotFocus() {
+        ctx.events.push({UIEvent::OnGotFocus,  UIEvent{}, id});
+    }
+
+    void Widget::eventLostFocus() {
+        ctx.events.push({UIEvent::OnLostFocus,  UIEvent{}, id});
+    }
+
+    void Widget::setTransparency(const float alpha) {
+        transparency = alpha;
+        refresh();
+    }
+
+    void Widget::setPadding(const float P) {
+        padding = P;
+        eventResize();
+    }
+
+    void Widget::setDrawBackground(const bool D) {
+        drawBackground = D;
+        refresh();
+    }
+
+    void Widget::setAlignment(const Alignment ALIGN) {
+        alignment = ALIGN;
+        eventResize();
+    }
+
+    void Widget::refresh() const {
+        if ((!freeze) && (window)) {
+            static_cast<Window *>(window)->refresh();
+        }
+    }
+
+    void Widget::setFont(const std::shared_ptr<Font> &font) {
+        this->font = font;
+        resizeChildren();
+        refresh();
+    }
+
+    float Widget::getFontScale() const {
+        return fontScale > 0.0f ? fontScale : window->getFontScale();
+    }
+
+    void Widget::setFontScale(const float fontScale) {
+        this->fontScale = fontScale;
+        resizeChildren();
+        refresh();
+    }
+
+    void Widget::setGroupIndex(const int32 index) { groupIndex = index; }
+
+    void Widget::setUserData(void *data) { userData = data; }
+
+    bool Widget::isDrawBackground() const { return drawBackground; }
+
+    Rect Widget::getChildrenRect() const { return childrenRect; }
+
+    bool Widget::isPointed() const { return pointed; }
+
+    Alignment Widget::getAlignment() const { return alignment; }
+
+    Widget::Type Widget::getType() const { return type; }
+
+    bool Widget::isEnabled() const { return enabled; }
+
+    bool Widget::isFocused() const { return focused; }
+
+    const Rect &Widget::getRect() const { return rect; }
+
+    void Widget::setRect(const float x, const float y, const float width, const float height) {
+        setPos(x, y);
+        _setSize(width, height);
+    }
+
+    void Widget::setRect(const Rect &rect) { setRect(rect.x, rect.y, rect.width, rect.height); }
+
+    bool Widget::isPushed() const { return pushed; }
+
+    bool Widget::isFreezed() const { return freeze; }
+
+    bool Widget::isRedrawOnMouseEvent() const { return redrawOnMouseEvent; }
+
+    float Widget::getPadding() const { return padding; }
+
+    float Widget::getVBorder() const { return vborder; }
+
+    float Widget::getHBorder() const { return hborder; }
+
+    void Widget::setVBorder(const float size) {
+        vborder = size;
+        if (!freeze) {
+            resizeChildren();
+        }
+        refresh();
+    }
+
+    void Widget::setHBorder(const float size) {
+        hborder = size;
+        if (!freeze) {
+            resizeChildren();
+        }
+        refresh();
+    }
+
+    uint32 Widget::getGroupIndex() const { return groupIndex; }
+
+    void *Widget::getUserData() const { return userData; }
+} // namespace lysa::ui
