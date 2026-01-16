@@ -17,12 +17,12 @@ import lysa.resources.font;
 import lysa.ui.alignment;
 import lysa.ui.uiresource;
 
-namespace lysa::ui {
+export namespace lysa::ui {
 
     /**
      * Base class for all UI widgets.
      */
-    export class Widget : public UniqueResource, public std::enable_shared_from_this<Widget>  {
+    class Widget : public UniqueResource, public std::enable_shared_from_this<Widget>  {
     public:
         /**
          * Widget type enumeration.
@@ -362,14 +362,6 @@ namespace lysa::ui {
          */
         void resizeChildren();
 
-        void _setRedrawOnMouseEvent(const bool r) { redrawOnMouseEvent = r; }
-
-        void _setMoveChildrenOnPush(const bool r) { moveChildrenOnPush = r; }
-
-        virtual std::list<std::shared_ptr<Widget>>& _getChildren() { return children; }
-
-        void _draw(Vector2DRenderer &) const;
-
         std::shared_ptr<Widget> setFocus(bool = true);
 
         virtual void eventCreate();
@@ -406,8 +398,23 @@ namespace lysa::ui {
 
         void _allowFocus(bool allow = true);
 
+        void _setRedrawOnMouseEvent(const bool r) { redrawOnMouseEvent = r; }
+
+        void _setMoveChildrenOnPush(const bool r) { moveChildrenOnPush = r; }
+
+        virtual std::list<std::shared_ptr<Widget>>& _getChildren() { return children; }
+
+        void _draw(Vector2DRenderer &) const;
+
+        void _setWindow(void* window) { this->window = window; }
+
+        void _setStyle(void* style) { this->style = style; }
+
+        void* _getStyle() const { return style; }
+
+        bool _isMouseMoveOnFocus() const { return mouseMoveOnFocus; }
+
     protected:
-        friend class Window;
         Context& ctx;
         const Type type;
         Rect rect;
@@ -428,7 +435,7 @@ namespace lysa::ui {
         Alignment alignment{Alignment::NONE};
         std::shared_ptr<UIResource> resource;
         std::list<std::shared_ptr<Widget>> children;
-        Window* window{nullptr};
+        void* window{nullptr};
         void* style{nullptr};
         bool mouseMoveOnFocus{false};
         float fontScale{0.0f};

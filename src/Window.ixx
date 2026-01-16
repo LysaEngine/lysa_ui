@@ -406,13 +406,17 @@ export namespace lysa::ui {
 
         void draw() const;
 
-        friend class WindowManager;
-
-        void attach(WindowManager* windowManager);
+        void attach(void* windowManager);
 
         void detach();
 
-        WindowManager& getWindowManager() const { return *windowManager; }
+        void* _getWindowManager() const { return windowManager; }
+
+        bool _isVisibilityChanged() const { return visibilityChanged; }
+
+        bool _isVisibilityChange() const { return visibilityChange; }
+
+        void _setVisibilityChanged(const bool value) { visibilityChanged = value; }
 
     private:
         Context& ctx;
@@ -427,7 +431,7 @@ export namespace lysa::ui {
         float transparency{1.0};
         float4 textColor{0.0f, 0.0f, 0.0f, 1.0f};
         uint32 resizeableBorders{RESIZEABLE_NONE};
-        WindowManager* windowManager{nullptr};
+        void* windowManager{nullptr};
         bool visibilityChanged{false};
         bool visible{true};
         bool visibilityChange{false};

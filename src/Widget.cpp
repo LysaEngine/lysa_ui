@@ -38,7 +38,7 @@ namespace lysa::ui {
                 return false;
             }
         } while ((p = p->parent) != nullptr);
-        return (window && static_cast<Window *>(window)->isVisible());
+        return (window && static_cast<lysa::ui::Window *>(window)->isVisible());
     }
 
     void Widget::show(const bool S) {
@@ -145,7 +145,7 @@ namespace lysa::ui {
                 if (!freeze) {
                     refresh();
                 }
-                window->setFocusedWidget(shared_from_this());
+                static_cast<Window*>(window)->setFocusedWidget(shared_from_this());
                 ctx.events.push({UIEvent::OnGotFocus, {}, id});
             } else {
                 ctx.events.push({UIEvent::OnLostFocus, {}, id});
@@ -166,7 +166,7 @@ namespace lysa::ui {
 
     std::shared_ptr<Font> Widget::getFont() const {
         assert([&]{ return window != nullptr;} , "Widget must be added to another widget before use");
-        return (font ? font : window->getFont());
+        return (font ? font : static_cast<Window*>(window)->getFont());
     }
 
     void Widget::_init(Widget &child, const Alignment alignment, const std::string &res, const bool overlap) {
@@ -636,7 +636,7 @@ namespace lysa::ui {
     }
 
     float Widget::getFontScale() const {
-        return fontScale > 0.0f ? fontScale : window->getFontScale();
+        return fontScale > 0.0f ? fontScale : static_cast<Window*>(window)->getFontScale();
     }
 
     void Widget::setFontScale(const float fontScale) {

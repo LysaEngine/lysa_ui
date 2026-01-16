@@ -84,7 +84,7 @@ namespace lysa::ui {
 
     void Text::eventCreate() {
         if (all(textColor == float4{0.0f})) {
-            textColor = window->getTextColor();
+            textColor = static_cast<Window*>(window)->getTextColor();
         }
         getSize(rect.width, rect.height);
         Widget::eventCreate();

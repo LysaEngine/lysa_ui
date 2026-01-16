@@ -25,7 +25,7 @@ namespace lysa::ui {
     void Image::_setSize(const float width, const float height) {
         if (autoSize) { return; }
         if (width == 0 && height == 0 && rect.width == 0 && rect.height == 0) {
-            const auto ratio = window->getWindowManager().getRenderer().getAspectRatio();
+            const auto ratio = static_cast<WindowManager*>(static_cast<Window*>(window)->_getWindowManager())->getRenderer().getAspectRatio();
             Widget::_setSize(std::round(width / ratio), height);
         }
         else {
@@ -35,7 +35,7 @@ namespace lysa::ui {
 
     void Image::autoResize() {
         if (window) {
-            const auto ratio = window->getWindowManager().getRenderer().getAspectRatio();
+            const auto ratio = static_cast<WindowManager*>(static_cast<Window*>(window)->_getWindowManager())->getRenderer().getAspectRatio();
             Widget::_setSize(std::round(image->getWidth() / ratio), static_cast<float>(image->getHeight()));
         }
     }

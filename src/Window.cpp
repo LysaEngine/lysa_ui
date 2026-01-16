@@ -24,12 +24,12 @@ namespace lysa::ui {
         rect{rect} {
     }
 
-    void Window::attach(WindowManager* windowManager) {
+    void Window::attach(void* windowManager) {
         assert([&]{ return this->windowManager == nullptr;} , "ui::Window must not be already attached to a manager");
         this->windowManager = windowManager;
-        this->fontScale = windowManager->getDefaultFontScale();
-        this->font = windowManager->getDefaultFont();
-        this->textColor = windowManager->getDefaultTextColor();
+        this->fontScale = static_cast<WindowManager*>(windowManager)->getDefaultFontScale();
+        this->font = static_cast<WindowManager*>(windowManager)->getDefaultFont();
+        this->textColor = static_cast<WindowManager*>(windowManager)->getDefaultTextColor();
     }
 
     void Window::detach() {
@@ -38,7 +38,7 @@ namespace lysa::ui {
 
     void Window::draw() const {
         if (!isVisible()) { return; }
-        Vector2DRenderer& renderer = windowManager->getRenderer();
+        Vector2DRenderer& renderer = static_cast<WindowManager*>(windowManager)->getRenderer();
         renderer.setTranslate({rect.x, rect.y});
         renderer.setTransparency(1.0f - transparency);
         widget->_draw(renderer);
@@ -79,10 +79,10 @@ namespace lysa::ui {
         }
         widget->setFreezed( true);
         widget->setPadding(padding);
-        widget->window = this;
-        widget->style = layout.get();
-        widget->setFont(static_cast<Style*>(widget->style)->getFont());
-        static_cast<Style*>(widget->style)->addResource(*widget, resources);
+        widget->_setWindow(this);
+        widget->_setStyle(layout.get());
+        widget->setFont(static_cast<Style*>(widget->_getStyle())->getFont());
+        static_cast<Style*>(widget->_getStyle())->addResource(*widget, resources);
         widget->eventCreate();
         widget->setPos(0, 0);
         widget->_setSize(getWidth(), getHeight());
@@ -209,7 +209,7 @@ namespace lysa::ui {
         if (!visible) { return false; }
         bool consumed = false;
         if ((focusedWidget != nullptr) &&
-            (focusedWidget->mouseMoveOnFocus)) {
+            (focusedWidget->_isMouseMoveOnFocus())) {
             consumed = focusedWidget->eventMouseMove(B, X, Y);
         } else if (widget) {
             consumed = widget->eventMouseMove(B, X, Y);
@@ -225,7 +225,7 @@ namespace lysa::ui {
     }
 
     void Window::refresh() const {
-        if (windowManager) { windowManager->refresh(); }
+        if (windowManager) { static_cast<WindowManager*>(windowManager)->refresh(); }
     }
 
     void Window::setFocusedWidget(const std::shared_ptr<Widget> &W) {

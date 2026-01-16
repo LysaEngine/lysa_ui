@@ -8,6 +8,7 @@ export module lysa.ui.tree_view;
 
 import lysa.context;
 import lysa.exception;
+import lysa.types;
 import lysa.ui.box;
 import lysa.ui.panel;
 import lysa.ui.scroll_bar;
