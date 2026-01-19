@@ -17,7 +17,7 @@ namespace lysa::ui {
         const float4& defaultTextColor):
         ctx{renderingWindow.getRenderTarget().getContext()},
         renderingWindow{renderingWindow},
-        renderer{ctx,renderingWindow.getRenderTarget().getRendererConfiguration()},
+        renderer{ctx,renderingWindow.getRenderTarget().getRendererConfiguration(), renderingWindow.getRenderTarget().getImageFormat()},
         fontScale{defaultFontScale},
         textColor{defaultTextColor} {
         defaultFont = std::make_shared<Font>(ctx, defaultFontURI);
