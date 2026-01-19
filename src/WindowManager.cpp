@@ -96,7 +96,12 @@ namespace lysa::ui {
     }
 
     bool WindowManager::onInput(const InputEvent &inputEvent) {
-        if (inputEvent.type == InputEventType::KEY) {
+        if (inputEvent.type == InputEventType::TEXT_INPUT) {
+            const auto &textInputEvent = std::get<InputEventTextInput>(inputEvent.data);
+            if ((focusedWindow != nullptr) && (focusedWindow->isVisible())) {
+                return focusedWindow->eventTextInput(textInputEvent.text);
+            }
+        } else if (inputEvent.type == InputEventType::KEY) {
             const auto &keyInputEvent = std::get<InputEventKey>(inputEvent.data);
             if ((focusedWindow != nullptr) && (focusedWindow->isVisible())) {
                 if (keyInputEvent.pressed) {

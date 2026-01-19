@@ -380,6 +380,8 @@ export namespace lysa::ui {
 
         virtual void eventResize();
 
+        virtual bool eventTextInput(const std::string& text);
+
         virtual bool eventKeyDown(Key key);
 
         virtual bool eventKeyUp(Key key);

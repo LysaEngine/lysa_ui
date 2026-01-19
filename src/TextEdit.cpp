@@ -47,7 +47,7 @@ namespace lysa::ui {
         textBox->setText(text.substr(startPos, nDispChar));
         box->refresh();
         refresh();
-        ctx.events.push({UIEvent::OnTextChange, UIEventTextChange{.text = text}, id});
+        ctx.events.push({UIEvent::OnTextChange, UIEventText{.text = text}, id});
     }
 
     void TextEdit::setSelStart(const uint32 start) {
@@ -66,6 +66,31 @@ namespace lysa::ui {
         startPos = 0;
         computeNDispChar();
         textBox->setText(text.substr(0, nDispChar));
+    }
+
+    bool TextEdit::eventTextInput(const std::string& newText) {
+        const auto consumed = Widget::eventTextInput(newText);
+        if (isReadOnly()) { return consumed; }
+
+        setFreezed(true);
+        setText(text.substr(0, selStart) + newText +
+                       text.substr(selStart, text.size() - selStart));
+        ctx.events.push({UIEvent::OnTextChange, UIEventText{.text = text}, id});
+        selStart++;
+        computeNDispChar();
+        if (selStart < startPos) {
+            startPos = selStart;
+        }
+        else if (((selStart + selLen) > (startPos + nDispChar)) &&
+            (nDispChar != text.length())) {
+            startPos = selStart - nDispChar;
+        }
+        computeNDispChar();
+        setFreezed(false);
+        textBox->setText(text.substr(startPos, nDispChar));
+        box->refresh();
+        refresh();
+        return true;
     }
 
     bool TextEdit::eventKeyDown(const Key key) {
@@ -96,26 +121,6 @@ namespace lysa::ui {
             if (selStart < text.length()) {
                 setText(text.substr(0, selStart) + text.substr(selStart + 1,
                                                                text.length() - selStart - 1));
-            }
-        } else if ((key != KEY_RIGHT_SHIFT) &&
-                (key != KEY_LEFT_SHIFT) &&
-                (key != KEY_RIGHT_CONTROL) &&
-                (key != KEY_LEFT_CONTROL) &&
-                (key != KEY_RIGHT_ALT) &&
-                (key != KEY_LEFT_ALT) &&
-                (key != KEY_ESCAPE) &&
-                (key != KEY_TAB) &&
-                (key != KEY_ENTER)) {
-            const auto c = Input::keyToChar(key);
-            if (!c.empty() || static_cast<int>(c[0]) < 12) {
-                setText(text.substr(0, selStart) + c +
-                        text.substr(selStart, text.size() - selStart));
-                ctx.events.push({UIEvent::OnTextChange, UIEventTextChange{.text = text}, id});
-                selStart++;
-            }
-            else {
-                setFreezed(false);
-                return true;
             }
         } else {
             setFreezed(false);

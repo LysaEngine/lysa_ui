@@ -140,6 +140,8 @@ namespace lysa::ui {
     }
 
     bool Window::eventKeyDown(const Key K) {
+        if (!visible) { return false; }
+
         bool consumed = false;
         if (focusedWidget) {
             focusedWidget->eventKeyDown(K);
@@ -157,6 +159,8 @@ namespace lysa::ui {
     }
 
     bool Window::eventKeyUp(const Key K) {
+        if (!visible) { return false; }
+
         bool consumed = false;
         if (focusedWidget) {
             focusedWidget->eventKeyUp(K);
@@ -168,6 +172,24 @@ namespace lysa::ui {
         if (!consumed) {
             auto event = UIEventKeyb{.key = K};
             ctx.events.push({UIEvent::OnKeyUp, event, id});
+        }
+        refresh();
+        return consumed;
+    }
+
+    bool Window::eventTextInput(const std::string& text) {
+        if (!visible) { return false; }
+        bool consumed = false;
+        if (focusedWidget) {
+            focusedWidget->eventTextInput(text);
+            consumed = true;
+        }
+        if (!consumed) {
+            consumed |= onTextInput(text);
+        }
+        if (!consumed) {
+            auto event = UIEventText{.text = text};
+            ctx.events.push({UIEvent::OnTextInput, event, id});
         }
         refresh();
         return consumed;

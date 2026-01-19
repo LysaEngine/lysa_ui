@@ -91,6 +91,8 @@ export namespace lysa::ui {
 
         bool eventKeyDown(Key key) override;
 
+        bool eventTextInput(const std::string& newText) override;
+
         // Compute the number of displayed characters
         void computeNDispChar();
     };
