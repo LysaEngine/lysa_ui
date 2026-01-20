@@ -20,17 +20,6 @@ if (NOT DEFINED LYSA_ENGINE_PROJECT_DIR)
 endif()
 
 #######################################################
-if(NOT DEFINED LYSA_ENGINE_AS_DEPENDENCY)
-    set(LYSA_ENGINE_AS_DEPENDENCY ON)
-    set(LUA_BINDING OFF)
-    set(DIRECTX_BACKEND ON)
-    set(PHYSIC_ENGINE_JOLT ON)
-    set(PHYSIC_ENGINE_PHYSX OFF)
-    set(FORWARD_RENDERER ON)
-    set(DEFERRED_RENDERER ON)
-endif ()
-
-#######################################################
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
