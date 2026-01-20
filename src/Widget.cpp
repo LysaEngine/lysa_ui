@@ -503,6 +503,14 @@ namespace lysa::ui {
         freeze = false;
     }
 
+    bool Widget::eventTextInput(const std::string& text) {
+        if (!enabled) {
+            return false;
+        }
+        ctx.events.push({UIEvent::OnTextInput, UIEventText{.text = text}, id});
+        return false;
+    }
+
     bool Widget::eventKeyDown(const Key key) {
         if (!enabled) {
             return false;

@@ -31,6 +31,7 @@ export namespace lysa::ui {
         static const std::string OnEnable;      //!< Called after state change to enabled (all widgets)
         static const std::string OnDisable;     //!< Called after state change to disabled (all widgets)
         static const std::string OnTextChange;  //!< Text content of the widget has changed
+        static const std::string OnTextInput;  //!< Text content from the user
         static const std::string OnClick;       //!< Called when the user clicks on the widget (buttons)
         static const std::string OnStateChange; //!< A CheckWidget state changed
         static const std::string OnValueChange; //!< Value of a ValueSelect widget changed
@@ -95,10 +96,10 @@ export namespace lysa::ui {
     };
 
     /**
-     * Parameters for UIEvent::OnTextChange.
+     * Parameters for UIEvent::OnTextChange & UIEvent::OnTextInput
      */
-    struct UIEventTextChange : UIEvent {
-        const std::string text; //!< New text content
+    struct UIEventText : UIEvent {
+        const std::string text;
     };
 
     const event_type UIEvent::OnCreate{"on_create"};
@@ -115,6 +116,7 @@ export namespace lysa::ui {
     const event_type UIEvent::OnEnable{"on_enable"};
     const event_type UIEvent::OnDisable{"on_disable"};
     const event_type UIEvent::OnTextChange{"on_text_change"};
+    const event_type UIEvent::OnTextInput{"on_text_input"};
     const event_type UIEvent::OnClick{"on_click"};
     const event_type UIEvent::OnStateChange{"on_state_change"};
     const event_type UIEvent::OnResize{"on_resize"};

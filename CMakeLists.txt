@@ -75,6 +75,9 @@ function(build_target TARGET_NAME SRCS MODULES)
             target_link_options(${TARGET_NAME} PRIVATE "-mwindows")
         endif()
     endif()
+    if (UNIX AND NOT APPLE)
+        target_compile_options(${LYSA_ENGINE_TARGET} PRIVATE -stdlib=libc++)
+    endif ()
 endfunction()
 
 #######################################################

@@ -371,8 +371,6 @@ _deps
 *.dxil
 # optional CMake variables
 .env.cmake
-# Blender backup files
-*.blend1
 # template files
 log.txt
 .vscode

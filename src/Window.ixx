@@ -276,6 +276,11 @@ export namespace lysa::ui {
         virtual bool onKeyDown(Key key) { return false; }
 
         /**
+           * Event called on user input
+           */
+        virtual bool onTextInput(const std::string& text) { return false; }
+
+        /**
          * Event called when a key was released.
          * @param key The key released.
          * @return True if event was handled.
@@ -393,6 +398,8 @@ export namespace lysa::ui {
         bool eventKeyDown(Key);
 
         bool eventKeyUp(Key);
+
+        bool eventTextInput(const std::string& text);
 
         bool eventMouseDown(MouseButton, float, float);
 
