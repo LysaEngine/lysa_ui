@@ -21,10 +21,10 @@ namespace lysa::ui {
         textColor{defaultTextColor} {
         defaultFont = std::make_shared<Font>(defaultFontURI);
         renderingWindow.getRenderTarget().addRenderer(renderer);
-        Context::ctx->events.subscribe(MainLoopEvent::PROCESS, [this](const Event&) {
+        ctx().events.subscribe(MainLoopEvent::PROCESS, [this](const Event&) {
             drawFrame();
         });
-        Context::ctx->events.subscribe(RenderingWindowEvent::INPUT, renderingWindow.id, [this](Event& evt) {
+        ctx().events.subscribe(RenderingWindowEvent::INPUT, renderingWindow.id, [this](Event& evt) {
             evt.consumed = onInput(std::any_cast<InputEvent>(evt.payload));
         });
     }

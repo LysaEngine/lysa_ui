@@ -27,10 +27,10 @@ namespace lysa::ui {
             mouseMoveOnFocus = true;
             liftArea = create<Box>(area, Alignment::FILL);
             liftCage = create<Box>(cage, Alignment::NONE);
-            Context::ctx->events.subscribe(UIEvent::OnMouseDown, liftArea->id, [this](auto evt) {
+            ctx().events.subscribe(UIEvent::OnMouseDown, liftArea->id, [this](auto evt) {
                 this->onLiftAreaDown(std::any_cast<UIEventMouseButton>(evt.payload));
             });
-            Context::ctx->events.subscribe(UIEvent::OnMouseDown, liftCage->id, [this](auto evt) {
+            ctx().events.subscribe(UIEvent::OnMouseDown, liftCage->id, [this](auto evt) {
                 this->onLiftCageDown(std::any_cast<UIEventMouseButton>(evt.payload));
             });
             liftCage->_setRedrawOnMouseEvent(true);

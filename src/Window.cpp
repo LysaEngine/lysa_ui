@@ -151,7 +151,7 @@ namespace lysa::ui {
         }
         if (!consumed) {
             auto event = UIEventKeyb{.key = K};
-            Context::ctx->events.push({UIEvent::OnKeyDown, event, id});
+            ctx().events.push({UIEvent::OnKeyDown, event, id});
         }
         refresh();
         return consumed;
@@ -170,7 +170,7 @@ namespace lysa::ui {
         }
         if (!consumed) {
             auto event = UIEventKeyb{.key = K};
-            Context::ctx->events.push({UIEvent::OnKeyUp, event, id});
+            ctx().events.push({UIEvent::OnKeyUp, event, id});
         }
         refresh();
         return consumed;
@@ -188,7 +188,7 @@ namespace lysa::ui {
         }
         if (!consumed) {
             auto event = UIEventText{.text = text};
-            Context::ctx->events.push({UIEvent::OnTextInput, event, id});
+            ctx().events.push({UIEvent::OnTextInput, event, id});
         }
         refresh();
         return consumed;
@@ -204,7 +204,7 @@ namespace lysa::ui {
             consumed |= onMouseDown(B, X, Y);
         }
         if (!consumed) {
-            Context::ctx->events.push({UIEvent::OnMouseDown, UIEventMouseButton{.button = B, .x = X, .y = Y}, id});
+            ctx().events.push({UIEvent::OnMouseDown, UIEventMouseButton{.button = B, .x = X, .y = Y}, id});
         }
         refresh();
         return consumed;
@@ -220,7 +220,7 @@ namespace lysa::ui {
             consumed |= onMouseUp(B, X, Y);
         }
         if (!consumed) {
-            Context::ctx->events.push({UIEvent::OnMouseUp, UIEventMouseButton{.button = B, .x = X, .y = Y}, id});
+            ctx().events.push({UIEvent::OnMouseUp, UIEventMouseButton{.button = B, .x = X, .y = Y}, id});
         }
         refresh();
         return consumed;
@@ -239,7 +239,7 @@ namespace lysa::ui {
             consumed |= onMouseMove(B, X, Y);
         }
         if (!consumed) {
-            Context::ctx->events.push({UIEvent::OnMouseMove, UIEventMouseMove{.buttonsState = B, .x = X, .y = Y}, id});
+            ctx().events.push({UIEvent::OnMouseMove, UIEventMouseMove{.buttonsState = B, .x = X, .y = Y}, id});
         }
         if (consumed) { refresh(); }
         return consumed;

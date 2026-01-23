@@ -47,7 +47,7 @@ namespace lysa::ui {
         textBox->setText(text.substr(startPos, nDispChar));
         box->refresh();
         refresh();
-        Context::ctx->events.push({UIEvent::OnTextChange, UIEventText{.text = text}, id});
+        ctx().events.push({UIEvent::OnTextChange, UIEventText{.text = text}, id});
     }
 
     void TextEdit::setSelStart(const uint32 start) {
@@ -75,7 +75,7 @@ namespace lysa::ui {
         setFreezed(true);
         setText(text.substr(0, selStart) + newText +
                        text.substr(selStart, text.size() - selStart));
-        Context::ctx->events.push({UIEvent::OnTextChange, UIEventText{.text = text}, id});
+        ctx().events.push({UIEvent::OnTextChange, UIEventText{.text = text}, id});
         selStart++;
         computeNDispChar();
         if (selStart < startPos) {

@@ -146,9 +146,9 @@ namespace lysa::ui {
                     refresh();
                 }
                 static_cast<Window*>(window)->setFocusedWidget(shared_from_this());
-                Context::ctx->events.push({UIEvent::OnGotFocus, {}, id});
+                ctx().events.push({UIEvent::OnGotFocus, {}, id});
             } else {
-                Context::ctx->events.push({UIEvent::OnLostFocus, {}, id});
+                ctx().events.push({UIEvent::OnLostFocus, {}, id});
                 /*shared_ptr<Widget>p = parent;
                 while (p && (!p->DrawBackground())) p = p->parent;
                 if (p) { p->Refresh(rect); }*/
@@ -207,20 +207,20 @@ namespace lysa::ui {
     }
 
     void Widget::eventCreate() {
-        Context::ctx->events.push({UIEvent::OnCreate,  UIEvent{}, id});
+        ctx().events.push({UIEvent::OnCreate,  UIEvent{}, id});
     }
 
     void Widget::eventDestroy() {
         for (const auto &child : children) {
             child->eventDestroy();
         }
-        Context::ctx->events.push({UIEvent::OnDestroy,  UIEvent{}, id});
+        ctx().events.push({UIEvent::OnDestroy,  UIEvent{}, id});
         children.clear();
     }
 
     void Widget::eventShow() {
         if (visible) {
-            Context::ctx->events.push({UIEvent::OnShow,  UIEvent{}, id});
+            ctx().events.push({UIEvent::OnShow,  UIEvent{}, id});
             for (const auto &child : children) {
                 child->eventShow();
             }
@@ -238,12 +238,12 @@ namespace lysa::ui {
             if (parent) {
                 parent->refresh();
             }
-            Context::ctx->events.push({UIEvent::OnHide,  UIEvent{}, id});
+            ctx().events.push({UIEvent::OnHide,  UIEvent{}, id});
         }
     }
 
     void Widget::eventEnable() {
-        Context::ctx->events.push({UIEvent::OnEnable,  UIEvent{}, id});
+        ctx().events.push({UIEvent::OnEnable,  UIEvent{}, id});
         for (const auto &child : children) {
             child->enable();
         }
@@ -254,7 +254,7 @@ namespace lysa::ui {
         for (const auto &child : children) {
             child->enable(false);
         }
-        Context::ctx->events.push({UIEvent::OnDisable,  UIEvent{}, id});
+        ctx().events.push({UIEvent::OnDisable,  UIEvent{}, id});
         refresh();
     }
 
@@ -507,7 +507,7 @@ namespace lysa::ui {
         if (!enabled) {
             return false;
         }
-        Context::ctx->events.push({UIEvent::OnTextInput, UIEventText{.text = text}, id});
+        ctx().events.push({UIEvent::OnTextInput, UIEventText{.text = text}, id});
         return false;
     }
 
@@ -515,7 +515,7 @@ namespace lysa::ui {
         if (!enabled) {
             return false;
         }
-        Context::ctx->events.push({UIEvent::OnKeyDown, UIEventKeyb{.key = key}, id});
+        ctx().events.push({UIEvent::OnKeyDown, UIEventKeyb{.key = key}, id});
         return false;
     }
 
@@ -524,7 +524,7 @@ namespace lysa::ui {
             return false;
         }
         if (focused) {
-            Context::ctx->events.push({UIEvent::OnKeyUp, UIEventKeyb{.key = key}, id});
+            ctx().events.push({UIEvent::OnKeyUp, UIEventKeyb{.key = key}, id});
             return true;
         }
         return false;
@@ -552,7 +552,7 @@ namespace lysa::ui {
         if (redrawOnMouseEvent) {
             refresh();
         }
-        Context::ctx->events.push({UIEvent::OnMouseDown, UIEventMouseButton{.button = button, .x = x, .y = y}, id});
+        ctx().events.push({UIEvent::OnMouseDown, UIEventMouseButton{.button = button, .x = x, .y = y}, id});
         return consumed;
     }
 
@@ -571,7 +571,7 @@ namespace lysa::ui {
             }
         }
         if (redrawOnMouseEvent) { refresh();}
-        Context::ctx->events.push(Event { UIEvent::OnMouseUp, UIEventMouseButton{
+        ctx().events.push(Event { UIEvent::OnMouseUp, UIEventMouseButton{
             .button = button,
             .x = x,
             .y = y
@@ -599,16 +599,16 @@ namespace lysa::ui {
         if (redrawOnMouseMove && (pointed != p)) {
             refresh();
         }
-        Context::ctx->events.push({UIEvent::OnMouseMove, UIEventMouseMove{.buttonsState = B, .x = x, .y = y}, id});
+        ctx().events.push({UIEvent::OnMouseMove, UIEventMouseMove{.buttonsState = B, .x = x, .y = y}, id});
         return consumed;
     }
 
     void Widget::eventGotFocus() {
-        Context::ctx->events.push({UIEvent::OnGotFocus,  UIEvent{}, id});
+        ctx().events.push({UIEvent::OnGotFocus,  UIEvent{}, id});
     }
 
     void Widget::eventLostFocus() {
-        Context::ctx->events.push({UIEvent::OnLostFocus,  UIEvent{}, id});
+        ctx().events.push({UIEvent::OnLostFocus,  UIEvent{}, id});
     }
 
     void Widget::setTransparency(const float alpha) {

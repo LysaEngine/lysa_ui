@@ -23,7 +23,7 @@ namespace lysa::ui {
                 resizeChildren();
             } else {
                 Box::eventMouseUp(button, x, y);
-                Context::ctx->events.push(Event{ UIEvent::OnClick, UIEventClick{}, id});
+                ctx().events.push(Event{ UIEvent::OnClick, UIEventClick{}, id});
                 return true;
             }
         }
