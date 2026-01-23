@@ -10,7 +10,7 @@ import lysa.ui.event;
 
 namespace lysa::ui {
 
-    Button::Button(Context& ctx): Box{ctx, BUTTON} {
+    Button::Button(): Box{BUTTON} {
         moveChildrenOnPush = true;
         redrawOnMouseEvent = true;
         allowFocus = true;
@@ -23,7 +23,7 @@ namespace lysa::ui {
                 resizeChildren();
             } else {
                 Box::eventMouseUp(button, x, y);
-                ctx.events.push(Event{ UIEvent::OnClick, UIEventClick{}, id});
+                Context::ctx->events.push(Event{ UIEvent::OnClick, UIEventClick{}, id});
                 return true;
             }
         }

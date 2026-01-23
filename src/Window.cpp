@@ -19,8 +19,7 @@ import lysa.ui.window_manager;
 
 namespace lysa::ui {
 
-    Window::Window(Context& ctx, const Rect& rect):
-        ctx(ctx),
+    Window::Window(const Rect& rect):
         rect{rect} {
     }
 
@@ -73,7 +72,7 @@ namespace lysa::ui {
         assert([&]{ return windowManager != nullptr;} , "ui::Window must be added to a Window manager before setting the main widget");
         if (layout == nullptr) { setStyle(nullptr); }
         if (widget == nullptr) {
-            widget = std::make_shared<Widget>(ctx);
+            widget = std::make_shared<Widget>();
         } else {
             widget = std::move(child);
         }
@@ -152,7 +151,7 @@ namespace lysa::ui {
         }
         if (!consumed) {
             auto event = UIEventKeyb{.key = K};
-            ctx.events.push({UIEvent::OnKeyDown, event, id});
+            Context::ctx->events.push({UIEvent::OnKeyDown, event, id});
         }
         refresh();
         return consumed;
@@ -171,7 +170,7 @@ namespace lysa::ui {
         }
         if (!consumed) {
             auto event = UIEventKeyb{.key = K};
-            ctx.events.push({UIEvent::OnKeyUp, event, id});
+            Context::ctx->events.push({UIEvent::OnKeyUp, event, id});
         }
         refresh();
         return consumed;
@@ -189,7 +188,7 @@ namespace lysa::ui {
         }
         if (!consumed) {
             auto event = UIEventText{.text = text};
-            ctx.events.push({UIEvent::OnTextInput, event, id});
+            Context::ctx->events.push({UIEvent::OnTextInput, event, id});
         }
         refresh();
         return consumed;
@@ -205,7 +204,7 @@ namespace lysa::ui {
             consumed |= onMouseDown(B, X, Y);
         }
         if (!consumed) {
-            ctx.events.push({UIEvent::OnMouseDown, UIEventMouseButton{.button = B, .x = X, .y = Y}, id});
+            Context::ctx->events.push({UIEvent::OnMouseDown, UIEventMouseButton{.button = B, .x = X, .y = Y}, id});
         }
         refresh();
         return consumed;
@@ -221,7 +220,7 @@ namespace lysa::ui {
             consumed |= onMouseUp(B, X, Y);
         }
         if (!consumed) {
-            ctx.events.push({UIEvent::OnMouseUp, UIEventMouseButton{.button = B, .x = X, .y = Y}, id});
+            Context::ctx->events.push({UIEvent::OnMouseUp, UIEventMouseButton{.button = B, .x = X, .y = Y}, id});
         }
         refresh();
         return consumed;
@@ -240,7 +239,7 @@ namespace lysa::ui {
             consumed |= onMouseMove(B, X, Y);
         }
         if (!consumed) {
-            ctx.events.push({UIEvent::OnMouseMove, UIEventMouseMove{.buttonsState = B, .x = X, .y = Y}, id});
+            Context::ctx->events.push({UIEvent::OnMouseMove, UIEventMouseMove{.buttonsState = B, .x = X, .y = Y}, id});
         }
         if (consumed) { refresh(); }
         return consumed;

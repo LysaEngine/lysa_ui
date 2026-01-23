@@ -48,7 +48,7 @@ const auto button = panel->create<lysa::ui::Button>("100,80", lysa::ui::Alignmen
 button->create<lysa::ui::Text>(lysa::ui::Alignment::CENTER, "Click Me!");
 
 // Subscribe to events
-ctx.events.subscribe(lysa::ui::UIEvent::OnClick, button->id, [](const lysa::Event&) {
+Context::ctx->events.subscribe(lysa::ui::UIEvent::OnClick, button->id, [](const lysa::Event&) {
     lysa::Log::info("Button clicked!");
 });
 

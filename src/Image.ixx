@@ -25,14 +25,14 @@ export namespace lysa::ui {
          * @param image The image to display.
          * @param autoSize Whether to automatically resize the widget to the image size.
          */
-        Image(Context& ctx, const lysa::Image& image, bool autoSize = true);
+        Image( const lysa::Image& image, bool autoSize = true);
 
         /**
          * Constructor without image.
          * @param ctx The engine context.
          * @param autoSize Whether to automatically resize the widget.
          */
-        Image(Context& ctx, bool autoSize = true);
+        Image( bool autoSize = true);
 
         /**
          * Sets whether to automatically resize the widget to the image size.

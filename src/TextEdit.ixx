@@ -27,7 +27,7 @@ export namespace lysa::ui {
          * @param ctx The engine context.
          * @param text Initial text.
          */
-        TextEdit(Context& ctx, const std::string& text = "");
+        TextEdit( const std::string& text = "");
 
         /**
          * Returns true if the widget is read-only.

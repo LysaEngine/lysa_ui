@@ -22,7 +22,7 @@ export namespace lysa::ui {
          * @param ctx The engine context.
          * @param title The title of the frame.
          */
-        Frame(Context& ctx, const std::string& title);
+        Frame( const std::string& title);
 
         /**
          * Returns the current title of the widget.

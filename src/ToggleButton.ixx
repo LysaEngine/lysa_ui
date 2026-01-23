@@ -17,11 +17,7 @@ export namespace lysa::ui {
      */
     class ToggleButton : public CheckWidget {
     public:
-        /**
-         * Constructor.
-         * @param ctx The engine context.
-         */
-        ToggleButton(Context& ctx);
+        ToggleButton();
 
     protected:
         bool eventMouseUp(MouseButton button, float x, float y) override;

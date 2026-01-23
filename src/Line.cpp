@@ -8,7 +8,7 @@ module lysa.ui.line;
 
 namespace lysa::ui {
 
-    Line::Line(Context& ctx, const LineStyle style) : Widget{ctx, LINE}, style{style} {
+    Line::Line(const LineStyle style) : Widget{LINE}, style{style} {
         allowChildren = false;
     }
 

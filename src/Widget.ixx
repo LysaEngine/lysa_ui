@@ -59,7 +59,7 @@ export namespace lysa::ui {
          * @param ctx The engine context.
          * @param type The type of the widget.
          */
-        Widget(Context& ctx, Type type = WIDGET);
+        Widget( Type type = WIDGET);
 
         virtual ~Widget() = default;
 
@@ -181,7 +181,7 @@ export namespace lysa::ui {
             const Alignment alignment,
             Args&&... args) {
             return add(
-                std::make_shared<T>(ctx, std::forward<Args>(args)...),
+                std::make_shared<T>(std::forward<Args>(args)...),
                 alignment,
                 resource);
         }
@@ -199,7 +199,7 @@ export namespace lysa::ui {
             const Alignment alignment,
             Args&&... args) {
             return add(
-                std::make_shared<T>(ctx, std::forward<Args>(args)...),
+                std::make_shared<T>(std::forward<Args>(args)...),
                 alignment);
         }
 
@@ -417,7 +417,6 @@ export namespace lysa::ui {
         bool _isMouseMoveOnFocus() const { return mouseMoveOnFocus; }
 
     protected:
-        Context& ctx;
         const Type type;
         Rect rect;
         Rect defaultRect;

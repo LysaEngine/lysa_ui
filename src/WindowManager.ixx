@@ -43,7 +43,7 @@ export namespace lysa::ui {
          * @return Shared pointer to the created window.
          */
         std::shared_ptr<Window> create(const Rect& rect) {
-            return add(std::make_shared<Window>(ctx, rect));
+            return add(std::make_shared<Window>(rect));
         }
 
         /**
@@ -114,7 +114,6 @@ export namespace lysa::ui {
 
     private:
         const float resizeDelta{5.0f};
-        Context& ctx;
         RenderingWindow& renderingWindow;
         Vector2DRenderer renderer;
         std::shared_ptr<Font> defaultFont;

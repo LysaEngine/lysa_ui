@@ -12,13 +12,12 @@ import lysa.ui.event;
 namespace lysa::ui {
 
     ValueSelect::ValueSelect(
-        Context& ctx,
         const Type type,
         const float min,
         const float max,
         const float value,
         const float step):
-        Widget{ctx, type},
+        Widget{type},
         min{min},
         max{max},
         value{value},
@@ -35,7 +34,7 @@ namespace lysa::ui {
         resizeChildren();
         eventRangeChange();
         refresh();
-        ctx.events.push({UIEvent::OnRangeChange, UIEventRange{.min = min, .max = max, .value = value}, id});
+        Context::ctx->events.push({UIEvent::OnRangeChange, UIEventRange{.min = min, .max = max, .value = value}, id});
     }
 
     void ValueSelect::setMax(const float max) {
@@ -47,7 +46,7 @@ namespace lysa::ui {
         }
         resizeChildren();
         eventRangeChange();
-        ctx.events.push({UIEvent::OnRangeChange, UIEventRange{.min = min, .max = max, .value = value}, id});
+        Context::ctx->events.push({UIEvent::OnRangeChange, UIEventRange{.min = min, .max = max, .value = value}, id});
     }
 
     void ValueSelect::setValue(const float value) {
@@ -65,7 +64,7 @@ namespace lysa::ui {
         if (parent) {
             parent->refresh();
         }
-        ctx.events.push({UIEvent::OnValueChange, UIEventValue{.value = this->value, .previous = prev}, id});
+        Context::ctx->events.push({UIEvent::OnValueChange, UIEventValue{.value = this->value, .previous = prev}, id});
     }
 
     void ValueSelect::setStep(const float step) {
@@ -82,11 +81,11 @@ namespace lysa::ui {
     }
 
     void ValueSelect::eventRangeChange() {
-        ctx.events.push({UIEvent::OnRangeChange, UIEventRange{.min = min, .max = max, .value = value}, id});
+        Context::ctx->events.push({UIEvent::OnRangeChange, UIEventRange{.min = min, .max = max, .value = value}, id});
     }
 
     void ValueSelect::eventValueChange(const float prev) {
-        ctx.events.push({UIEvent::OnValueChange, UIEventRange{.min = min, .max = max, .value = value}, id});
+        Context::ctx->events.push({UIEvent::OnValueChange, UIEventRange{.min = min, .max = max, .value = value}, id});
     }
 
 }

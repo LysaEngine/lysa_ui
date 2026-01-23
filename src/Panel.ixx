@@ -16,14 +16,10 @@ export namespace lysa::ui {
      */
     class Panel: public Widget {
     public:
-        /**
-         * Constructor.
-         * @param ctx The engine context.
-         */
-        Panel(Context& ctx): Widget(ctx, PANEL) {}
+        Panel(): Widget(PANEL) {}
 
     protected:
-        Panel(Context& ctx, const Type type): Widget(ctx, type) {}
+        Panel( const Type type): Widget(type) {}
     };
 
 }

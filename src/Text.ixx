@@ -23,7 +23,7 @@ export namespace lysa::ui {
          * @param ctx The engine context.
          * @param text Initial text to display.
          */
-        Text(Context& ctx, const std::string& text = "");
+        Text( const std::string& text = "");
 
         /**
          * Returns the displayed text.

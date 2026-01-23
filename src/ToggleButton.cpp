@@ -10,7 +10,7 @@ import lysa.ui.event;
 
 namespace lysa::ui {
 
-    ToggleButton::ToggleButton(Context& ctx): CheckWidget(ctx, TOGGLEBUTTON) {
+    ToggleButton::ToggleButton(): CheckWidget(TOGGLEBUTTON) {
         moveChildrenOnPush = true;
         redrawOnMouseEvent = true;
         allowFocus = true;
@@ -19,7 +19,7 @@ namespace lysa::ui {
     bool ToggleButton::eventMouseUp(const MouseButton button, const float x, const float y)  {
         CheckWidget::eventMouseUp(button, x, y);
         if (getRect().contains(x, y)) {
-            ctx.events.push({UIEvent::OnClick, UIEventClick{}, id});
+            Context::ctx->events.push({UIEvent::OnClick, UIEventClick{}, id});
             return true;
         }
         return false;

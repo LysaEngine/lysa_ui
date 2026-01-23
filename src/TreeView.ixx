@@ -34,19 +34,10 @@ export namespace lysa::ui {
             bool selected{false};                   //! Whether the item is selected
             bool expanded{false};                   //! Whether the item is expanded
 
-            /**
-             * Constructor.
-             * @param ctx The engine context.
-             * @param item The widget to display for this item.
-             */
-            Item(Context& ctx, std::shared_ptr<Widget> item) : Panel(ctx), item{item} {}
+            Item(const std::shared_ptr<Widget>& item) : item{item} {}
         };
 
-        /**
-         * Constructor.
-         * @param ctx The engine context.
-         */
-        TreeView(Context& ctx);
+        TreeView();
 
         /**
          * Sets the UI resources for the tree view.

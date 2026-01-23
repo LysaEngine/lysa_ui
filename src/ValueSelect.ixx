@@ -26,7 +26,7 @@ export namespace lysa::ui {
          * @param step Step increment.
          */
         ValueSelect(
-            Context& ctx,
+
             Type type,
             float min,
             float max,

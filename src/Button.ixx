@@ -17,11 +17,7 @@ export namespace lysa::ui {
      */
     class Button : public Box {
     public:
-        /**
-         * Constructor.
-         * @param ctx The engine context.
-         */
-        Button(Context& ctx);
+        Button();
 
     protected:
         bool eventMouseUp(MouseButton button, float x, float y) override;

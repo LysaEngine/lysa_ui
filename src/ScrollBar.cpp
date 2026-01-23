@@ -12,13 +12,12 @@ import lysa.ui.alignment;
 namespace lysa::ui {
 
     ScrollBar::ScrollBar(
-        Context& ctx,
         const Type type,
         const float min,
         const float max,
         const float value,
         const float step):
-        ValueSelect{ctx, SCROLLBAR, min, max, value, step},
+        ValueSelect{SCROLLBAR, min, max, value, step},
         type{type} {
         allowFocus = true;
     }
@@ -28,10 +27,10 @@ namespace lysa::ui {
             mouseMoveOnFocus = true;
             liftArea = create<Box>(area, Alignment::FILL);
             liftCage = create<Box>(cage, Alignment::NONE);
-            ctx.events.subscribe(UIEvent::OnMouseDown, liftArea->id, [this](auto evt) {
+            Context::ctx->events.subscribe(UIEvent::OnMouseDown, liftArea->id, [this](auto evt) {
                 this->onLiftAreaDown(std::any_cast<UIEventMouseButton>(evt.payload));
             });
-            ctx.events.subscribe(UIEvent::OnMouseDown, liftCage->id, [this](auto evt) {
+            Context::ctx->events.subscribe(UIEvent::OnMouseDown, liftCage->id, [this](auto evt) {
                 this->onLiftCageDown(std::any_cast<UIEventMouseButton>(evt.payload));
             });
             liftCage->_setRedrawOnMouseEvent(true);

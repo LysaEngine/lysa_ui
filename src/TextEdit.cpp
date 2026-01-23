@@ -13,8 +13,8 @@ import lysa.ui.alignment;
 
 namespace lysa::ui {
 
-    TextEdit::TextEdit(Context& ctx, const std::string& text):
-        Widget{ctx, TEXTEDIT},
+    TextEdit::TextEdit(const std::string& text):
+        Widget{TEXTEDIT},
         text(text)  {
         allowFocus = true;
     }
@@ -47,7 +47,7 @@ namespace lysa::ui {
         textBox->setText(text.substr(startPos, nDispChar));
         box->refresh();
         refresh();
-        ctx.events.push({UIEvent::OnTextChange, UIEventText{.text = text}, id});
+        Context::ctx->events.push({UIEvent::OnTextChange, UIEventText{.text = text}, id});
     }
 
     void TextEdit::setSelStart(const uint32 start) {
@@ -75,7 +75,7 @@ namespace lysa::ui {
         setFreezed(true);
         setText(text.substr(0, selStart) + newText +
                        text.substr(selStart, text.size() - selStart));
-        ctx.events.push({UIEvent::OnTextChange, UIEventText{.text = text}, id});
+        Context::ctx->events.push({UIEvent::OnTextChange, UIEventText{.text = text}, id});
         selStart++;
         computeNDispChar();
         if (selStart < startPos) {

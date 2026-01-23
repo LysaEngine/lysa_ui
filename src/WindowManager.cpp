@@ -15,17 +15,16 @@ namespace lysa::ui {
         const std::string& defaultFontURI,
         const float defaultFontScale,
         const float4& defaultTextColor):
-        ctx{renderingWindow.getRenderTarget().getContext()},
         renderingWindow{renderingWindow},
-        renderer{ctx,renderingWindow.getRenderTarget().getRendererConfiguration(), renderingWindow.getRenderTarget().getImageFormat()},
+        renderer{renderingWindow.getRenderTarget().getRendererConfiguration(), renderingWindow.getRenderTarget().getImageFormat()},
         fontScale{defaultFontScale},
         textColor{defaultTextColor} {
-        defaultFont = std::make_shared<Font>(ctx, defaultFontURI);
+        defaultFont = std::make_shared<Font>(defaultFontURI);
         renderingWindow.getRenderTarget().addRenderer(renderer);
-        ctx.events.subscribe(MainLoopEvent::PROCESS, [this](const Event&) {
+        Context::ctx->events.subscribe(MainLoopEvent::PROCESS, [this](const Event&) {
             drawFrame();
         });
-        ctx.events.subscribe(RenderingWindowEvent::INPUT, renderingWindow.id, [this](Event& evt) {
+        Context::ctx->events.subscribe(RenderingWindowEvent::INPUT, renderingWindow.id, [this](Event& evt) {
             evt.consumed = onInput(std::any_cast<InputEvent>(evt.payload));
         });
     }

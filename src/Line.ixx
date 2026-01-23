@@ -28,7 +28,7 @@ export namespace lysa::ui {
          * @param ctx The engine context.
          * @param style The line orientation.
          */
-        Line(Context& ctx, LineStyle style = HORIZ);
+        Line( LineStyle style = HORIZ);
 
         /**
          * Returns the current line style.
@@ -50,11 +50,7 @@ export namespace lysa::ui {
      */
     class HLine : public Line {
     public:
-        /**
-         * Constructor.
-         * @param ctx The engine context.
-         */
-        HLine(Context& ctx) : Line(ctx, HORIZ) {}
+        HLine() : Line(HORIZ) {}
     };
 
     /**
@@ -63,10 +59,6 @@ export namespace lysa::ui {
      */
     class VLine : public Line {
     public:
-        /**
-         * Constructor.
-         * @param ctx The engine context.
-         */
-        VLine(Context& ctx) : Line(ctx, VERT) {}
+        VLine() : Line(VERT) {}
     };
 }

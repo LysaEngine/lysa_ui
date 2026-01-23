@@ -42,7 +42,7 @@ export namespace lysa::ui {
          * @param step Step increment.
          */
         ScrollBar(
-            Context& ctx,
+
             Type type = HORIZONTAL,
             float min = 0,
             float max = 100,
@@ -91,14 +91,13 @@ export namespace lysa::ui {
     public:
         /**
          * Constructor.
-         * @param ctx The engine context.
          * @param min Minimum value.
          * @param max Maximum value.
          * @param value Initial value.
          * @param step Step increment.
          */
-        VScrollBar(Context& ctx, const float min = 0, const float max = 100, const float value = 0, const float step = 1):
-            ScrollBar(ctx, VERTICAL, min, max, value, step) {
+        VScrollBar(const float min = 0, const float max = 100, const float value = 0, const float step = 1):
+            ScrollBar(VERTICAL, min, max, value, step) {
         }
     };
 
@@ -110,14 +109,13 @@ export namespace lysa::ui {
     public:
         /**
          * Constructor.
-         * @param ctx The engine context.
          * @param min Minimum value.
          * @param max Maximum value.
          * @param value Initial value.
          * @param step Step increment.
          */
-        HScrollBar(Context& ctx, const float min = 0, const float max = 100, const float value = 0, const float step = 1):
-            ScrollBar(ctx, HORIZONTAL, min, max, value, step) {
+        HScrollBar(const float min = 0, const float max = 100, const float value = 0, const float step = 1):
+            ScrollBar(HORIZONTAL, min, max, value, step) {
         }
     };
 

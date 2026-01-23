@@ -39,10 +39,9 @@ export namespace lysa::ui {
 
         /**
          * Creates a virtual UI window with a given position & size.
-         * @param ctx The engine context.
          * @param rect The initial rectangle (position and size).
          */
-        Window(Context& ctx, const Rect& rect);
+        Window(const Rect& rect);
 
         /**
          * Sets the borders that can be used to resize the Window.
@@ -102,7 +101,7 @@ export namespace lysa::ui {
             const Alignment alignment,
             Args&&... args) {
             return add(
-                std::make_shared<T>(ctx, std::forward<Args>(args)...),
+                std::make_shared<T>(std::forward<Args>(args)...),
                 alignment,
                 resource);
         }
@@ -120,7 +119,7 @@ export namespace lysa::ui {
             const Alignment alignment,
             Args&&... args) {
             return add(
-                std::make_shared<T>(ctx, std::forward<Args>(args)...),
+                std::make_shared<T>(std::forward<Args>(args)...),
                 alignment);
         }
 
@@ -426,7 +425,6 @@ export namespace lysa::ui {
         void _setVisibilityChanged(const bool value) { visibilityChanged = value; }
 
     private:
-        Context& ctx;
         Rect rect;
         float minWidth{2.0f};
         float minHeight{2.0f};

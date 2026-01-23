@@ -16,14 +16,10 @@ export namespace lysa::ui {
      */
     class Box : public Panel {
     public:
-        /**
-         * Constructor.
-         * @param ctx The engine context.
-         */
-        Box(Context& ctx): Panel{ctx, BOX} {}
+        Box(): Panel{BOX} {}
 
     protected:
-        Box(Context& ctx, const Type type): Panel{ctx, type} {}
+        Box( const Type type): Panel{type} {}
     };
 
 }
