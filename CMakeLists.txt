@@ -57,10 +57,7 @@ function(build_target TARGET_NAME SRCS MODULES)
     )
     lysa_compile_options(${TARGET_NAME})
     add_dependencies(${TARGET_NAME} ${LYSA_ENGINE_TARGET})
-    target_link_libraries(${TARGET_NAME} ${LYSA_ENGINE_TARGET} std-cxx-modules)
-    if (UNIX AND NOT APPLE)
-        target_compile_options(${LYSA_ENGINE_TARGET} PRIVATE -stdlib=libc++)
-    endif ()
+    target_link_libraries(${TARGET_NAME} ${LYSA_ENGINE_TARGET})
 endfunction()
 
 #######################################################
