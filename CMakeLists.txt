@@ -22,17 +22,6 @@ if (NOT DEFINED LYSA_ENGINE_TARGET)
 endif ()
 
 #######################################################
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release)
-endif()
-if(WIN32)
-    add_compile_definitions(WIN32_LEAN_AND_MEAN UNICODE _UNICODE NOMINMAX)
-endif ()
-
-#######################################################
 if (NOT DEFINED LYSA_ENGINE_TARGET)
     set(LYSA_ENGINE_TARGET "lysa_engine")
     set(LUA_BINDING OFF)
@@ -43,22 +32,6 @@ endif ()
 
 #######################################################
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-
-#######################################################
-function(build_target TARGET_NAME SRCS MODULES)
-    message("Building target ${TARGET_NAME}")
-    add_library(${TARGET_NAME} ${SRCS})
-    target_sources(${TARGET_NAME}
-        PUBLIC
-        FILE_SET CXX_MODULES
-        FILES
-            ${COMMON_MODULES}
-            ${MODULES}
-    )
-    lysa_compile_options(${TARGET_NAME})
-    add_dependencies(${TARGET_NAME} ${LYSA_ENGINE_TARGET})
-    target_link_libraries(${TARGET_NAME} ${LYSA_ENGINE_TARGET})
-endfunction()
 
 #######################################################
 if(LUA_BINDING)
