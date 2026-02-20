@@ -21,11 +21,30 @@ offering a hybrid system with retained-mode components drawn using an immediate 
 
 ### Integration
 
-Add Lysa UI to your project using CMake. You'll need to set the `LYSA_ENGINE_PROJECT_DIR` and `VIREO_RHI_PROJECT_DIR` variables in your environment or a `.env.cmake` file.
+Add Lysa UI to your project using CMake. You'll need to set the`LYSA_UI_PROJECT_DIR`, `LYSA_ENGINE_PROJECT_DIR` and `VIREO_RHI_PROJECT_DIR` variables in your environment or a `.env.cmake` file.
 
 ```cmake
-add_subdirectory(path/to/lysa_ui)
-target_link_libraries(your_target PUBLIC lysa_ui)
+# .env.cmake
+set(VIREO_RHI_PROJECT_DIR "path/to/vireo_rhi")
+set(LYSA_ENGINE_PROJECT_DIR "path/to/lysa_engine")
+set(LYSA_UI_PROJECT_DIR "path/to/lysa_ui")
+```
+
+Then, add it via CMake:
+
+```cmake
+set(LUA_BINDING OFF)
+set(DIRECTX_BACKEND ON)
+set(FORWARD_RENDERER ON)
+set(DEFERRED_RENDERER ON)
+set(PHYSIC_ENGINE_JOLT ON)
+set(PHYSIC_ENGINE_PHYSX OFF)
+if(WIN32)
+  set(DIRECTX_BACKEND ON)
+endif ()
+add_subdirectory(${LYSA_ENGINE_PROJECT_DIR})
+add_subdirectory(${LYSA_UI_PROJECT_DIR})
+target_link_libraries(your_target PUBLIC lysa_engine lysa_ui)
 ```
 
 ## Basic Usage
@@ -53,13 +72,6 @@ ctx().events.subscribe(lysa::ui::UIEvent::OnClick, button->id, [](const lysa::Ev
 });
 
 ```
-
-## Alignment System
-
-Widgets can be aligned relative to their parent using the `lysa::ui::Alignment` enum:
-
-- `CENTER`, `TOPCENTER`, `BOTTOMLEFT`, etc.
-- `FILL`: Resizes the widget to fill the parent's content area.
 
 ## License
 
