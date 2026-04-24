@@ -20,7 +20,7 @@ namespace lysa::ui {
         fontScale{defaultFontScale},
         textColor{defaultTextColor} {
         defaultFont = std::make_shared<Font>(defaultFontURI);
-        renderingWindow.getRenderTarget().addRenderer(renderer);
+        renderingWindow.getRenderTarget().addUIRenderer(renderer);
         ctx().events.subscribe(MainLoopEvent::PROCESS, [this](const Event&) {
             drawFrame();
         });
