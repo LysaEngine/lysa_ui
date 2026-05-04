@@ -48,8 +48,7 @@ namespace lysa::ui {
         removedWindows.clear();
         for (auto& window: windows) {
             if (window->_isVisibilityChanged()) {
-                window->_setVisibilityChanged(false);
-                window->setVisible(window->_isVisibilityChange());
+                window->_commitVisibility();
                 needRedraw = true;
                 if (window->isVisible()) {
                     if (focusedWindow) { focusedWindow->eventLostFocus(); }

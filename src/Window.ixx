@@ -420,9 +420,10 @@ export namespace lysa::ui {
 
         bool _isVisibilityChanged() const { return visibilityChanged; }
 
-        bool _isVisibilityChange() const { return visibilityChange; }
-
-        void _setVisibilityChanged(const bool value) { visibilityChanged = value; }
+        void _commitVisibility() {
+            visible = visibilityChange;
+            visibilityChanged = false;
+        }
 
     private:
         Rect rect;

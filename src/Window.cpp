@@ -36,7 +36,9 @@ namespace lysa::ui {
     }
 
     void Window::draw() const {
-        if (!isVisible()) { return; }
+        if (!isVisible()) {
+            return;
+        }
         Vector2DRenderer& renderer = static_cast<WindowManager*>(windowManager)->getRenderer();
         renderer.setTranslate({rect.x, rect.y});
         renderer.setTransparency(1.0f - transparency);
