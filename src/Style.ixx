@@ -19,7 +19,7 @@ namespace lysa::ui {
     /**
      * UI Widget drawing style base class.
      */
-    export class Style  {
+    export class Style : public std::enable_shared_from_this<Style>  {
     public:
         /**
          * Constructor.

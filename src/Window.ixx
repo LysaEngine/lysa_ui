@@ -24,7 +24,7 @@ export namespace lysa::ui {
      *
      * All UI widgets must belong to a UI window.
      */
-    class Window : public UniqueResource {
+    class Window : public UniqueResource, public std::enable_shared_from_this<Window> {
     public:
         /**
          * Which Window borders can be used to resize the Window.

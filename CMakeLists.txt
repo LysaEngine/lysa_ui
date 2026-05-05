@@ -34,12 +34,21 @@ endif ()
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 #######################################################
-if(LUA_BINDING)
-
+if(LUA_BINDINGS)
+    message("Building Lua bindings for Lysa UI")
+    add_compile_definitions(LUA_BINDINGS)
+    set(LUA_INCLUDE_DIR "${lua_cmake_SOURCE_DIR}/upstream" PARENT_SCOPE)
+    set(LUA_BINDINGS_SOURCES
+            ${SRC_DIR}/bindings/lua/LuaBindings.cpp
+    )
+    set(LUA_BINDINGS_MODULES
+            ${SRC_DIR}/bindings/lua/LuaBindings.ixx
+    )
 endif ()
 
 #######################################################
 set(LYSA_UI_SRC
+        ${LUA_BINDINGS_SOURCES}
         ${SRC_DIR}/Button.cpp
         ${SRC_DIR}/CheckWidget.cpp
         ${SRC_DIR}/Frame.cpp
@@ -60,6 +69,7 @@ set(LYSA_UI_SRC
 
 )
 set(LYSA_UI_MODULES
+        ${LUA_BINDINGS_MODULES}
         ${SRC_DIR}/UI.ixx
         ${SRC_DIR}/Alignment.ixx
         ${SRC_DIR}/Box.ixx

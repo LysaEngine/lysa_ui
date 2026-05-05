@@ -7,6 +7,7 @@
 module lysa.ui.window_manager;
 
 import lysa;
+import lysa.ui.lua;
 
 namespace lysa::ui {
 
@@ -19,6 +20,7 @@ namespace lysa::ui {
         renderer{renderingWindow.getRenderTarget().getRendererConfiguration(), renderingWindow.getRenderTarget().getImageFormat()},
         fontScale{defaultFontScale},
         textColor{defaultTextColor} {
+        LuaBindings::_register(ctx().lua.get());
         defaultFont = std::make_shared<Font>(defaultFontURI);
         renderingWindow.getRenderTarget().addUIRenderer(renderer);
         ctx().events.subscribe(MainLoopEvent::PROCESS, [this](const Event&) {
