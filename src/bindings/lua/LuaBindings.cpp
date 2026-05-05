@@ -348,6 +348,7 @@ namespace lysa::ui {
             .addConstructor<void(const Rect&)>()
             .addFunction("get_resizeable_borders", &Window::getResizeableBorders)
             .addFunction("set_resizeable_borders", &Window::setResizeableBorders)
+            .addFunction("get_widget",              &Window::getWidget)
             .addFunction("get_style",              &Window::getStyle)
             .addFunction("set_style",              &Window::setStyle)
             .addFunction("set_widget",
@@ -399,6 +400,10 @@ namespace lysa::ui {
             .addFunction("remove_child",
                 +[](Window* self, const std::shared_ptr<Widget>& child) {
                     self->remove(child);
+                })
+            .addFunction("create_text",
+                +[](Window* self, const int alignment, const std::string& text) -> std::shared_ptr<Text> {
+                    return self->create<Text>(static_cast<Alignment>(alignment), text);
                 })
         .endClass()
 

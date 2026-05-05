@@ -249,6 +249,7 @@ return {
     ---@class lysa.ui.Window
     ---@field get_resizeable_borders fun(self:lysa.ui.Window):integer Returns the resizable borders bitmask (see lysa.ui.ResizeableBorder).
     ---@field set_resizeable_borders fun(self:lysa.ui.Window, borders:integer):nil Sets the resizable borders bitmask.
+    ---@field get_widget fun(self:lysa.ui.Window):lysa.ui.Widget
     ---@field get_style fun(self:lysa.ui.Window):any Returns the current style, or nil.
     ---@field set_style fun(self:lysa.ui.Window, style:any):nil Sets the current style (pass nil to install the default).
     ---@field set_widget fun(self:lysa.ui.Window, child:lysa.ui.Widget|nil, resources:string|nil, padding:number|nil):nil Sets the root widget.
