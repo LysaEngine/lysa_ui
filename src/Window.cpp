@@ -23,6 +23,12 @@ namespace lysa::ui {
         rect{rect} {
     }
 
+    Window::~Window() {
+        if (windowManager) {
+            static_cast<WindowManager*>(windowManager)->remove(this->shared_from_this());
+        }
+    }
+
     void Window::attach(void* windowManager) {
         assert([&]{ return this->windowManager == nullptr;} , "ui::Window must not be already attached to a manager");
         this->windowManager = windowManager;

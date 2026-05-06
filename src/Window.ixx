@@ -43,6 +43,8 @@ export namespace lysa::ui {
          */
         Window(const Rect& rect);
 
+        ~Window() override;
+
         /**
          * Sets the borders that can be used to resize the Window.
          * @param borders Bitmask of ResizeableBorder.
