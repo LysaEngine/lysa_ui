@@ -129,5 +129,7 @@ export namespace lysa::ui {
         MouseCursor currentCursor{MouseCursor::ARROW};
         float fontScale;
         float4 textColor{1.0f};
+        unique_id onProcessHandler;
+        unique_id onInputHandler;
     };
 }

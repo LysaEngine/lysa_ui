@@ -90,8 +90,8 @@ namespace lysa::ui {
         public:
             std::string name;
             std::string value;
-            explicit StyleOption(const std::string &name):
-                name{std::move(name)} {
+            StyleOption(const std::string &name):
+                name{name} {
             }
         };
 

@@ -51,7 +51,7 @@ namespace lysa::ui {
 
     void ValueSelect::setValue(const float value) {
         if (this->value == value) { return; }
-        const float prev = value;
+        const auto prev = this->value;
         this->value = value;
         if (this->value < min) {
             this->value = min;

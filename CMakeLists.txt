@@ -24,7 +24,7 @@ endif ()
 #######################################################
 if (NOT DEFINED LYSA_ENGINE_TARGET)
     set(LYSA_ENGINE_TARGET "lysa_engine")
-    set(LUA_BINDING OFF)
+    set(LUA_BINDINGS OFF)
     set(FORWARD_RENDERER ON)
     set(DEFERRED_RENDERER ON)
     add_subdirectory(${LYSA_ENGINE_PROJECT_DIR} external_lib_build/${LYSA_ENGINE_TARGET})

@@ -79,7 +79,7 @@ namespace lysa::ui {
     void Window::setWidget(std::shared_ptr<Widget> child, const std::string &resources, const float padding) {
         assert([&]{ return windowManager != nullptr;} , "ui::Window must be added to a Window manager before setting the main widget");
         if (layout == nullptr) { setStyle(nullptr); }
-        if (widget == nullptr) {
+        if (child == nullptr) {
             widget = std::make_shared<Widget>();
         } else {
             widget = std::move(child);

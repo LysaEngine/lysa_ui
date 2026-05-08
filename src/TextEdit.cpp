@@ -95,7 +95,7 @@ namespace lysa::ui {
 
     bool TextEdit::eventKeyDown(const Key key) {
         const auto consumed = Widget::eventKeyDown(key);
-        if (isReadOnly()) { return key; }
+        if (isReadOnly()) { return false; }
 
         setFreezed(true);
         if (key == KEY_LEFT) {

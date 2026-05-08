@@ -27,15 +27,17 @@ namespace lysa::ui {
 #endif
         defaultFont = std::make_shared<Font>(defaultFontURI);
         renderingWindow.getRenderTarget().addUIRenderer(renderer);
-        ctx().events.subscribe(MainLoopEvent::PROCESS, [this](const Event&) {
+        onProcessHandler = ctx().events.subscribe(MainLoopEvent::PROCESS, [this](const Event&) {
             drawFrame();
         });
-        ctx().events.subscribe(RenderingWindowEvent::INPUT, renderingWindow.id, [this](Event& evt) {
+        onInputHandler = ctx().events.subscribe(RenderingWindowEvent::INPUT, renderingWindow.id, [this](Event& evt) {
             evt.consumed = onInput(std::any_cast<InputEvent>(evt.payload));
         });
     }
 
     WindowManager::~WindowManager() {
+        if (onInputHandler) ctx().events.unsubscribe(onInputHandler);
+        if (onProcessHandler) ctx().events.unsubscribe(onProcessHandler);
         for (const auto& window: windows) {
             window->eventDestroy();
         }

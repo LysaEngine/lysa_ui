@@ -644,7 +644,7 @@ namespace lysa::ui {
     }
 
     float Widget::getFontScale() const {
-        return fontScale > 0.0f ? fontScale : static_cast<Window*>(window)->getFontScale();
+        return window != nullptr && fontScale > 0.0f ? fontScale : static_cast<Window*>(window)->getFontScale();
     }
 
     void Widget::setFontScale(const float fontScale) {
