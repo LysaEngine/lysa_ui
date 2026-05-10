@@ -41,14 +41,6 @@ Please refer to the [Documentation](https://henrimichelon.github.io/LysaUI/) for
 - Window events: `OnResize`, `OnMove`, `OnGotFocus`, `OnLostFocus`
 - Integrated with the Lysa engine's centralized event dispatcher; Lua callbacks supported when Lua bindings are enabled
 
-### Rendering
-- Immediate-mode vector 2D renderer (retained-mode widget tree, immediate-mode draw calls)
-- Font loading and rendering with per-widget font and scale overrides
-- RGBA color system (`float4`, 0–1 range) throughout
-- Before/after-children rendering hooks for style implementations
-- Redraw-on-event optimisation with explicit force-refresh support
-
-
 ## License
 
 This project is licensed under the MIT License
