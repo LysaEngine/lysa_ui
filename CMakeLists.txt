@@ -95,3 +95,24 @@ set(LYSA_UI_MODULES
         ${SRC_DIR}/WindowManager.ixx
        )
 build_target(${PROJECT_NAME} "${LYSA_UI_SRC}" "${LYSA_UI_MODULES}")
+
+
+#######################################################
+find_program(DOXYPRESS_EXECUTABLE doxypress)
+
+if (DOXYPRESS_EXECUTABLE)
+    message(STATUS "DoxyPress found: ${DOXYPRESS_EXECUTABLE}")
+    set(DOCS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/docs")
+
+    add_custom_target(lysa_ui_docs
+            COMMAND ${DOXYPRESS_EXECUTABLE}
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${DOCS_DIRECTORY}/navtree.js
+            ${DOCS_DIRECTORY}/html/navtree.js
+            WORKING_DIRECTORY ${DOCS_DIRECTORY}
+            COMMENT "Generating Lysa UI documentation with DoxyPress"
+            VERBATIM
+    )
+else()
+    message(STATUS "DoxyPress not found, lysa_ui_docs target will not be available.")
+endif()

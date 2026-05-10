@@ -1,0 +1,148 @@
+/*!
+\page architecture Architecture overview
+
+Overview
+---------------------------------------------------------------------------
+
+Lysa UI is organized as a set of C++23 modules (`.ixx` interfaces paired with `.cpp` implementations)
+that live in the `lysa::ui` namespace. The single top-level module `lysa.ui` re-exports every
+public widget type and serves as the only import needed by application code.
+
+The library sits on top of the [Lysa Engine](https://github.com/LysaEngine/) and relies on the
+engine context (`lysa::ctx()`) for rendering, resource management, and event dispatch.
+
+Entry Point — WindowManager
+---------------------------------------------------------------------------
+
+\ref lysa::ui::WindowManager is the root of every UI setup. It attaches to a `RenderingWindow` and
+owns a list of virtual \ref lysa::ui::Window objects. The WindowManager:
+
+- Loads the default font at construction and makes it available to all windows and widgets.
+- Subscribes to the engine's `PROCESS` and `INPUT` events to drive per-frame rendering and input routing.
+- Routes mouse and keyboard events to the currently focused `Window`.
+- Handles user-driven `Window` resizing via configurable border deltas.
+- Exposes `drawFrame()` and `onInput()` for explicit frame-by-frame control when needed.
+
+Widget Base Class
+---------------------------------------------------------------------------
+
+\ref lysa::ui::Widget is the base of every UI element. Key responsibilities:
+
+| Concern | Details |
+|---|---|
+| **Identity** | Inherits `UniqueResource`; each widget has a unique `id` used for event subscription |
+| **Layout** | `Rect` for position and size; `Alignment` enum controls placement within the parent |
+| **Hierarchy** | `add<T>()` / `create<T>()` templates; `remove()` / `removeAll()` |
+| **Appearance** | `setDrawBackground()`, `setTransparency()`, `setPadding()`, `setHBorder()`, `setVBorder()` |
+| **Input** | Virtual `eventMouseDown`, `eventMouseUp`, `eventMouseMove`, `eventKeyDown`, `eventKeyUp`, `eventTextInput` hooks |
+| **Focus** | `setFocus()`, `isFocused()`, `allowFocus` flag; tab-order traversal via `setNextFocus()` |
+| **State** | `show()` / `isVisible()`, `enable()` / `isEnabled()`, `setFreezed()` / `isFreezed()` |
+| **User data** | `setUserData()` / `getUserData()` and `setGroupIndex()` / `getGroupIndex()` for application tagging |
+
+Widget Hierarchy
+---------------------------------------------------------------------------
+
+```
+Widget
+├── Panel
+│   ├── Box
+│   │   ├── Button
+│   │   └── (ScrollBar internals)
+│   └── Frame
+├── CheckWidget
+│   └── ToggleButton
+├── Line
+│   ├── HLine
+│   └── VLine
+├── Text
+├── TextEdit
+├── Image
+├── ValueSelect
+│   └── ScrollBar
+│       ├── HScrollBar
+│       └── VScrollBar
+└── TreeView
+```
+
+Window
+---------------------------------------------------------------------------
+
+\ref lysa::ui::Window is a virtual panel displayed inside a `RenderingWindow`. It holds a root
+\ref lysa::ui::Widget that covers its entire client area and acts as the parent for all widgets in
+that window. Key features:
+
+- `setWidget()` sets the root widget and its resource string.
+- `create<T>()` / `add<T>()` template helpers delegate to the root widget.
+- `setStyle()` / `getStyle()` configure the drawing style; passing `nullptr` installs the default.
+- `setResizeableBorders()` controls which edges the user can drag to resize the window.
+- Visibility changes (`show()`, `hide()`, `setVisible()`) take effect at the start of the next frame.
+- Virtual callbacks `onCreate`, `onDestroy`, `onShow`, `onHide`, `onResize`, `onMove`,
+  `onKeyDown`, `onKeyUp`, `onMouseDown`, `onMouseUp`, `onMouseMove`, `onGotFocus`, `onLostFocus`
+  are intended to be overridden by application-level subclasses.
+
+Styling
+---------------------------------------------------------------------------
+
+\ref lysa::ui::Style is the abstract drawing backend. It defines three responsibilities:
+
+| Method | Description |
+|---|---|
+| `draw()` | Renders a widget before (when=true) or after (when=false) its children are drawn |
+| `resize()` | Adjusts a widget's size rectangle to style-specific constraints |
+| `addResource()` | Parses a resource string and attaches a `UIResource` to a widget |
+
+The built-in implementation is \ref lysa::ui::StyleClassic. It provides a classic 3D vector look
+with three appearance modes per widget:
+
+| Mode | Description |
+|---|---|
+| `FLAT` | No 3D effect |
+| `RAISED` | Beveled raised appearance |
+| `LOWERED` | Beveled lowered (sunken) appearance |
+
+Style options (colors, font scale) are set via `setOption()` / `getOption()`. A custom style is
+created by subclassing `Style` and passing an instance to `Window::setStyle()`.
+
+`Style::create("vector")` constructs a `StyleClassic` instance; this is the factory used by
+`Window` when no explicit style is set.
+
+Event System
+---------------------------------------------------------------------------
+
+All widget events are dispatched through the engine's `EventManager`. Widgets fire events using
+`UIEvent` signal-name constants:
+
+| Signal | Payload struct | Description |
+|---|---|---|
+| `UIEvent::OnClick` | `UIEventClick` | Button or ToggleButton clicked |
+| `UIEvent::OnStateChange` | `UIEventState` | `CheckWidget` state changed |
+| `UIEvent::OnValueChange` | `UIEventValue` | `ValueSelect` value changed |
+| `UIEvent::OnRangeChange` | `UIEventRange` | `ValueSelect` range changed |
+| `UIEvent::OnTextChange` | `UIEventText` | Text widget content changed |
+| `UIEvent::OnTextInput` | `UIEventText` | User text input in a `TextEdit` |
+| `UIEvent::OnKeyDown` | `UIEventKeyb` | Key pressed with widget focused |
+| `UIEvent::OnKeyUp` | `UIEventKeyb` | Key released with widget focused |
+| `UIEvent::OnMouseDown` | `UIEventMouseButton` | Mouse button pressed over widget |
+| `UIEvent::OnMouseUp` | `UIEventMouseButton` | Mouse button released over widget |
+| `UIEvent::OnMouseMove` | `UIEventMouseMove` | Mouse moved over widget |
+| `UIEvent::OnGotFocus` | `UIEvent` | Widget acquired keyboard focus |
+| `UIEvent::OnLostFocus` | `UIEvent` | Widget lost keyboard focus |
+| `UIEvent::OnShow` | `UIEvent` | Widget became visible |
+| `UIEvent::OnHide` | `UIEvent` | Widget became hidden |
+| `UIEvent::OnEnable` | `UIEvent` | Widget enabled |
+| `UIEvent::OnDisable` | `UIEvent` | Widget disabled |
+| `UIEvent::OnCreate` | `UIEvent` | Widget created |
+| `UIEvent::OnDestroy` | `UIEvent` | Widget destroyed |
+| `UIEvent::OnResize` | `UIEvent` | Window resized |
+| `UIEvent::OnMove` | `UIEvent` | Window moved |
+
+Subscribe using `lysa::ctx().events.subscribe(UIEvent::OnClick, widget->id, handler)`.
+
+Lua Scripting
+---------------------------------------------------------------------------
+
+When the engine is compiled with `LUA_BINDINGS=ON`, every widget type inherits from `LuaScript` and
+exposes its full public API to Lua via LuaBridge. All `UIEvent` signal constants and `Alignment`,
+`CheckWidget::State`, `Line::LineStyle`, `ScrollBar::Type`, and `Window::ResizeableBorder` enums are
+available in the `lysa.ui` Lua namespace.
+*/

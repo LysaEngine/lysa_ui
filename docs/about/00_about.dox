@@ -1,0 +1,50 @@
+/*!
+\page about Lysa UI overview
+
+Lysa UI is a user interface library for the [Lysa Engine](https://github.com/LysaEngine/) offering a
+hybrid system with retained-mode components drawn using an immediate-mode vector renderer.
+
+Overview
+---------------------------------------------------------------------------
+Lysa UI provides a widget-based UI framework built on top of the [Lysa Engine](https://github.com/LysaEngine/).
+It organizes interface elements into a hierarchy of typed widgets contained within virtual UI windows,
+all managed by a central `WindowManager`. Each widget participates in the engine's event system for
+input handling, focus management, and rendering callbacks.
+
+Features
+---------------------------------------------------------------------------
+- **Alignment System**: Powerful stacking and placement system via the `Alignment` enum — place children
+  at corners, centers, edges, or fill their parent entirely.
+- **Widget Hierarchy**: Parent–child widget trees with padding, border, and overlap support.
+  - `create<T>()` and `add<T>()` template helpers on both `Widget` and `Window`.
+  - Recursive `removeAll()` and individual `remove()` for dynamic UI updates.
+- **Widget Types**:
+  - `Widget` — transparent base widget; all other types derive from it.
+  - `Panel` — rectangular widget with a background only.
+  - `Box` — rectangular widget with a border and a background.
+  - `Frame` — `Box` with an optional title string and configurable title color.
+  - `Button` — clickable `Box` that fires `UIEvent::OnClick`.
+  - `ToggleButton` — two-state (checked/unchecked) clickable button.
+  - `CheckWidget` — abstract base for all two-state widgets.
+  - `Text` — single-line text display with configurable color and font scale.
+  - `TextEdit` — single-line editable text field with cursor and selection support.
+  - `Image` — displays a `lysa::Image` resource with optional color tint and auto-sizing.
+  - `Line` / `HLine` / `VLine` — horizontal or vertical divider lines.
+  - `ScrollBar` / `HScrollBar` / `VScrollBar` — range-based scroll bars.
+  - `TreeView` — hierarchical list widget with expand/collapse and scroll support.
+  - `ValueSelect` — abstract base for range-bound numeric widgets (`ScrollBar`).
+- **Window Management**: `WindowManager` manages multiple virtual `Window` objects overlaid on a
+  single `RenderingWindow`, with focus, resize, and z-ordering support.
+- **Styling**: `Style` base class with a built-in `StyleClassic` implementation providing a 3D
+  raised/lowered/flat classic vector look. Custom styles can be added by subclassing `Style`.
+- **Event System**: All widget interactions are routed through the engine's `EventManager` using
+  `UIEvent` signal constants (`OnClick`, `OnTextChange`, `OnValueChange`, and more).
+- **Lua Scripting**: All widget types expose their full API to Lua when compiled with `LUA_BINDINGS=ON`.
+
+Architecture
+---------------------------------------------------------------------------
+- \subpage architecture
+
+Released under the [MIT license](https://opensource.org/licenses/MIT).
+
+*/

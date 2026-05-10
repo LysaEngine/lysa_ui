@@ -1,0 +1,77 @@
+/*!
+\page manual_001_integration Integration
+
+Dependencies
+===========================================================================
+
+Lysa UI requires a working [Lysa Engine](https://github.com/LysaEngine/) setup.
+Refer to the engine's own integration guide for compiler, CMake, Vulkan SDK, and Slang requirements.
+In addition, Lysa UI itself requires:
+
+- A C++23 compiler with C++ module support (same requirements as the engine).
+- CMake 3.29+.
+- The Lysa Engine and Vireo RHI already available as CMake subdirectories or submodules.
+
+Integration
+===========================================================================
+
+Lysa UI is intended to be used alongside Lysa Engine via a `.env.cmake` configuration file or
+by setting CMake variables directly.
+
+\section ui_integration_env 1. Configure path variables
+
+Create a `.env.cmake` file (or set variables in your top-level `CMakeLists.txt`) before adding
+the subdirectory:
+
+```cmake
+# .env.cmake
+set(VIREO_RHI_PROJECT_DIR    "path/to/vireo_rhi")
+set(LYSA_ENGINE_PROJECT_DIR  "path/to/lysa_engine")
+set(LYSA_UI_PROJECT_DIR      "path/to/lysa_ui")
+```
+
+\section ui_integration_cmake 2. Add Lysa UI to your CMakeLists.txt
+
+Add the subdirectories and link against both `lysa_engine` and `lysa_ui`:
+
+```cmake
+set(LUA_BINDINGS        OFF)
+set(DIRECTX_BACKEND     ON)
+set(FORWARD_RENDERER    ON)
+set(DEFERRED_RENDERER   ON)
+set(PHYSIC_ENGINE_JOLT  ON)
+set(PHYSIC_ENGINE_PHYSX OFF)
+if(WIN32)
+    set(DIRECTX_BACKEND ON)
+endif()
+
+add_subdirectory(${LYSA_ENGINE_PROJECT_DIR})
+add_subdirectory(${LYSA_UI_PROJECT_DIR})
+
+add_executable(your_app
+    src/Main.cpp
+    # … your other source files …
+)
+target_link_libraries(your_app PUBLIC lysa_engine lysa_ui)
+```
+
+\section ui_integration_import 3. Import the module
+
+In your C++ source files, import the top-level module to access all widget types:
+
+```cpp
+import lysa.ui;
+```
+
+This single import re-exports every class (`Widget`, `Window`, `WindowManager`, `Button`,
+`Text`, `TextEdit`, all scroll bars, `TreeView`, and more) as well as all enumerations
+and `UIEvent` signal constants.
+
+\section ui_integration_options 4. CMake options reference
+
+| Option | Default | Description |
+|---|---|---|
+| `LUA_BINDINGS` | OFF | Expose widget API to Lua via LuaBridge |
+
+
+*/

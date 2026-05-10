@@ -1,0 +1,415 @@
+/*!
+\page manual_002_howto How To Use
+
+Table of contents
+---------------------------------------------------------------------------
+- \ref howto_ui_setup
+- \ref howto_ui_window
+- \ref howto_ui_widgets
+- \ref howto_ui_alignment
+- \ref howto_ui_events
+- \ref howto_ui_text
+- \ref howto_ui_textedit
+- \ref howto_ui_image
+- \ref howto_ui_scrollbar
+- \ref howto_ui_togglebutton
+- \ref howto_ui_treeview
+- \ref howto_ui_style
+- \ref howto_ui_visibility
+
+---
+
+\section howto_ui_setup 1. Setting up the WindowManager
+
+Create a `WindowManager` in your application entry point, passing the `RenderingWindow`, a font URI,
+and an optional font scale and default text color. The `WindowManager` subscribes to engine process
+and input events automatically:
+
+```cpp
+int lysaMain() {
+    lysa::ContextConfiguration contextConfiguration { /* ... */ };
+    lysa::Lysa lysa(contextConfiguration);
+    MainWindow window;
+
+    // Create the UI manager — loads the default font and wires up engine events
+    lysa::ui::WindowManager windowManager(
+        window,
+        "app://res/fonts/Signwood",
+        0.25f,
+        lysa::float4(1.0f, 1.0f, 1.0f, 1.0f));
+
+    // Instantiate and attach a scene that also uses the UI
+    auto scene = std::make_unique<nodes::GameScene>(windowManager);
+    scene->attach(window);
+
+    lysa::ctx().events.subscribe(lysa::MainLoopEvent::PROCESS,
+        [&](const lysa::Event&) {
+            window.getRenderTarget().render();
+        });
+
+    lysa.run();
+    return 0;
+}
+```
+
+---
+
+\section howto_ui_window 2. Creating a UI Window
+
+A `Window` is a virtual overlay panel managed by `WindowManager`. Create one with a rectangle and
+configure its style and root widget before adding child widgets:
+
+```cpp
+// Full-screen overlay window
+const auto uiWindow = windowManager.create(lysa::RECT_FULLSCREEN);
+
+// OR a fixed-size positioned window
+const auto dialog = windowManager.create(lysa::Rect{100.0f, 100.0f, 400.0f, 300.0f});
+
+// Allow the user to resize from the right and bottom edges
+dialog->setResizeableBorders(
+    lysa::ui::Window::RESIZEABLE_RIGHT | lysa::ui::Window::RESIZEABLE_BOTTOM);
+dialog->setMinimumSize(200.0f, 150.0f);
+```
+
+Subclass `Window` to respond to lifecycle events:
+
+```cpp
+class HUDWindow : public lysa::ui::Window {
+public:
+    HUDWindow() : Window(lysa::RECT_FULLSCREEN) {}
+
+    void onCreate() override {
+        // build the widget tree here
+    }
+
+    void onResize() override {
+        // re-layout widgets when the window is resized
+    }
+};
+
+const auto hud = windowManager.add(std::make_shared<HUDWindow>());
+```
+
+---
+
+\section howto_ui_widgets 3. Creating and adding widgets
+
+Use the `create<T>()` template on a `Window` or `Widget` to construct and add a child in one step.
+The first argument is a resource string (size or style hint), the second is the `Alignment`:
+
+```cpp
+// Create a centered panel of size 200x300
+const auto panel = uiWindow->create<lysa::ui::Box>(
+    "200,300", lysa::ui::Alignment::CENTER);
+
+// Add a button inside the panel
+const auto button = panel->create<lysa::ui::Button>(
+    "100,40", lysa::ui::Alignment::TOPCENTER);
+
+// Add a text label inside the button
+button->create<lysa::ui::Text>(
+    lysa::ui::Alignment::CENTER, "Click Me!");
+```
+
+Widgets can also be constructed separately and added with `add<T>()`:
+
+```cpp
+auto label = std::make_shared<lysa::ui::Text>("Score: 0");
+label->setTextColor(lysa::float4{1.0f, 1.0f, 0.0f, 1.0f});
+panel->add(label, lysa::ui::Alignment::TOPLEFT, "");
+```
+
+Remove a specific child or clear the entire tree:
+
+```cpp
+panel->remove(button);
+panel->removeAll();
+```
+
+---
+
+\section howto_ui_alignment 4. Alignment and layout
+
+The `Alignment` enum controls how each child is stacked inside its parent's content area.
+Children are laid out in the order they are added.
+
+```cpp
+// Fill the entire parent
+panel->create<lysa::ui::Panel>(lysa::ui::Alignment::FILL);
+
+// Stack buttons along the left edge
+panel->create<lysa::ui::Button>("80,30", lysa::ui::Alignment::LEFT, "OK");
+panel->create<lysa::ui::Button>("80,30", lysa::ui::Alignment::LEFT, "Cancel");
+
+// Pin a label to the bottom-right corner
+panel->create<lysa::ui::Text>(lysa::ui::Alignment::CORNERBOTTOMRIGHT, "v1.0");
+```
+
+Use padding to add space between stacked children:
+
+```cpp
+panel->setPadding(8.0f);
+```
+
+Use borders to add internal margins inside a widget:
+
+```cpp
+panel->setHBorder(10.0f);
+panel->setVBorder(6.0f);
+```
+
+---
+
+\section howto_ui_events 5. Handling events
+
+All widget signals are dispatched through the engine's event system. Subscribe using the widget's
+`id` and a `UIEvent` constant:
+
+```cpp
+// Button click
+lysa::ctx().events.subscribe(lysa::ui::UIEvent::OnClick, button->id,
+    [](const lysa::Event&) {
+        lysa::Log::info("Button clicked!");
+    });
+
+// React when a TextEdit changes
+lysa::ctx().events.subscribe(lysa::ui::UIEvent::OnTextChange, editField->id,
+    [editField](const lysa::Event& e) {
+        const auto& payload = static_cast<const lysa::ui::UIEventText&>(e);
+        lysa::Log::info("New text: " + payload.text);
+    });
+
+// Value changed in a scroll bar
+lysa::ctx().events.subscribe(lysa::ui::UIEvent::OnValueChange, scrollBar->id,
+    [](const lysa::Event& e) {
+        const auto& payload = static_cast<const lysa::ui::UIEventValue&>(e);
+        lysa::Log::info("Value: " + std::to_string(payload.value));
+    });
+```
+
+---
+
+\section howto_ui_text 6. Text widget
+
+`Text` displays a single immutable line of text. Wrap it inside a `Box` or `Button` for
+a bordered appearance:
+
+```cpp
+// Simple label
+const auto label = uiWindow->create<lysa::ui::Text>(
+    lysa::ui::Alignment::TOPLEFT, "Health: 100");
+label->setTextColor(lysa::float4{0.0f, 1.0f, 0.0f, 1.0f});
+label->setFontScale(1.5f);
+
+// Update at runtime
+label->setText("Health: 75");
+```
+
+Query the natural size of a `Text` widget before sizing its container:
+
+```cpp
+float w, h;
+label->getSize(w, h);
+container->setSize(w + 20.0f, h + 10.0f);
+```
+
+---
+
+\section howto_ui_textedit 7. TextEdit widget
+
+`TextEdit` provides a single-line editable text field with cursor and selection support:
+
+```cpp
+const auto edit = panel->create<lysa::ui::TextEdit>(
+    "200,28", lysa::ui::Alignment::CENTER, "Enter name…");
+
+// Read-only mode
+edit->setReadOnly(true);
+
+// Programmatic text update
+edit->setText("Player One");
+
+// Move the cursor
+edit->setSelStart(0);
+
+// Listen for changes
+lysa::ctx().events.subscribe(lysa::ui::UIEvent::OnTextInput, edit->id,
+    [edit](const lysa::Event&) {
+        lysa::Log::info("Input: " + edit->getText());
+    });
+```
+
+---
+
+\section howto_ui_image 8. Image widget
+
+`Image` displays a `lysa::Image` resource. By default it auto-sizes to the image dimensions:
+
+```cpp
+const auto logo = lysa::ctx().resources.load<lysa::Image>("app://res/ui/logo.png");
+
+// Auto-sized image
+const auto imgWidget = panel->create<lysa::ui::Image>(
+    lysa::ui::Alignment::CENTER, *logo, true);
+
+// Fixed-size image with a color tint
+const auto icon = panel->create<lysa::ui::Image>(
+    "32,32", lysa::ui::Alignment::LEFT, *logo, false);
+icon->setColor(lysa::float4{1.0f, 0.5f, 0.5f, 1.0f});
+
+// Swap the image at runtime
+icon->setImage(*otherImage);
+```
+
+---
+
+\section howto_ui_scrollbar 9. ScrollBar widget
+
+`ScrollBar` (and its aliases `HScrollBar` / `VScrollBar`) lets the user select a value
+within a numeric range:
+
+```cpp
+// Horizontal bar: range 0–100, initial value 50, step 1
+const auto hBar = panel->create<lysa::ui::HScrollBar>(
+    "200,20", lysa::ui::Alignment::BOTTOM,
+    0.0f, 100.0f, 50.0f, 1.0f);
+
+// Vertical bar
+const auto vBar = panel->create<lysa::ui::VScrollBar>(
+    "20,150", lysa::ui::Alignment::RIGHT,
+    0.0f, 200.0f, 0.0f, 5.0f);
+
+// Change range and value programmatically
+hBar->setMin(0.0f);
+hBar->setMax(255.0f);
+hBar->setValue(128.0f);
+
+// Listen for changes
+lysa::ctx().events.subscribe(lysa::ui::UIEvent::OnValueChange, hBar->id,
+    [hBar](const lysa::Event&) {
+        applyBrightness(hBar->getValue());
+    });
+```
+
+---
+
+\section howto_ui_togglebutton 10. ToggleButton widget
+
+`ToggleButton` is a two-state button (checked / unchecked). Query or change the state
+programmatically, or listen for `UIEvent::OnStateChange`:
+
+```cpp
+const auto toggle = panel->create<lysa::ui::ToggleButton>(
+    "120,30", lysa::ui::Alignment::CENTER);
+toggle->create<lysa::ui::Text>(lysa::ui::Alignment::CENTER, "Fullscreen");
+
+// Set initial state
+toggle->setState(lysa::ui::CheckWidget::UNCHECK);
+
+// React to toggles
+lysa::ctx().events.subscribe(lysa::ui::UIEvent::OnStateChange, toggle->id,
+    [toggle](const lysa::Event&) {
+        const bool on = toggle->getState() == lysa::ui::CheckWidget::CHECK;
+        lysa::Log::info(std::string("Fullscreen: ") + (on ? "ON" : "OFF"));
+    });
+```
+
+---
+
+\section howto_ui_treeview 11. TreeView widget
+
+`TreeView` displays a hierarchical list of widgets with expand/collapse handles and a
+vertical scroll bar:
+
+```cpp
+const auto tree = panel->create<lysa::ui::TreeView>(
+    "250,300", lysa::ui::Alignment::LEFT);
+tree->setResources("raised", "flat", "raised");
+
+// Add root items
+const auto rootA = tree->addItem(
+    std::make_shared<lysa::ui::Text>("Root A"));
+const auto rootB = tree->addItem(
+    std::make_shared<lysa::ui::Text>("Root B"));
+
+// Add child items
+const auto childA1 = tree->addItem(rootA,
+    std::make_shared<lysa::ui::Text>("Child A.1"));
+tree->addItem(rootA,
+    std::make_shared<lysa::ui::Text>("Child A.2"));
+
+// Expand a node programmatically
+tree->expand(rootA->item);
+
+// Clear the entire tree
+tree->removeAllItems();
+```
+
+---
+
+\section howto_ui_style 12. Applying a style
+
+Every `Window` uses `StyleClassic` by default. You can set a custom style or reconfigure
+the classic style options:
+
+```cpp
+// Use the default classic style (installed automatically)
+uiWindow->setStyle(nullptr);
+
+// Create and configure a classic style manually
+const auto style = lysa::ui::Style::create("vector");
+style->setOption("focus",        "0.3,0.5,0.9,1.0");
+style->setOption("shadow_dark",  "0.1,0.1,0.1,1.0");
+style->setOption("shadow_bright","0.9,0.9,0.9,1.0");
+uiWindow->setStyle(style);
+```
+
+Widget resource strings are parsed by the active style. For `StyleClassic`, a resource string
+can encode the desired size and appearance:
+
+```cpp
+// "width,height"       — size only, default RAISED
+// "width,height,flat"  — flat appearance
+// "width,height,low"   — lowered appearance
+// "width,height,r,g,b" — custom background color (0–255)
+
+const auto box    = panel->create<lysa::ui::Box>("120,40",        lysa::ui::Alignment::CENTER);
+const auto flat   = panel->create<lysa::ui::Box>("120,40,flat",   lysa::ui::Alignment::CENTER);
+const auto sunken = panel->create<lysa::ui::Box>("120,40,low",    lysa::ui::Alignment::CENTER);
+const auto tinted = panel->create<lysa::ui::Box>("120,40,200,100,50", lysa::ui::Alignment::CENTER);
+```
+
+---
+
+\section howto_ui_visibility 13. Show, hide, and enable
+
+Visibility changes take effect at the start of the next frame. Use `show()` / `hide()` as
+convenient aliases:
+
+```cpp
+// Widgets
+statusLabel->show();
+debugPanel->show(false);   // equivalent to hide()
+
+// Windows
+hud->show();
+pauseMenu->hide();
+pauseMenu->setVisible(!pauseMenu->isVisible());
+```
+
+Disabling a widget prevents it from responding to mouse and keyboard events but keeps it visible:
+
+```cpp
+submitButton->enable(false);
+// … later …
+submitButton->enable(true);
+```
+
+Force an "immediate" repaint of a widget and its children (widgets are drawn at the start of each frame):
+
+```cpp
+panel->refresh();
+```
+
+*/

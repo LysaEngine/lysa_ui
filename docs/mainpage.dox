@@ -1,0 +1,15 @@
+/*!
+\mainpage Lysa UI User Documentation
+
+Welcome to the official documentation of Lysa UI, a user interface library for the [Lysa Engine](https://github.com/LysaEngine/).
+
+If you are new to Lysa UI, we recommend that you read \ref about "the introduction page" then browse the \ref manual_000.
+
+[GitHub project page](https://github.com/LysaEngine/lysa_ui)
+
+Documentation
+---------------------------------------------------------------------------
+- \ref about
+- \ref manual_000
+
+*/

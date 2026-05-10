@@ -1,0 +1,190 @@
+/*!
+\page manual_003_coordinates 2D Coordinate System
+
+Lysa UI uses a resolution-independent unit coordinate space for all widget
+positions, sizes, and drawing operations. Understanding this space is essential
+when placing windows, sizing widgets, or working with mouse input events.
+
+Table of contents
+---------------------------------------------------------------------------
+- \ref coords_unit_space
+- \ref coords_origin
+- \ref coords_rect
+- \ref coords_mouse
+- \ref coords_aspect
+- \ref coords_fullscreen
+
+---
+
+\section coords_unit_space 1. Unit space
+
+The 2D renderer maps the visible surface to a fixed logical range of
+1000 × 1000 units, regardless of the actual pixel dimensions of the
+rendering window.
+
+```cpp
+// From Vector2DRenderer.ixx
+constexpr float VECTOR_2D_SCREEN_SIZE{1000.0f};
+```
+
+Every coordinate you pass to `Rect`, `setRect()`, `setSize()`, or the drawing
+primitives (`drawFilledRect`, `drawText`, `drawLine`) is expressed in these
+1000-unit coordinates.
+
+A widget that is 500 units wide therefore always occupies exactly half the
+screen width, no matter the resolution.
+
+---
+
+\section coords_origin 2. Axis orientation and origin
+
+The coordinate system is **Y-up** with the origin at the **bottom-left** corner
+of the rendering surface:
+
+```
+(0, 1000) ────────────── (1000, 1000)
+    │                          │
+    │         screen           │
+    │                          │
+(0,   0) ────────────── (1000,    0)
+    ↑ origin
+```
+
+- **X** increases to the right.
+- **Y** increases upward.
+
+This matches the convention used by `lysa::Rect` as defined in the engine:
+
+```cpp
+// From Rect.ixx
+struct Rect {
+    float x{0.0f};   // Bottom-Left corner X position
+    float y{0.0f};   // Bottom-Left corner Y position
+    float width{0.0f};
+    float height{0.0f};
+};
+```
+
+A `Rect` at `{0, 0, 200, 100}` therefore starts at the bottom-left corner and
+extends 200 units to the right and 100 units upward.
+
+---
+
+\section coords_rect 3. Rect and widget coordinates
+
+`lysa::Rect` is the fundamental building block for window and widget placement.
+
+```cpp
+// A window anchored at (100, 200) with a size of 400 × 300 units
+const auto dialog = windowManager.create(lysa::Rect{100.0f, 200.0f, 400.0f, 300.0f});
+```
+
+Within a widget tree, each child's `Rect` is expressed in the **same absolute
+unit space** as its parent window. Child alignment (via lysa::ui::Alignment)
+is calculated by the layout engine relative to the parent's content area, but
+the resulting `Rect` stored on the child is always in absolute units.
+
+You can query or override a widget's rectangle at any time:
+
+```cpp
+// Read position and size (all values in units)
+const lysa::Rect& r = widget->getRect();
+float x = r.x;          // left edge in units
+float y = r.y;          // bottom edge in units
+float w = r.width;      // width in units
+float h = r.height;     // height in units
+
+// Move the widget
+widget->moveTo(150.0f, 400.0f);
+
+// Resize the widget
+widget->setSize(300.0f, 80.0f);
+
+// Set position and size in one call
+widget->setRect(150.0f, 400.0f, 300.0f, 80.0f);
+```
+
+`getWidth()` and `getHeight()` are convenience accessors that return the same
+`rect.width` and `rect.height` values, also in units.
+
+---
+
+\section coords_mouse 4. Mouse input coordinates
+
+Raw mouse events from the OS arrive in **pixels** relative to the client area.
+`WindowManager` converts them to **unit coordinates** before routing to widgets:
+
+```cpp
+// From WindowManager.cpp — performed on every mouse event
+const auto scaleX = VECTOR_2D_SCREEN_SIZE / renderingWindow.getRenderTarget().getWidth();
+const auto scaleY = VECTOR_2D_SCREEN_SIZE / renderingWindow.getRenderTarget().getHeight();
+const auto x = mouseEvent.position.x * scaleX;
+const auto y = mouseEvent.position.y * scaleY;
+```
+
+The virtual event handlers on `Widget` and `Window` therefore receive
+coordinates already expressed in the **same 1000-unit space** as the widget
+rectangles:
+
+```cpp
+class MyWidget : public lysa::ui::Widget {
+protected:
+    bool eventMouseMove(uint32 buttons, float x, float y) override {
+        // x and y are in unit space [0, 1000]
+        if (getRect().contains(x, y)) {
+            // cursor is inside this widget
+        }
+        return false;
+    }
+};
+```
+
+Similarly, the `UIEventMouseButton` and `UIEventMouseMove` payloads delivered
+through the engine event system carry unit-space coordinates:
+
+```cpp
+lysa::ctx().events.subscribe(lysa::ui::UIEvent::OnMouseMove, widget->id,
+    [](const lysa::Event& e) {
+        const auto& payload = static_cast<const lysa::ui::UIEventMouseMove&>(e);
+        // payload.x and payload.y are in unit space
+    });
+```
+
+---
+
+\section coords_aspect 5. Non-square screens and aspect ratio
+
+Because both axes are mapped independently to 1000 units, a widget with
+`width == height` in unit space will appear **wider than tall** on a landscape
+display. This is by design: unit coordinates express fractions of each axis
+independently.
+
+If you need to account for the actual pixel proportions (e.g. to draw a
+circle or a square that looks square on screen), retrieve the renderer's aspect
+ratio (or the Scene renderer's aspect ratio) and use it to calculate the
+desired size :
+
+```cpp
+// aspectRatio = pixel_width / pixel_height
+const float ar = windowManager.getRenderer().getAspectRatio();
+
+// A visually square widget on a 16:9 screen: height_units = width_units / ar
+const float sideUnits = 100.0f;
+panel->create<lysa::ui::Box>(
+    std::to_string(sideUnits) + "," + std::to_string(sideUnits / ar),
+    lysa::ui::Alignment::CENTER);
+```
+
+---
+
+\section coords_fullscreen 6. Full-screen constant
+
+Use the special constant `lysa::RECT_FULLSCREEN` to creates a window  that
+automatically covers the entire unit surface regardless of the actual
+resolution:
+
+```cpp
+const auto hud = windowManager.create(lysa::RECT_FULLSCREEN);
+```
+
+*/

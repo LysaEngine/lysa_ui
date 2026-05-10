@@ -1,0 +1,384 @@
+/*!
+\page manual_004_alignments Widget Alignments
+
+Every child widget is placed inside its parent's **content area** according to
+its lysa::ui::Alignment value, set when the child is added:
+
+```cpp
+parent->create<lysa::ui::Button>("80,30", lysa::ui::Alignment::TOP, "Save");
+parent->add(myWidget, lysa::ui::Alignment::LEFT, "");
+```
+
+Unless the child is created with `overlap = true`, each placement **consumes**
+part of the remaining content area so subsequent children are stacked against
+the already-placed ones. All diagrams below show a single child `[W]` placed
+in an otherwise empty parent `[P]`.
+
+Table of contents
+---------------------------------------------------------------------------
+- \ref align_content_area
+- \ref align_fill_center
+- \ref align_edge_stacking
+- \ref align_edge_centered
+- \ref align_edge_aligned
+- \ref align_axis_stacking
+- \ref align_corners
+- \ref align_none
+- \ref align_stacking_order
+- \ref align_padding_border
+
+---
+
+\section align_content_area 1. Content area
+
+Before alignment is applied the parent's **content area** is inset by its
+`hborder`, `vborder`, and `padding` values:
+
+```
+┌──────────────────────────────────┐
+│          parent widget           │
+│  ┌────────────────────────────┐  │← vborder + padding
+│  │       content area         │  │
+│  │                            │← hborder + padding
+│  └────────────────────────────┘  │
+└──────────────────────────────────┘
+```
+
+Set these with:
+
+```cpp
+parent->setHBorder(8.0f);   // left & right inset
+parent->setVBorder(4.0f);   // top & bottom inset
+parent->setPadding(4.0f);   // added to all four sides, also used as gap between stacked children
+```
+
+All alignment positions described below are relative to this inset rectangle.
+
+---
+
+\section align_fill_center 2. Fill and Center
+
+### align_fill FILL
+
+The child is resized to cover the **entire** content area.
+No further children can be placed after it (content area becomes zero).
+
+```
+┌──────────────────────────────────┐
+│  ┌────────────────────────────┐  │
+│  │                            │  │
+│  │            [W]             │  │
+│  │                            │  │
+│  └────────────────────────────┘  │
+└──────────────────────────────────┘
+```
+
+### align_center CENTER
+
+The child is positioned at the **center** of the content area (both axes)
+but keeps its own size. No further children can be placed after it.
+
+```
+┌──────────────────────────────────┐
+│                                  │
+│           ┌────────┐             │
+│           │  [W]   │             │
+│           └────────┘             │
+│                                  │
+└──────────────────────────────────┘
+```
+
+### align_hcenter HCENTER
+
+The child is **horizontally centered** and placed at the bottom of the content
+area. Its width is expanded to the full content width.
+
+```
+┌──────────────────────────────────┐
+│                                  │
+│                                  │
+│  ┌────────────────────────────┐  │
+│  │           [W]              │  │
+│  └────────────────────────────┘  │
+└──────────────────────────────────┘
+```
+
+### align_vcenter VCENTER
+
+The child is **vertically centered** and placed at the left of the content
+area. Its height is expanded to the full content height.
+
+```
+┌──────────────────────────────────┐
+│  ┌────────┐                      │
+│  │        │                      │
+│  │  [W]   │                      │
+│  │        │                      │
+│  └────────┘                      │
+└──────────────────────────────────┘
+```
+
+---
+
+\section align_edge_stacking 3. Edge stacking (full span)
+
+These four values place the child against one edge and stretch it across the
+full span of the perpendicular axis. Each one carves its row or column out
+of the remaining content area so the next child is placed against the same
+edge but inside the leftover space.
+
+### align_top TOP
+
+Child is placed at the **top** edge, full width.
+Subsequent TOP children stack downward from the new top edge.
+
+```
+┌──────────────────────────────────┐
+│  ┌────────────────────────────┐  │
+│  │           [W]   TOP        │  │
+│  └────────────────────────────┘  │
+│                                  │
+│         (remaining space)        │
+│                                  │
+└──────────────────────────────────┘
+```
+
+### align_bottom BOTTOM
+
+Child is placed at the **bottom** edge, full width.
+Subsequent BOTTOM children stack upward.
+
+```
+┌──────────────────────────────────┐
+│                                  │
+│         (remaining space)        │
+│                                  │
+│  ┌────────────────────────────┐  │
+│  │           [W]   BOTTOM     │  │
+│  └────────────────────────────┘  │
+└──────────────────────────────────┘
+```
+
+### align_left LEFT
+
+Child is placed at the **left** edge, full height.
+Subsequent LEFT children stack rightward.
+
+```
+┌──────────────────────────────────┐
+│  ┌────────┐                      │
+│  │        │                      │
+│  │  [W]   │  (remaining space)   │
+│  │  LEFT  │                      │
+│  └────────┘                      │
+└──────────────────────────────────┘
+```
+
+### align_right RIGHT
+
+Child is placed at the **right** edge, full height.
+Subsequent RIGHT children stack leftward.
+
+```
+┌──────────────────────────────────┐
+│                      ┌────────┐  │
+│                      │        │  │
+│   (remaining space)  │  [W]   │  │
+│                      │  RIGHT │  │
+│                      └────────┘  │
+└──────────────────────────────────┘
+```
+
+---
+
+\section align_edge_centered 4. Edge + centered (natural size)
+
+These values pin the child to one edge at the **center** of the perpendicular
+axis, without stretching it. They consume the same strip as the plain edge
+variants but leave the child at its natural size and centered on the opposite
+axis.
+
+| Value | Edge | Centering |
+|---|---|---|
+| `TOPCENTER` | top | horizontally centered |
+| `BOTTOMCENTER` | bottom | horizontally centered |
+| `LEFTCENTER` | left | vertically centered |
+| `RIGHTCENTER` | right | vertically centered |
+
+```
+TOPCENTER                            LEFTCENTER
+┌──────────────────────────────────┐  ┌──────────────────────────────────┐
+│           ┌────────┐             │  │  ┌────────┐                      │
+│           │  [W]   │             │  │  │        │                      │
+│           └────────┘             │  │  │  [W]   │                      │
+│                                  │  │  │        │                      │
+│       (remaining space)          │  │  └────────┘  (remaining space)   │
+└──────────────────────────────────┘  └──────────────────────────────────┘
+```
+
+---
+
+\section align_edge_aligned 5. Edge + corner-aligned (natural size)
+
+These values pin the child to one edge and flush it to a **corner** of that
+edge, without stretching it. Like the centered variants they consume a strip
+on that edge.
+
+| Value | Edge | Flush to |
+|---|---|---|
+| `TOPLEFT` | top | left corner |
+| `TOPRIGHT` | top | right corner |
+| `BOTTOMLEFT` | bottom | left corner |
+| `BOTTOMRIGHT` | bottom | right corner |
+
+```
+TOPLEFT                              TOPRIGHT
+┌──────────────────────────────────┐  ┌──────────────────────────────────┐
+│  ┌────────┐                      │  │                      ┌────────┐  │
+│  │  [W]   │                      │  │                      │  [W]   │  │
+│  └────────┘                      │  │                      └────────┘  │
+│                                  │  │                                  │
+│       (remaining space)          │  │       (remaining space)          │
+└──────────────────────────────────┘  └──────────────────────────────────┘
+
+BOTTOMLEFT                           BOTTOMRIGHT
+┌──────────────────────────────────┐  ┌──────────────────────────────────┐
+│                                  │  │                                  │
+│       (remaining space)          │  │       (remaining space)          │
+│                                  │  │                                  │
+│  ┌────────┐                      │  │                      ┌────────┐  │
+│  │  [W]   │                      │  │                      │  [W]   │  │
+│  └────────┘                      │  │                      └────────┘  │
+└──────────────────────────────────┘  └──────────────────────────────────┘
+```
+
+---
+
+\section align_axis_stacking 6. Axis stacking (column / row)
+
+These values build columns or rows of natural-sized children without
+stretching them on the stacking axis.
+
+| Value | First axis | Anchor on second axis |
+|---|---|---|
+| `LEFTTOP` | left column | top-aligned |
+| `LEFTBOTTOM` | left column | bottom-aligned |
+| `RIGHTTOP` | right column | top-aligned |
+| `RIGHTBOTTOM` | right column | bottom-aligned |
+
+```
+LEFTTOP (children stacked left-to-right, each at the top of the column)
+
+┌──────────────────────────────────┐
+│  ┌──┐ ┌──┐ ┌──┐                  │
+│  │W1│ │W2│ │W3│                  │
+│  └──┘ └──┘ └──┘                  │
+│                                  │
+│       (remaining space)          │
+└──────────────────────────────────┘
+
+LEFTBOTTOM (children stacked left-to-right, each at the bottom of the column)
+
+┌──────────────────────────────────┐
+│                                  │
+│       (remaining space)          │
+│                                  │
+│  ┌──┐ ┌──┐ ┌──┐                  │
+│  │W1│ │W2│ │W3│                  │
+│  └──┘ └──┘ └──┘                  │
+└──────────────────────────────────┘
+
+RIGHTTOP / RIGHTBOTTOM are the mirror image, children growing leftward from the right edge.
+```
+
+---
+
+\section align_corners 7. Corner pinning
+
+Corner alignments pin the child to an **absolute corner** of the content area
+without consuming space from the stacking pool. They are typically used for
+overlays like version labels or close buttons.
+
+| Value | Corner |
+|---|---|
+| `CORNERTOPLEFT` | top-left |
+| `CORNERTOPRIGHT` | top-right |
+| `CORNERBOTTOMLEFT` | bottom-left |
+| `CORNERBOTTOMRIGHT` | bottom-right |
+
+```
+┌──────────────────────────────────┐
+│  ┌──┐                      ┌──┐  │
+│  │TL│                      │TR│  │
+│  └──┘                      └──┘  │
+│                                  │
+│  ┌──┐                      ┌──┐  │
+│  │BL│                      │BR│  │
+│  └──┘                      └──┘  │
+└──────────────────────────────────┘
+```
+
+```cpp
+// Stamp a version label in the bottom-right corner
+panel->create<lysa::ui::Text>(
+    lysa::ui::Alignment::CORNERBOTTOMRIGHT, "v1.0");
+```
+
+---
+
+\section align_none 8. NONE
+
+`Alignment::NONE` skips all automatic placement. The child's `Rect` is left
+exactly as set by the application via `setRect()`. Use this for manual placement.
+
+---
+
+\section align_stacking_order 9. Stacking order with multiple children
+
+Children are laid out **in the order they were added**. Each non-overlapping
+child shrinks the remaining content area for the next. A common idiom is to
+claim edges first and fill the center last:
+
+```cpp
+// Classic toolbar + sidebar + content layout
+const auto toolbar  = panel->create<lysa::ui::Box>("0,40", lysa::ui::Alignment::TOP);
+const auto sidebar  = panel->create<lysa::ui::Box>("150,0", lysa::ui::Alignment::LEFT);
+const auto content  = panel->create<lysa::ui::Box>("", lysa::ui::Alignment::FILL);
+```
+
+```
+┌──────────────────────────────────┐
+│           toolbar (TOP)          │
+├──────────┬───────────────────────┤
+│          │                       │
+│ sidebar  │    content (FILL)     │
+│  (LEFT)  │                       │
+│          │                       │
+└──────────┴───────────────────────┘
+```
+
+---
+
+\section align_padding_border 10. Padding and gap between stacked children
+
+`padding` acts as a **gap** between consecutive stacked children (TOP, BOTTOM,
+LEFT, RIGHT, and their variants). For example, two TOP children with
+`padding = 8`:
+
+```
+┌──────────────────────────────────┐
+│  ┌────────────────────────────┐  │
+│  │          [W1]  TOP         │  │
+│  └────────────────────────────┘  │
+│  · · · · · · · · (8 px gap) · ·  │
+│  ┌────────────────────────────┐  │
+│  │          [W2]  TOP         │  │
+│  └────────────────────────────┘  │
+│                                  │
+└──────────────────────────────────┘
+```
+
+Corner alignments and `CENTER` / `FILL` ignore the padding gap between
+siblings — they pin to fixed positions regardless of what surrounds them.
+
+*/

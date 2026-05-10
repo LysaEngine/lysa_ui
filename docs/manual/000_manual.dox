@@ -1,0 +1,11 @@
+/*!
+\page manual_000 Manual
+
+This series describes the various concepts needed to build an application using Lysa UI.
+
+- \subpage manual_001_integration
+- \subpage manual_002_howto
+- \subpage manual_003_coordinates
+- \subpage manual_004_alignments
+
+*/
