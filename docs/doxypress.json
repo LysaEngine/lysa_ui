@@ -407,9 +407,9 @@
     "skip-function-macros": true
   },
   "project": {
-    "project-brief": "Lysa Nodes \u2014 Scene Graph for the Lysa Engine",
+    "project-brief": "Lysa UI \u2014UI components for the Lysa Engine ",
     "project-logo": "logo.png",
-    "project-name": "Lysa Nodes",
+    "project-name": "Lysa UI",
     "project-version": "0.0"
   },
   "source": {
