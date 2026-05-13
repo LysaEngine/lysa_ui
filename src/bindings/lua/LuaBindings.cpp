@@ -124,10 +124,10 @@ namespace lysa::ui {
             .addProperty("type",                 &Widget::getType)
             .addFunction("is_visible",           &Widget::isVisible)
             .addFunction("show",
-                +[](Widget* self, bool v = true){ self->show(v); })
+                +[](Widget* self, const bool v = true){ self->show(v); })
             .addFunction("is_enabled",           &Widget::isEnabled)
             .addFunction("enable",
-                +[](Widget* self, bool v = true){ self->enable(v); })
+                +[](Widget* self, const bool v = true){ self->enable(v); })
             .addFunction("set_pos",              &Widget::setPos)
             .addProperty("width",                &Widget::getWidth)
             .addProperty("height",               &Widget::getHeight)
@@ -161,7 +161,7 @@ namespace lysa::ui {
             .addFunction("add_child",
                 +[](Widget* self,
                     const std::shared_ptr<Widget>& child,
-                    Alignment alignment,
+                    const Alignment alignment,
                     const std::string& resource = "") -> std::shared_ptr<Widget> {
                     return self->add(child, alignment, resource);
                 })
@@ -327,7 +327,7 @@ namespace lysa::ui {
                 +[](Window* self,
                     const std::shared_ptr<Widget>& child = nullptr,
                     const std::string& resources = "",
-                    float padding = 0.0f) {
+                    const float padding = 0.0f) {
                     self->setWidget(child, resources, padding);
                 })
             .addFunction("set_focused_widget",  &Window::setFocusedWidget)
@@ -358,7 +358,7 @@ namespace lysa::ui {
             .addFunction("add_child",
                 +[](Window* self,
                     const std::shared_ptr<Widget>& child,
-                    Alignment alignment,
+                    const Alignment alignment,
                     const std::string& resource = "") -> std::shared_ptr<Widget> {
                     return self->add(child, alignment, resource);
                 })
