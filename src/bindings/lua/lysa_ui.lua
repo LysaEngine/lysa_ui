@@ -93,47 +93,36 @@
 ------------------------------------------------------------------------
 
 ---@class lysa.ui.Widget
----@field get_type fun(self:lysa.ui.Widget):integer Returns the widget type (see lysa.ui.WidgetType).
+---@field type integer The widget type (see lysa.ui.WidgetType). (read-only)
 ---@field is_visible fun(self:lysa.ui.Widget):boolean Returns true if the widget is visible.
 ---@field show fun(self:lysa.ui.Widget, visible:boolean|nil):nil Shows or hides the widget (default true).
----@field is_enabled fun(self:lysa.ui.Widget):boolean Returns true if the widget reacts to input.
----@field enable fun(self:lysa.ui.Widget, enabled:boolean|nil):nil Enables or disables the widget (default true).
----@field set_pos fun(self:lysa.ui.Widget, x:number, y:number):nil Moves the widget to (x, y).
----@field get_width fun(self:lysa.ui.Widget):number Returns the width in pixels.
----@field get_height fun(self:lysa.ui.Widget):number Returns the height in pixels.
----@field set_size fun(self:lysa.ui.Widget, width:number, height:number):nil Resizes the widget.
----@field get_rect fun(self:lysa.ui.Widget):any Returns the position and size rectangle.
----@field set_rect fun(self:lysa.ui.Widget, x:number, y:number, width:number, height:number):nil Sets position and size.
----@field get_alignment fun(self:lysa.ui.Widget):integer Returns the current alignment (see lysa.ui.Alignment).
----@field set_alignment fun(self:lysa.ui.Widget, alignment:integer):nil Sets the widget placement alignment.
----@field get_font fun(self:lysa.ui.Widget):any Returns the current font.
----@field set_font fun(self:lysa.ui.Widget, font:any):nil Sets the current font.
----@field get_font_scale fun(self:lysa.ui.Widget):number Returns the font scale.
----@field set_font_scale fun(self:lysa.ui.Widget, scale:number):nil Sets the font scale.
----@field is_focused fun(self:lysa.ui.Widget):boolean Returns true if the widget has keyboard focus.
----@field get_parent fun(self:lysa.ui.Widget):lysa.ui.Widget|nil Returns the parent widget, or nil.
+---@field is_enabled fun(self:lysa.ui.Widget):boolean Returns true if the widget is reactive to user action (mouse & keyboard).
+---@field enable fun(self:lysa.ui.Widget, enabled:boolean|nil):nil Enables or disables widget reactions to input events (default true).
+---@field set_pos fun(self:lysa.ui.Widget, x:number, y:number):nil Moves the widget to the given position.
+---@field width number The widget width in pixels. (read-only)
+---@field height number The widget height in pixels. (read-only)
+---@field set_size fun(self:lysa.ui.Widget, width:number, height:number):nil Resizes the widget in pixels.
+---@field rect any The size and position of the widget.
+---@field set_rect fun(self:lysa.ui.Widget, x:number, y:number, width:number, height:number):nil Changes the size and position with x, y, width, height components.
+---@field alignment integer The current widget placement alignment (see lysa.ui.Alignment).
+---@field font any The current font of the widget.
+---@field font_scale number The font scale.
+---@field is_focused boolean True if the widget has keyboard focus. (read-only)
+---@field parent lysa.ui.Widget|nil The parent widget, or nil. (read-only)
 ---@field remove fun(self:lysa.ui.Widget, child:lysa.ui.Widget):nil Removes a child widget.
----@field remove_all fun(self:lysa.ui.Widget):nil Removes all children recursively.
----@field set_padding fun(self:lysa.ui.Widget, padding:number):nil Sets children padding.
----@field get_padding fun(self:lysa.ui.Widget):number Returns children padding.
----@field get_vborder fun(self:lysa.ui.Widget):number Returns vertical border size.
----@field get_hborder fun(self:lysa.ui.Widget):number Returns horizontal border size.
----@field set_vborder fun(self:lysa.ui.Widget, size:number):nil Sets vertical border size.
----@field set_hborder fun(self:lysa.ui.Widget, size:number):nil Sets horizontal border size.
----@field is_draw_background fun(self:lysa.ui.Widget):boolean Returns false if background is transparent.
----@field set_draw_background fun(self:lysa.ui.Widget, draw:boolean):nil Sets whether to draw the background.
----@field is_pushed fun(self:lysa.ui.Widget):boolean Returns true if the widget is currently pushed.
----@field is_pointed fun(self:lysa.ui.Widget):boolean Returns true if the mouse is over the widget.
----@field is_freezed fun(self:lysa.ui.Widget):boolean Returns true if the widget is not responding to events.
----@field is_overlapping fun(self:lysa.ui.Widget):boolean Returns true if the widget overlaps others.
----@field get_children_rect fun(self:lysa.ui.Widget):any Returns the bounding rectangle of all children.
----@field set_freezed fun(self:lysa.ui.Widget, freeze:boolean):nil Sets whether the widget is frozen.
----@field set_pushed fun(self:lysa.ui.Widget, pushed:boolean):nil Sets the pushed state of the widget.
+---@field remove_all fun(self:lysa.ui.Widget):nil Removes all children widgets recursively.
+---@field padding number Children padding (space between children).
+---@field vborder number Vertical border size.
+---@field hborder number Horizontal border size.
+---@field is_draw_background boolean False if the background is transparent.
+---@field is_pushed boolean True if the widget is currently pushed (e.g. mouse button down).
+---@field is_pointed boolean True if the widget is currently pointed by the mouse. (read-only)
+---@field is_freezed boolean True if the widget is not responding to events.
+---@field is_overlapping boolean True if the widget overlaps other widgets. (read-only)
+---@field children_rect any The rectangle enclosing all children. (read-only)
 ---@field refresh fun(self:lysa.ui.Widget):nil Forces a full redraw of the widget.
----@field get_group_index fun(self:lysa.ui.Widget):integer Returns the user-defined group index.
----@field set_group_index fun(self:lysa.ui.Widget, index:integer):nil Sets the user-defined group index.
----@field get_transparency fun(self:lysa.ui.Widget):number Returns the transparency alpha value.
----@field set_transparency fun(self:lysa.ui.Widget, alpha:number):nil Sets the transparency alpha value.
+---@field group_index integer The user-defined group index.
+---@field transparency number The transparency alpha value.
 ---@field resize_children fun(self:lysa.ui.Widget):nil Resizes children widgets.
 ---@field add_child fun(self:lysa.ui.Widget, child:lysa.ui.Widget, alignment:integer, resource:string|nil):lysa.ui.Widget Adds a child widget with alignment and optional resource string.
 
@@ -144,63 +133,48 @@
 ---@class lysa.ui.Button : lysa.ui.Box
 
 ---@class lysa.ui.CheckWidget : lysa.ui.Widget
----@field get_state fun(self:lysa.ui.CheckWidget):integer Returns the current state (see lysa.ui.CheckState).
----@field set_state fun(self:lysa.ui.CheckWidget, state:integer):nil Changes the widget state.
+---@field state integer The current state of the widget (see lysa.ui.CheckState).
 
 ---@class lysa.ui.ToggleButton : lysa.ui.CheckWidget
 
 ---@class lysa.ui.Line : lysa.ui.Widget
----@field get_style fun(self:lysa.ui.Line):integer Returns the line orientation (see lysa.ui.LineStyle).
----@field set_style fun(self:lysa.ui.Line, style:integer):nil Sets the line orientation.
+---@field style integer The current line orientation (see lysa.ui.LineStyle).
 
 ---@class lysa.ui.HLine : lysa.ui.Line
 
 ---@class lysa.ui.VLine : lysa.ui.Line
 
 ---@class lysa.ui.Frame : lysa.ui.Panel
----@field get_title fun(self:lysa.ui.Frame):string Returns the frame title.
----@field set_title fun(self:lysa.ui.Frame, title:string):nil Sets the frame title.
----@field get_title_color fun(self:lysa.ui.Frame):any Returns the title text color.
----@field set_title_color fun(self:lysa.ui.Frame, color:any):nil Sets the title text color.
+---@field title string The frame title.
+---@field title_color any The title text color.
 
 ---@class lysa.ui.Text : lysa.ui.Widget
----@field get_text fun(self:lysa.ui.Text):string Returns the displayed text.
----@field set_text fun(self:lysa.ui.Text, text:string):nil Sets the text to display.
----@field get_text_color fun(self:lysa.ui.Text):any Returns the text color.
----@field set_text_color fun(self:lysa.ui.Text, color:any):nil Sets the text color.
----@field get_size fun(self:lysa.ui.Text):{number, number} Returns the {width, height} of the text.
+---@field text string The displayed text.
+---@field text_color any The text color.
+---@field size {number, number} The {width, height} size of the rendered text. (read-only)
 
 ---@class lysa.ui.TextEdit : lysa.ui.Widget
----@field is_read_only fun(self:lysa.ui.TextEdit):boolean Returns true if the widget is read-only.
----@field set_read_only fun(self:lysa.ui.TextEdit, readonly:boolean):nil Sets whether the widget is read-only.
----@field get_text fun(self:lysa.ui.TextEdit):string Returns the current text.
----@field set_text fun(self:lysa.ui.TextEdit, text:string):nil Sets the text.
----@field get_sel_start fun(self:lysa.ui.TextEdit):integer Returns the selection start position.
----@field set_sel_start fun(self:lysa.ui.TextEdit, start:integer):nil Sets the selection start position.
----@field get_first_displayed_char fun(self:lysa.ui.TextEdit):integer Returns the index of the first displayed character.
----@field get_displayed_text fun(self:lysa.ui.TextEdit):string Returns the text currently displayed in the text box.
+---@field is_read_only boolean True if the widget is read-only.
+---@field text string The current text.
+---@field sel_start integer The selection start position.
+---@field first_displayed_char integer The index of the first displayed character. (read-only)
+---@field displayed_text string The text currently being displayed in the text box. (read-only)
 ---@field set_resources fun(self:lysa.ui.TextEdit, resource:string):nil Sets the UI resources for the text edit.
 
 ---@class lysa.ui.Image : lysa.ui.Widget
----@field set_auto_size fun(self:lysa.ui.Image, autoSize:boolean):nil Sets whether to automatically resize to image size.
----@field get_color fun(self:lysa.ui.Image):any Returns the image color tint.
----@field set_color fun(self:lysa.ui.Image, color:any):nil Sets the image color tint.
----@field set_image fun(self:lysa.ui.Image, image:any):nil Sets the image to display.
----@field get_image fun(self:lysa.ui.Image):any Returns the currently displayed image, or nil.
+---@field set_auto_size fun(self:lysa.ui.Image, autoSize:boolean):nil Sets whether to automatically resize the widget to the image size.
+---@field color any The image color tint.
+---@field image any The currently displayed image, or nil.
 
 ---@class lysa.ui.ValueSelect : lysa.ui.Widget
----@field get_min fun(self:lysa.ui.ValueSelect):number Returns the minimum value.
----@field get_max fun(self:lysa.ui.ValueSelect):number Returns the maximum value.
----@field get_value fun(self:lysa.ui.ValueSelect):number Returns the current value.
----@field get_step fun(self:lysa.ui.ValueSelect):number Returns the step increment.
----@field set_min fun(self:lysa.ui.ValueSelect, min:number):nil Sets the minimum value.
----@field set_max fun(self:lysa.ui.ValueSelect, max:number):nil Sets the maximum value.
----@field set_value fun(self:lysa.ui.ValueSelect, value:number):nil Sets the current value.
----@field set_step fun(self:lysa.ui.ValueSelect, step:number):nil Sets the step increment.
+---@field min number The minimum value.
+---@field max number The maximum value.
+---@field value number The current value.
+---@field step number The step increment.
 
 ---@class lysa.ui.ScrollBar : lysa.ui.ValueSelect
----@field get_scroll_bar_type fun(self:lysa.ui.ScrollBar):integer Returns the orientation (see lysa.ui.ScrollBarType).
----@field set_resources fun(self:lysa.ui.ScrollBar, area:string, cage:string):nil Sets the UI resources for the scroll bar.
+---@field scroll_bar_type integer The scroll bar orientation (see lysa.ui.ScrollBarType). (read-only)
+---@field set_resources fun(self:lysa.ui.ScrollBar, area:string, cage:string):nil Sets the UI resources for the scroll bar (area = scroll area, cage = scroll lift).
 
 ---@class lysa.ui.VScrollBar : lysa.ui.ScrollBar
 
@@ -219,55 +193,46 @@
 ---@field expand fun(self:lysa.ui.TreeView, item:lysa.ui.Widget):nil Expands the tree item associated with the given widget.
 
 ---@class lysa.ui.Window
----@field get_resizeable_borders fun(self:lysa.ui.Window):integer Returns the resizable borders bitmask (see lysa.ui.ResizeableBorder).
----@field set_resizeable_borders fun(self:lysa.ui.Window, borders:integer):nil Sets the resizable borders bitmask.
----@field get_widget fun(self:lysa.ui.Window):lysa.ui.Widget
----@field get_style fun(self:lysa.ui.Window):any Returns the current style, or nil.
----@field set_style fun(self:lysa.ui.Window, style:any):nil Sets the current style (pass nil to install the default).
----@field set_widget fun(self:lysa.ui.Window, child:lysa.ui.Widget|nil, resources:string|nil, padding:number|nil):nil Sets the root widget.
+---@field resizeable_borders integer Bitmask of which borders can resize the window (see lysa.ui.ResizeableBorder).
+---@field widget lysa.ui.Widget The root widget that covers the entire window. (read-only)
+---@field style any The current style layout, or nil.
+---@field set_widget fun(self:lysa.ui.Window, child:lysa.ui.Widget|nil, resources:string|nil, padding:number|nil):nil Sets the root widget. Call setStyle(nil) first if no layout has been set previously.
 ---@field set_focused_widget fun(self:lysa.ui.Window, widget:lysa.ui.Widget):nil Moves keyboard focus to the given widget.
----@field get_width fun(self:lysa.ui.Window):number Returns the client area width.
----@field get_height fun(self:lysa.ui.Window):number Returns the client area height.
----@field get_rect fun(self:lysa.ui.Window):any Returns the client area rectangle.
----@field set_rect fun(self:lysa.ui.Window, rect:any):nil Sets the client area position and size.
----@field set_width fun(self:lysa.ui.Window, width:number):nil Sets the client area width.
----@field set_height fun(self:lysa.ui.Window, height:number):nil Sets the client area height.
----@field set_pos fun(self:lysa.ui.Window, x:number, y:number):nil Sets the window position (bottom-left).
----@field set_x fun(self:lysa.ui.Window, x:number):nil Sets the X position.
----@field set_y fun(self:lysa.ui.Window, y:number):nil Sets the Y position.
----@field is_visible fun(self:lysa.ui.Window):boolean Returns true if the window is visible.
----@field set_visible fun(self:lysa.ui.Window, visible:boolean):nil Sets window visibility (effective next frame).
+---@field width number The client area width.
+---@field height number The client area height.
+---@field rect any The client area position and size.
+---@field set_pos fun(self:lysa.ui.Window, x:number, y:number):nil Sets the window position (bottom-left corner).
+---@field set_x fun(self:lysa.ui.Window, x:number):nil Sets the X position (bottom-left).
+---@field set_y fun(self:lysa.ui.Window, y:number):nil Sets the Y position (bottom-left).
+---@field is_visible boolean Whether the window is visible. The change is effective at the start of the next frame.
 ---@field show fun(self:lysa.ui.Window):nil Shows the window (effective next frame).
 ---@field hide fun(self:lysa.ui.Window):nil Hides the window (effective next frame).
 ---@field set_transparency fun(self:lysa.ui.Window, alpha:number):nil Sets the alpha transparency value.
----@field set_minimum_size fun(self:lysa.ui.Window, width:number, height:number):nil Sets the minimum window size.
+---@field set_minimum_size fun(self:lysa.ui.Window, width:number, height:number):nil Sets the minimum window size (default 2x2).
 ---@field set_maximum_size fun(self:lysa.ui.Window, width:number, height:number):nil Sets the maximum window size.
----@field get_minimum_width fun(self:lysa.ui.Window):number Returns the minimum width.
----@field get_minimum_height fun(self:lysa.ui.Window):number Returns the minimum height.
----@field get_maximum_width fun(self:lysa.ui.Window):number Returns the maximum width.
----@field get_maximum_height fun(self:lysa.ui.Window):number Returns the maximum height.
----@field get_font fun(self:lysa.ui.Window):any Returns the default font.
----@field set_font fun(self:lysa.ui.Window, font:any):nil Sets the default font.
----@field get_font_scale fun(self:lysa.ui.Window):number Returns the default font scale.
----@field set_font_scale fun(self:lysa.ui.Window, scale:number):nil Sets the default font scale.
----@field get_text_color fun(self:lysa.ui.Window):any Returns the default text color.
----@field set_text_color fun(self:lysa.ui.Window, color:any):nil Sets the default text color.
+---@field minimum_width number The minimum width of the window. (read-only)
+---@field minimum_height number The minimum height of the window. (read-only)
+---@field maximum_width number The maximum width of the window. (read-only)
+---@field maximum_height number The maximum height of the window. (read-only)
+---@field font any The default font for the window.
+---@field font_scale number The default font scale.
+---@field text_color any The default text color.
 ---@field refresh fun(self:lysa.ui.Window):nil Forces a redraw of all the UI.
 ---@field add_child fun(self:lysa.ui.Window, child:lysa.ui.Widget, alignment:integer, resource:string|nil):lysa.ui.Widget Adds a child widget to the root widget.
 ---@field remove_child fun(self:lysa.ui.Window, child:lysa.ui.Widget):nil Removes a child widget from the root widget.
----@field create_text fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text
+---@field create_text fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text widget to the window.
 
 ---@class lysa.ui.WindowManager
 ---@field create fun(self:lysa.ui.WindowManager, rect:any):lysa.ui.Window Creates and adds a new UI window with the given rectangle.
 ---@field add fun(self:lysa.ui.WindowManager, window:lysa.ui.Window):lysa.ui.Window Adds an existing UI window to the manager.
----@field remove fun(self:lysa.ui.WindowManager, window:lysa.ui.Window):nil Removes a UI window (effective next frame).
----@field get_default_font fun(self:lysa.ui.WindowManager):any Returns the default font.
----@field get_default_font_scale fun(self:lysa.ui.WindowManager):number Returns the default font scale.
----@field get_default_text_color fun(self:lysa.ui.WindowManager):any Returns the default text color.
----@field get_aspect_ratio fun(self:lysa.ui.WindowManager):number Returns the aspect ratio of the managed rendering window.
+---@field remove fun(self:lysa.ui.WindowManager, window:lysa.ui.Window):nil Removes a UI window (effective at the start of the next frame).
+---@field default_font any The default font loaded at creation. (read-only)
+---@field default_font_scale number The default font scale. (read-only)
+---@field default_text_color any The default text color. (read-only)
+---@field aspect_ratio number The aspect ratio of the managed rendering window. (read-only)
 ---@field refresh fun(self:lysa.ui.WindowManager):nil Forces a redraw of all UI at the start of the next frame.
----@field get_resize_delta fun(self:lysa.ui.WindowManager):number Returns the resize delta for window resizing.
----@field set_enable_window_resizing fun(self:lysa.ui.WindowManager, enable:boolean):nil Enables or disables user window resizing.
+---@field resize_delta number The pixel delta used for window border resizing (default 5.0). (read-only)
+---@field set_enable_window_resizing fun(self:lysa.ui.WindowManager, enable:boolean):nil Enables or disables UI window resizing by the user.
 
 ------------------------------------------------------------------------
 -- Global namespace declaration

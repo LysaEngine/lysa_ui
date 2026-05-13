@@ -121,7 +121,7 @@ namespace lysa::ui {
         .endNamespace()
 
         .beginClass<Widget>("Widget")
-            .addFunction("get_type",             &Widget::getType)
+            .addProperty("type",                 &Widget::getType)
             .addFunction("is_visible",           &Widget::isVisible)
             .addFunction("show",
                 +[](Widget* self, bool v = true){ self->show(v); })
@@ -129,44 +129,33 @@ namespace lysa::ui {
             .addFunction("enable",
                 +[](Widget* self, bool v = true){ self->enable(v); })
             .addFunction("set_pos",              &Widget::setPos)
-            .addFunction("get_width",            &Widget::getWidth)
-            .addFunction("get_height",           &Widget::getHeight)
+            .addProperty("width",                &Widget::getWidth)
+            .addProperty("height",               &Widget::getHeight)
             .addFunction("set_size",             &Widget::setSize)
-            .addFunction("get_rect",             &Widget::getRect)
+            .addProperty("rect",
+                &Widget::getRect,
+                static_cast<void(Widget::*)(const Rect&)>(&Widget::setRect))
             .addFunction("set_rect",
-                luabridge::overload<float, float, float, float>(&Widget::setRect),
-                luabridge::overload<const Rect&>(&Widget::setRect)
-            )
-            .addFunction("get_alignment",        &Widget::getAlignment)
-            .addFunction("set_alignment",        &Widget::setAlignment)
-            .addFunction("get_font",             &Widget::getFont)
-            .addFunction("set_font",             &Widget::setFont)
-            .addFunction("get_font_scale",       &Widget::getFontScale)
-            .addFunction("set_font_scale",       &Widget::setFontScale)
-            .addFunction("is_focused",           &Widget::isFocused)
-            .addFunction("get_parent",           &Widget::getParent)
+                luabridge::overload<float, float, float, float>(&Widget::setRect))
+            .addProperty("alignment",            &Widget::getAlignment, &Widget::setAlignment)
+            .addProperty("font",                 &Widget::getFont, &Widget::setFont)
+            .addProperty("font_scale",           &Widget::getFontScale, &Widget::setFontScale)
+            .addProperty("is_focused",           &Widget::isFocused)
+            .addProperty("parent",               &Widget::getParent)
             .addFunction("remove",               &Widget::remove)
             .addFunction("remove_all",           &Widget::removeAll)
-            .addFunction("set_padding",          &Widget::setPadding)
-            .addFunction("get_padding",          &Widget::getPadding)
-            .addFunction("get_vborder",          &Widget::getVBorder)
-            .addFunction("get_hborder",          &Widget::getHBorder)
-            .addFunction("set_vborder",          &Widget::setVBorder)
-            .addFunction("set_hborder",          &Widget::setHBorder)
-            .addFunction("is_draw_background",   &Widget::isDrawBackground)
-            .addFunction("set_draw_background",  &Widget::setDrawBackground)
-            .addFunction("is_pushed",            &Widget::isPushed)
-            .addFunction("is_pointed",           &Widget::isPointed)
-            .addFunction("is_freezed",           &Widget::isFreezed)
-            .addFunction("is_overlapping",       &Widget::isOverlapping)
-            .addFunction("get_children_rect",    &Widget::getChildrenRect)
-            .addFunction("set_freezed",          &Widget::setFreezed)
-            .addFunction("set_pushed",           &Widget::setPushed)
+            .addProperty("padding",              &Widget::getPadding, &Widget::setPadding)
+            .addProperty("vborder",              &Widget::getVBorder, &Widget::setVBorder)
+            .addProperty("hborder",              &Widget::getHBorder, &Widget::setHBorder)
+            .addProperty("is_draw_background",   &Widget::isDrawBackground, &Widget::setDrawBackground)
+            .addProperty("is_pushed",            &Widget::isPushed, &Widget::setPushed)
+            .addProperty("is_pointed",           &Widget::isPointed)
+            .addProperty("is_freezed",           &Widget::isFreezed, &Widget::setFreezed)
+            .addProperty("is_overlapping",       &Widget::isOverlapping)
+            .addProperty("children_rect",        &Widget::getChildrenRect)
             .addFunction("refresh",              &Widget::refresh)
-            .addFunction("get_group_index",      &Widget::getGroupIndex)
-            .addFunction("set_group_index",      &Widget::setGroupIndex)
-            .addFunction("get_transparency",     &Widget::getTransparency)
-            .addFunction("set_transparency",     &Widget::setTransparency)
+            .addProperty("group_index",          &Widget::getGroupIndex, &Widget::setGroupIndex)
+            .addProperty("transparency",         &Widget::getTransparency, &Widget::setTransparency)
             .addFunction("resize_children",      &Widget::resizeChildren)
             // add_child: expose the non-template path via a lambda taking a shared_ptr<Widget>
             .addFunction("add_child",
@@ -194,8 +183,7 @@ namespace lysa::ui {
         // CheckWidget : Widget  (abstract – expose state methods)
         // -----------------------------------------------------------------
         .deriveClass<CheckWidget, Widget>("CheckWidget")
-            .addFunction("get_state", &CheckWidget::getState)
-            .addFunction("set_state", &CheckWidget::setState)
+            .addProperty("state", &CheckWidget::getState, &CheckWidget::setState)
         .endClass()
 
         // -----------------------------------------------------------------
@@ -210,8 +198,7 @@ namespace lysa::ui {
         // -----------------------------------------------------------------
         .deriveClass<Line, Widget>("Line")
             .addConstructor<void(Line::LineStyle)>()
-            .addFunction("get_style", &Line::getStyle)
-            .addFunction("set_style", &Line::setStyle)
+            .addProperty("style", &Line::getStyle, &Line::setStyle)
         .endClass()
 
         .deriveClass<HLine, Line>("HLine")
@@ -227,10 +214,8 @@ namespace lysa::ui {
         // -----------------------------------------------------------------
         .deriveClass<Frame, Panel>("Frame")
             .addConstructor<void(const std::string&)>()
-            .addFunction("get_title",       &Frame::getTitle)
-            .addFunction("set_title",       &Frame::setTitle)
-            .addFunction("get_title_color", &Frame::getTitleColor)
-            .addFunction("set_title_color", &Frame::setTitleColor)
+            .addProperty("title",       &Frame::getTitle, &Frame::setTitle)
+            .addProperty("title_color", &Frame::getTitleColor, &Frame::setTitleColor)
         .endClass()
 
         // -----------------------------------------------------------------
@@ -238,12 +223,10 @@ namespace lysa::ui {
         // -----------------------------------------------------------------
         .deriveClass<Text, Widget>("Text")
             .addConstructor<void(), void(const std::string&)>()
-            .addFunction("get_text",       &Text::getText)
-            .addFunction("set_text",       &Text::setText)
-            .addFunction("get_text_color", &Text::getTextColor)
-            .addFunction("set_text_color", &Text::setTextColor)
+            .addProperty("text",       &Text::getText, &Text::setText)
+            .addProperty("text_color", &Text::getTextColor, &Text::setTextColor)
             .addFunction("get_size",
-                +[](Text* self) -> std::pair<float, float> {
+                +[](const Text* self) -> std::pair<float, float> {
                     float w = 0, h = 0;
                     self->getSize(w, h);
                     return {w, h};
@@ -255,14 +238,11 @@ namespace lysa::ui {
         // -----------------------------------------------------------------
         .deriveClass<TextEdit, Widget>("TextEdit")
             .addConstructor<void(), void(const std::string&)>()
-            .addFunction("is_read_only",             &TextEdit::isReadOnly)
-            .addFunction("set_read_only",            &TextEdit::setReadOnly)
-            .addFunction("get_text",                 &TextEdit::getText)
-            .addFunction("set_text",                 &TextEdit::setText)
-            .addFunction("get_sel_start",            &TextEdit::getSelStart)
-            .addFunction("set_sel_start",            &TextEdit::setSelStart)
-            .addFunction("get_first_displayed_char", &TextEdit::getFirstDisplayedChar)
-            .addFunction("get_displayed_text",       &TextEdit::getDisplayedText)
+            .addProperty("is_read_only",             &TextEdit::isReadOnly, &TextEdit::setReadOnly)
+            .addProperty("text",                     &TextEdit::getText, &TextEdit::setText)
+            .addProperty("sel_start",                &TextEdit::getSelStart, &TextEdit::setSelStart)
+            .addProperty("first_displayed_char",     &TextEdit::getFirstDisplayedChar)
+            .addProperty("displayed_text",           &TextEdit::getDisplayedText)
             .addFunction("set_resources",            &TextEdit::setResources)
         .endClass()
 
@@ -276,24 +256,18 @@ namespace lysa::ui {
                 void(const lysa::Image&, bool)
             >()
             .addFunction("set_auto_size", &Image::setAutoSize)
-            .addFunction("get_color",     &Image::getColor)
-            .addFunction("set_color",     &Image::setColor)
-            .addFunction("set_image",     &Image::setImage)
-            .addFunction("get_image",     &Image::getImage)
+            .addProperty("color",         &Image::getColor, &Image::setColor)
+            .addProperty("image",         &Image::getImage, &Image::setImage)
         .endClass()
 
         // -----------------------------------------------------------------
         // ValueSelect : Widget  (abstract base)
         // -----------------------------------------------------------------
         .deriveClass<ValueSelect, Widget>("ValueSelect")
-            .addFunction("get_min",   &ValueSelect::getMin)
-            .addFunction("get_max",   &ValueSelect::getMax)
-            .addFunction("get_value", &ValueSelect::getValue)
-            .addFunction("get_step",  &ValueSelect::getStep)
-            .addFunction("set_min",   &ValueSelect::setMin)
-            .addFunction("set_max",   &ValueSelect::setMax)
-            .addFunction("set_value", &ValueSelect::setValue)
-            .addFunction("set_step",  &ValueSelect::setStep)
+            .addProperty("min",   &ValueSelect::getMin, &ValueSelect::setMin)
+            .addProperty("max",   &ValueSelect::getMax, &ValueSelect::setMax)
+            .addProperty("value", &ValueSelect::getValue, &ValueSelect::setValue)
+            .addProperty("step",  &ValueSelect::getStep, &ValueSelect::setStep)
         .endClass()
 
         // -----------------------------------------------------------------
@@ -304,7 +278,7 @@ namespace lysa::ui {
                 void(),
                 void(ScrollBar::Type, float, float, float, float)
             >()
-            .addFunction("get_scroll_bar_type", &ScrollBar::getScrollBarType)
+            .addProperty("scroll_bar_type",     &ScrollBar::getScrollBarType)
             .addFunction("set_resources",       &ScrollBar::setResources)
         .endClass()
 
@@ -346,11 +320,9 @@ namespace lysa::ui {
         // -----------------------------------------------------------------
         .beginClass<Window>("Window")
             .addConstructor<void(const Rect&)>()
-            .addFunction("get_resizeable_borders", &Window::getResizeableBorders)
-            .addFunction("set_resizeable_borders", &Window::setResizeableBorders)
-            .addFunction("get_widget",              &Window::getWidget)
-            .addFunction("get_style",              &Window::getStyle)
-            .addFunction("set_style",              &Window::setStyle)
+            .addProperty("resizeable_borders",      &Window::getResizeableBorders, &Window::setResizeableBorders)
+            .addProperty("widget",                  &Window::getWidget)
+            .addProperty("style",                  &Window::getStyle, &Window::setStyle)
             .addFunction("set_widget",
                 +[](Window* self,
                     const std::shared_ptr<Widget>& child = nullptr,
@@ -359,35 +331,28 @@ namespace lysa::ui {
                     self->setWidget(child, resources, padding);
                 })
             .addFunction("set_focused_widget",  &Window::setFocusedWidget)
-            .addFunction("get_width",           &Window::getWidth)
-            .addFunction("get_height",          &Window::getHeight)
-            .addFunction("get_rect",            &Window::getRect)
-            .addFunction("set_rect",            &Window::setRect)
-            .addFunction("set_width",           &Window::setWidth)
-            .addFunction("set_height",          &Window::setHeight)
+            .addProperty("width",               &Window::getWidth, &Window::setWidth)
+            .addProperty("height",              &Window::getHeight, &Window::setHeight)
+            .addProperty("rect",                &Window::getRect, &Window::setRect)
             .addFunction("set_pos",
                 luabridge::overload<float, float>(&Window::setPos),
                 luabridge::overload<const float2&>(&Window::setPos)
             )
             .addFunction("set_x",               &Window::setX)
             .addFunction("set_y",               &Window::setY)
-            .addFunction("is_visible",          &Window::isVisible)
-            .addFunction("set_visible",         &Window::setVisible)
+            .addProperty("is_visible",          &Window::isVisible, &Window::setVisible)
             .addFunction("show",                &Window::show)
             .addFunction("hide",                &Window::hide)
             .addFunction("set_transparency",    &Window::setTransparency)
             .addFunction("set_minimum_size",    &Window::setMinimumSize)
             .addFunction("set_maximum_size",    &Window::setMaximumSize)
-            .addFunction("get_minimum_width",   &Window::getMinimumWidth)
-            .addFunction("get_minimum_height",  &Window::getMinimumHeight)
-            .addFunction("get_maximum_width",   &Window::getMaximumWidth)
-            .addFunction("get_maximum_height",  &Window::getMaximumHeight)
-            .addFunction("get_font",            &Window::getFont)
-            .addFunction("set_font",            &Window::setFont)
-            .addFunction("get_font_scale",      &Window::getFontScale)
-            .addFunction("set_font_scale",      &Window::setFontScale)
-            .addFunction("get_text_color",      &Window::getTextColor)
-            .addFunction("set_text_color",      &Window::setTextColor)
+            .addProperty("minimum_width",        &Window::getMinimumWidth)
+            .addProperty("minimum_height",       &Window::getMinimumHeight)
+            .addProperty("maximum_width",        &Window::getMaximumWidth)
+            .addProperty("maximum_height",       &Window::getMaximumHeight)
+            .addProperty("font",                &Window::getFont, &Window::setFont)
+            .addProperty("font_scale",          &Window::getFontScale, &Window::setFontScale)
+            .addProperty("text_color",          &Window::getTextColor, &Window::setTextColor)
             .addFunction("refresh",             &Window::refresh)
             // add_child shortcut mirrors Window::add<Widget>
             .addFunction("add_child",
@@ -418,12 +383,12 @@ namespace lysa::ui {
                 })
             .addFunction("add",                     &WindowManager::add)
             .addFunction("remove",                  &WindowManager::remove)
-            .addFunction("get_default_font",        &WindowManager::getDefaultFont)
-            .addFunction("get_default_font_scale",  &WindowManager::getDefaultFontScale)
-            .addFunction("get_default_text_color",  &WindowManager::getDefaultTextColor)
-            .addFunction("get_aspect_ratio",        &WindowManager::getAspectRatio)
-            .addFunction("refresh",                 &WindowManager::refresh)
-            .addFunction("get_resize_delta",        &WindowManager::getResizeDelta)
+            .addProperty("default_font",             &WindowManager::getDefaultFont)
+            .addProperty("default_font_scale",       &WindowManager::getDefaultFontScale)
+            .addProperty("default_text_color",       &WindowManager::getDefaultTextColor)
+            .addProperty("aspect_ratio",             &WindowManager::getAspectRatio)
+            .addFunction("refresh",                  &WindowManager::refresh)
+            .addProperty("resize_delta",             &WindowManager::getResizeDelta)
             .addFunction("set_enable_window_resizing", &WindowManager::setEnableWindowResizing)
         .endClass()
 
