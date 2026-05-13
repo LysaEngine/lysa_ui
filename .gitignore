@@ -379,3 +379,4 @@ cmake-build-debug-msvc
 cmake-build-debug-llvm
 /docs/html/
 /CLAUDE.md
+/.emmyrc.json
