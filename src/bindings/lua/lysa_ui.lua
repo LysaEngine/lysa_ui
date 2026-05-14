@@ -1,10 +1,6 @@
 ---@meta
 ---@diagnostic disable: missing-return, lowercase-global
 
-------------------------------------------------------------------------
--- Enums (exposed as namespaces)
-------------------------------------------------------------------------
-
 ---@class lysa.ui.Alignment
 ---@field NONE integer No alignment
 ---@field FILL integer Centered and resized to parent content size
@@ -87,10 +83,6 @@
 ---@field OnRangeChange string Range of a ValueSelect widget changed
 ---@field OnResize string Window size changed
 ---@field OnMove string Window position changed
-
-------------------------------------------------------------------------
--- Classes
-------------------------------------------------------------------------
 
 ---@class lysa.ui.Widget
 ---@field type integer The widget type (see lysa.ui.WidgetType). (read-only)
@@ -233,11 +225,6 @@
 ---@field refresh fun(self:lysa.ui.WindowManager):nil Forces a redraw of all UI at the start of the next frame.
 ---@field resize_delta number The pixel delta used for window border resizing (default 5.0). (read-only)
 ---@field set_enable_window_resizing fun(self:lysa.ui.WindowManager, enable:boolean):nil Enables or disables UI window resizing by the user.
-
-------------------------------------------------------------------------
--- Global namespace declaration
--- All lysa.ui.* classes above are accessible as fields of this global.
-------------------------------------------------------------------------
 
 ---@class lysa.ui
 ---@field Alignment lysa.ui.Alignment
