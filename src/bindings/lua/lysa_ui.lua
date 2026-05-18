@@ -212,7 +212,19 @@
 ---@field refresh fun(self:lysa.ui.Window):nil Forces a redraw of all the UI.
 ---@field add_child fun(self:lysa.ui.Window, child:lysa.ui.Widget, alignment:integer, resource:string|nil):lysa.ui.Widget Adds a child widget to the root widget.
 ---@field remove_child fun(self:lysa.ui.Window, child:lysa.ui.Widget):nil Removes a child widget from the root widget.
----@field create_text fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text widget to the window.
+---@field create_text fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text widget.
+---@field create_panel fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Panel Creates and adds a Panel widget.
+---@field create_box fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Box Creates and adds a Box widget (bordered panel).
+---@field create_button fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Button Creates and adds a Button widget.
+---@field create_toggle_button fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.ToggleButton Creates and adds a ToggleButton widget.
+---@field create_hline fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.HLine Creates and adds a horizontal Line widget.
+---@field create_vline fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.VLine Creates and adds a vertical Line widget.
+---@field create_frame fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment, title:string):lysa.ui.Frame Creates and adds a Frame widget with a title.
+---@field create_text_edit fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment, text:string|nil):lysa.ui.TextEdit Creates and adds a TextEdit widget.
+---@field create_image fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Image Creates and adds an Image widget.
+---@field create_vscrollbar fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.VScrollBar Creates and adds a vertical ScrollBar widget.
+---@field create_hscrollbar fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.HScrollBar Creates and adds a horizontal ScrollBar widget.
+---@field create_tree_view fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView widget.
 
 ---@class lysa.ui.WindowManager
 ---@field create fun(self:lysa.ui.WindowManager, rect:any):lysa.ui.Window Creates and adds a new UI window with the given rectangle.

@@ -370,6 +370,54 @@ namespace lysa::ui {
                 +[](Window* self, const int alignment, const std::string& text) -> std::shared_ptr<Text> {
                     return self->create<Text>(static_cast<Alignment>(alignment), text);
                 })
+            .addFunction("create_panel",
+                +[](Window* self, const int alignment) -> std::shared_ptr<Panel> {
+                    return self->create<Panel>(static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_box",
+                +[](Window* self, const int alignment) -> std::shared_ptr<Box> {
+                    return self->create<Box>(static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_button",
+                +[](Window* self, const int alignment) -> std::shared_ptr<Button> {
+                    return self->create<Button>(static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_toggle_button",
+                +[](Window* self, const int alignment) -> std::shared_ptr<ToggleButton> {
+                    return self->create<ToggleButton>(static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_hline",
+                +[](Window* self, const int alignment) -> std::shared_ptr<HLine> {
+                    return self->create<HLine>(static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_vline",
+                +[](Window* self, const int alignment) -> std::shared_ptr<VLine> {
+                    return self->create<VLine>(static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_frame",
+                +[](Window* self, const int alignment, const std::string& title) -> std::shared_ptr<Frame> {
+                    return self->create<Frame>(static_cast<Alignment>(alignment), title);
+                })
+            .addFunction("create_text_edit",
+                +[](Window* self, const int alignment, const std::string& text = "") -> std::shared_ptr<TextEdit> {
+                    return self->create<TextEdit>(static_cast<Alignment>(alignment), text);
+                })
+            .addFunction("create_image",
+                +[](Window* self, const int alignment) -> std::shared_ptr<Image> {
+                    return self->create<Image>(static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_vscrollbar",
+                +[](Window* self, const int alignment) -> std::shared_ptr<VScrollBar> {
+                    return self->create<VScrollBar>(static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_hscrollbar",
+                +[](Window* self, const int alignment) -> std::shared_ptr<HScrollBar> {
+                    return self->create<HScrollBar>(static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_tree_view",
+                +[](Window* self, const int alignment) -> std::shared_ptr<TreeView> {
+                    return self->create<TreeView>(static_cast<Alignment>(alignment));
+                })
         .endClass()
 
         // -----------------------------------------------------------------
