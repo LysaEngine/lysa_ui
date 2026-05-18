@@ -338,9 +338,9 @@ namespace lysa::ui {
                 luabridge::overload<float, float>(&Window::setPos),
                 luabridge::overload<const float2&>(&Window::setPos)
             )
-            .addFunction("set_x",               &Window::setX)
-            .addFunction("set_y",               &Window::setY)
-            .addProperty("is_visible",          &Window::isVisible, &Window::setVisible)
+            .addProperty("x",               &Window::getX, &Window::setX)
+            .addProperty("y",               &Window::getY, &Window::setY)
+            .addProperty("visible",          &Window::isVisible, &Window::setVisible)
             .addFunction("show",                &Window::show)
             .addFunction("hide",                &Window::hide)
             .addFunction("set_transparency",    &Window::setTransparency)

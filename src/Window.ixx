@@ -192,6 +192,10 @@ export namespace lysa::ui {
          */
         void setPos(const float2& pos);
 
+        float getX() const { return rect.x; }
+
+        float getY() const { return rect.y; }
+
         /**
          * Sets the X position of the Window, bottom-left.
          */

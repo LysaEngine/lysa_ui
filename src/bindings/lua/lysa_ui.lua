@@ -194,9 +194,9 @@
 ---@field height number The client area height.
 ---@field rect any The client area position and size.
 ---@field set_pos fun(self:lysa.ui.Window, x:number, y:number):nil Sets the window position (bottom-left corner).
----@field set_x fun(self:lysa.ui.Window, x:number):nil Sets the X position (bottom-left).
----@field set_y fun(self:lysa.ui.Window, y:number):nil Sets the Y position (bottom-left).
----@field is_visible boolean Whether the window is visible. The change is effective at the start of the next frame.
+---@field x number Sets the X position (bottom-left).
+---@field y number Sets the Y position (bottom-left).
+---@field visible boolean Whether the window is visible. The change is effective at the start of the next frame.
 ---@field show fun(self:lysa.ui.Window):nil Shows the window (effective next frame).
 ---@field hide fun(self:lysa.ui.Window):nil Hides the window (effective next frame).
 ---@field set_transparency fun(self:lysa.ui.Window, alpha:number):nil Sets the alpha transparency value.
