@@ -157,6 +157,58 @@ namespace lysa::ui {
             .addProperty("group_index",          &Widget::getGroupIndex, &Widget::setGroupIndex)
             .addProperty("transparency",         &Widget::getTransparency, &Widget::setTransparency)
             .addFunction("resize_children",      &Widget::resizeChildren)
+            .addFunction("create_text",
+                +[](Widget* self, const int alignment, const std::string& text) -> std::shared_ptr<Text> {
+                    return self->create<Text>(static_cast<Alignment>(alignment), text);
+                })
+            .addFunction("create_panel",
+                +[](Widget* self, const int alignment) -> std::shared_ptr<Panel> {
+                    return self->create<Panel>(static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_box",
+                +[](Widget* self, const int alignment) -> std::shared_ptr<Box> {
+                    return self->create<Box>(static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_button",
+                +[](Widget* self, const int alignment) -> std::shared_ptr<Button> {
+                    return self->create<Button>(static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_toggle_button",
+                +[](Widget* self, const int alignment) -> std::shared_ptr<ToggleButton> {
+                    return self->create<ToggleButton>(static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_hline",
+                +[](Widget* self, const int alignment) -> std::shared_ptr<HLine> {
+                    return self->create<HLine>(static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_vline",
+                +[](Widget* self, const int alignment) -> std::shared_ptr<VLine> {
+                    return self->create<VLine>(static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_frame",
+                +[](Widget* self, const int alignment, const std::string& title) -> std::shared_ptr<Frame> {
+                    return self->create<Frame>(static_cast<Alignment>(alignment), title);
+                })
+            .addFunction("create_text_edit",
+                +[](Widget* self, const int alignment, const std::string& text = "") -> std::shared_ptr<TextEdit> {
+                    return self->create<TextEdit>(static_cast<Alignment>(alignment), text);
+                })
+            .addFunction("create_image",
+                +[](Widget* self, const int alignment) -> std::shared_ptr<Image> {
+                    return self->create<Image>(static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_vscrollbar",
+                +[](Widget* self, const int alignment) -> std::shared_ptr<VScrollBar> {
+                    return self->create<VScrollBar>(static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_hscrollbar",
+                +[](Widget* self, const int alignment) -> std::shared_ptr<HScrollBar> {
+                    return self->create<HScrollBar>(static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_tree_view",
+                +[](Widget* self, const int alignment) -> std::shared_ptr<TreeView> {
+                    return self->create<TreeView>(static_cast<Alignment>(alignment));
+                })
             // add_child: expose the non-template path via a lambda taking a shared_ptr<Widget>
             .addFunction("add_child",
                 +[](Widget* self,
