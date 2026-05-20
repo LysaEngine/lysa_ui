@@ -68,12 +68,16 @@ export namespace lysa::ui {
         /**
          * Returns the default font scale.
          */
-        auto getDefaultFontScale() const { return fontScale; }
+        float getDefaultFontScale() const { return fontScale; }
 
         /**
          * Returns the default text color.
          */
-        auto getDefaultTextColor() const { return textColor; }
+        float4 getDefaultTextColor() const { return textColor; }
+
+        void setDefaultFontScale(const float defaultFontScale) { fontScale = defaultFontScale; }
+
+        void setDefaultTextColor(const float4& defaultTextColor) { textColor = defaultTextColor; }
 
         /**
          * Returns the aspect ratio of the managed rendering window.

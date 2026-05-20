@@ -243,9 +243,9 @@
 ---@field create fun(self:lysa.ui.WindowManager, rect:any):lysa.ui.Window Creates and adds a new UI window with the given rectangle.
 ---@field add fun(self:lysa.ui.WindowManager, window:lysa.ui.Window):lysa.ui.Window Adds an existing UI window to the manager.
 ---@field remove fun(self:lysa.ui.WindowManager, window:lysa.ui.Window):nil Removes a UI window (effective at the start of the next frame).
----@field default_font any The default font loaded at creation. (read-only)
----@field default_font_scale number The default font scale. (read-only)
----@field default_text_color any The default text color. (read-only)
+---@field default_font lysa.Font The default font loaded at creation. (read-only)
+---@field default_font_scale number The default font scale.
+---@field default_text_color lysa.float4 The default text color.
 ---@field aspect_ratio number The aspect ratio of the managed rendering window. (read-only)
 ---@field refresh fun(self:lysa.ui.WindowManager):nil Forces a redraw of all UI at the start of the next frame.
 ---@field resize_delta number The pixel delta used for window border resizing (default 5.0). (read-only)

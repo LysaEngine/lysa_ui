@@ -24,9 +24,6 @@ namespace lysa::ui {
     }
 
     Window::~Window() {
-        // if (windowManager) {
-            // static_cast<WindowManager*>(windowManager)->remove(this->shared_from_this());
-        // }
     }
 
     void Window::attach(void* windowManager) {

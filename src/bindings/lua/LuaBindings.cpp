@@ -481,14 +481,14 @@ namespace lysa::ui {
                 +[](WindowManager* self, const Rect& rect) -> std::shared_ptr<Window> {
                     return self->create(rect);
                 })
-            .addFunction("add",                     &WindowManager::add)
-            .addFunction("remove",                  &WindowManager::remove)
-            .addProperty("default_font",             &WindowManager::getDefaultFont)
-            .addProperty("default_font_scale",       &WindowManager::getDefaultFontScale)
-            .addProperty("default_text_color",       &WindowManager::getDefaultTextColor)
-            .addProperty("aspect_ratio",             &WindowManager::getAspectRatio)
-            .addFunction("refresh",                  &WindowManager::refresh)
-            .addProperty("resize_delta",             &WindowManager::getResizeDelta)
+            .addFunction("add", &WindowManager::add)
+            .addFunction("remove", &WindowManager::remove)
+            .addProperty("default_font", &WindowManager::getDefaultFont)
+            .addProperty("default_font_scale", &WindowManager::getDefaultFontScale, &WindowManager::setDefaultFontScale)
+            .addProperty("default_text_color", &WindowManager::getDefaultTextColor, &WindowManager::setDefaultTextColor)
+            .addProperty("aspect_ratio", &WindowManager::getAspectRatio)
+            .addFunction("refresh", &WindowManager::refresh)
+            .addProperty("resize_delta", &WindowManager::getResizeDelta)
             .addFunction("set_enable_window_resizing", &WindowManager::setEnableWindowResizing)
         .endClass()
 
