@@ -116,6 +116,8 @@ export namespace lysa::ui {
          */
         bool onInput(const InputEvent& inputEvent);
 
+        void removeFont(const std::shared_ptr<Font>& font);
+
     private:
         const float resizeDelta{5.0f};
         RenderingWindow& renderingWindow;

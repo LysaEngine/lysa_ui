@@ -246,6 +246,7 @@
 ---@field default_font lysa.Font The default font loaded at creation. (read-only)
 ---@field default_font_scale number The default font scale.
 ---@field default_text_color lysa.float4 The default text color.
+---@field remove_font fun(self:lysa.ui.WindowManager, font:lysa.Font): nil
 ---@field aspect_ratio number The aspect ratio of the managed rendering window. (read-only)
 ---@field refresh fun(self:lysa.ui.WindowManager):nil Forces a redraw of all UI at the start of the next frame.
 ---@field resize_delta number The pixel delta used for window border resizing (default 5.0). (read-only)
