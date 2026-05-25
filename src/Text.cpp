@@ -13,7 +13,7 @@ namespace lysa::ui {
 
     Text::Text(const std::string& text) :
         Widget{TEXT},
-        text{std::move(text)} {
+        text{text} {
         allowChildren  = false;
         drawBackground = false;
     }
@@ -56,8 +56,8 @@ namespace lysa::ui {
     void Text::getSize(float &width, float &height) const {
         const auto& font = getFont();
         const auto scale = getFontScale();
-        font->getSize(text, scale, width, height);
-        height += font->getDescender() * scale;
+        width = font->getWidth(text, scale);
+        height = font->getLineHeight() * scale;
         if (window) {
             width /= static_cast<Window*>(window)->getAspectRatio();
         }
