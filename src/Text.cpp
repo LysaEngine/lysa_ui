@@ -56,8 +56,7 @@ namespace lysa::ui {
     void Text::getSize(float &width, float &height) const {
         const auto& font = getFont();
         const auto scale = getFontScale();
-        width = font->getWidth(text, scale);
-        height = font->getLineHeight() * scale;
+        font->getSize(text, scale, width, height);
         if (window) {
             width /= static_cast<Window*>(window)->getAspectRatio();
         }
