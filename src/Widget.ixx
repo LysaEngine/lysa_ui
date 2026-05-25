@@ -91,7 +91,7 @@ export namespace lysa::ui {
         /**
          * Moves the widget to a particular position.
          */
-        void setPos(float x, float y);
+        virtual void setPos(float x, float y);
 
         /**
          * Returns the width of the widget, in pixels.
@@ -419,7 +419,7 @@ export namespace lysa::ui {
     protected:
         const Type type;
         Rect rect;
-        Rect defaultRect;
+        // Rect defaultRect;
         float hborder{0};
         float vborder{0};
         float padding{0};
@@ -441,7 +441,7 @@ export namespace lysa::ui {
         bool mouseMoveOnFocus{false};
         float fontScale{0.0f};
 
-        virtual Rect _getDefaultRect() { return defaultRect; }
+        // virtual Rect _getDefaultRect() { return defaultRect; }
 
         virtual void _init(Widget &child, Alignment alignment, const std::string &res, bool overlap);
 

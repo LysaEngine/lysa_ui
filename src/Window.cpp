@@ -355,5 +355,9 @@ namespace lysa::ui {
         maxWidth  = width;
         maxHeight = height;
     }
+
+    float Window::getAspectRatio() const {
+        return static_cast<WindowManager*>(windowManager)->getAspectRatio();
+    }
 }
 

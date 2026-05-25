@@ -21,13 +21,12 @@ namespace lysa::ui {
     void Text::setText(const std::string & text) {
         this->text = text;
         if (window) {
-            if (parent) {
-                parent->refresh();
-            }
             float w, h;
             getSize(w, h);
             _setSize(w, h);
-            if (!parent) {
+            if (parent) {
+                parent->refresh();
+            } else {
                 refresh();
             }
         }
@@ -36,13 +35,12 @@ namespace lysa::ui {
     void Text::setFontScale(const float scale) {
         this->fontScale = scale;
         if (window) {
-            if (parent) {
-                parent->refresh();
-            }
             float w, h;
             getSize(w, h);
             _setSize(w, h);
-            if (!parent) {
+            if (parent) {
+                parent->refresh();
+            } else {
                 refresh();
             }
         }
@@ -60,6 +58,9 @@ namespace lysa::ui {
         const auto scale = getFontScale();
         font->getSize(text, scale, width, height);
         height += font->getDescender() * scale;
+        if (window) {
+            width /= static_cast<Window*>(window)->getAspectRatio();
+        }
     }
 
     void Text::_setSize(const float width, const float height) {
@@ -73,14 +74,14 @@ namespace lysa::ui {
         }
     }
 
-    Rect Text::_getDefaultRect() {
-        if (rect.width == 0 && rect.height == 0) {
-            float w, h;
-            getSize(w, h);
-            _setSize(w, h);
-        }
-        return Widget::_getDefaultRect();
-    }
+    // Rect Text::_getDefaultRect() {
+    //     if (rect.width == 0 && rect.height == 0) {
+    //         float w, h;
+    //         getSize(w, h);
+    //         _setSize(w, h);
+    //     }
+    //     return Widget::_getDefaultRect();
+    // }
 
     void Text::eventCreate() {
         if (all(textColor == float4{0.0f})) {

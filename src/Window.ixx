@@ -211,6 +211,8 @@ export namespace lysa::ui {
          */
         const auto& getRect() const { return rect; }
 
+        float getAspectRatio() const;
+
         /**
          * Returns true if Window is currently visible.
          */

@@ -59,8 +59,8 @@ export namespace lysa::ui {
 
         void _setSize(float width, float height) override;
 
-    protected:
-        Rect _getDefaultRect() override;
+    // protected:
+        // Rect _getDefaultRect() override;
 
     private:
         std::string text;
