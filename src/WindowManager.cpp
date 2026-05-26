@@ -230,8 +230,4 @@ namespace lysa::ui {
         return false;
     }
 
-    void WindowManager::removeFont(const std::shared_ptr<Font>& font) {
-        renderer.removeFont(font->id);
-    }
-
 }
