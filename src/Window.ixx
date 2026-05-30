@@ -43,7 +43,7 @@ export namespace lysa::ui {
          */
         Window(const Rect& rect);
 
-        ~Window() override;
+        ~Window() override = default;
 
         /**
          * Sets the borders that can be used to resize the Window.
@@ -422,7 +422,12 @@ export namespace lysa::ui {
 
         void attach(void* windowManager);
 
-        void detach();
+        /**
+         * Remove the window from the currently attached Window manager
+         */
+        void close();
+
+        void _detach();
 
         void* _getWindowManager() const { return windowManager; }
 

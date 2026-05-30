@@ -23,9 +23,6 @@ namespace lysa::ui {
         rect{rect} {
     }
 
-    Window::~Window() {
-    }
-
     void Window::attach(void* windowManager) {
         assert([&]{ return this->windowManager == nullptr;} , "ui::Window must not be already attached to a manager");
         this->windowManager = windowManager;
@@ -34,8 +31,15 @@ namespace lysa::ui {
         this->textColor = static_cast<WindowManager*>(windowManager)->getDefaultTextColor();
     }
 
-    void Window::detach() {
+    void Window::_detach() {
         windowManager = nullptr;
+    }
+
+    void Window::close() {
+        if (windowManager) {
+            static_cast<WindowManager*>(windowManager)->remove(shared_from_this());
+            windowManager = nullptr;
+        }
     }
 
     void Window::draw() const {

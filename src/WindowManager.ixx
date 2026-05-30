@@ -123,7 +123,7 @@ export namespace lysa::ui {
         std::shared_ptr<Font> defaultFont;
         std::list<std::shared_ptr<Window>> windows;
         std::mutex windowsMutex;
-        std::vector<std::shared_ptr<Window>> removedWindows{};
+        std::set<std::shared_ptr<Window>> removedWindows{};
         std::shared_ptr<Window> focusedWindow{nullptr};
         std::shared_ptr<Window> resizedWindow{nullptr};
         bool needRedraw{false};

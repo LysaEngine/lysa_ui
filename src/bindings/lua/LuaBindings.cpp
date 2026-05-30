@@ -359,6 +359,7 @@ namespace lysa::ui {
             .addProperty("visible", &Window::isVisible, &Window::setVisible)
             .addFunction("show", &Window::show)
             .addFunction("hide", &Window::hide)
+            .addFunction("close", &Window::close)
             .addFunction("set_transparency", &Window::setTransparency)
             .addFunction("set_minimum_size", &Window::setMinimumSize)
             .addFunction("set_maximum_size", &Window::setMaximumSize)

@@ -47,7 +47,7 @@ namespace lysa::ui {
     void WindowManager::drawFrame() {
         auto lock = std::lock_guard(windowsMutex);
         for(const auto&window : removedWindows) {
-            window->detach();
+            window->_detach();
             if (window->isVisible()) { window->eventHide(); }
             window->eventDestroy();
             windows.remove(window);
@@ -98,7 +98,7 @@ namespace lysa::ui {
     }
 
     void WindowManager::remove(const std::shared_ptr<Window>&window) {
-        removedWindows.push_back(window);
+        removedWindows.insert(window);
     }
 
     bool WindowManager::onInput(const InputEvent &inputEvent) {
@@ -129,7 +129,7 @@ namespace lysa::ui {
                 const auto x = mouseEvent.position.x * scaleX;
                 const auto y = mouseEvent.position.y * scaleY;
                 const auto resizeDeltaY = scaleY * resizeDelta;
-                if (resizedWindow != nullptr) {
+                if ((resizedWindow != nullptr) && (!removedWindows.contains(resizedWindow))) {
                     if (resizingWindow) {
                         Rect rect = resizedWindow->getRect();
                         if (currentCursor == MouseCursor::RESIZE_H) {
@@ -158,6 +158,7 @@ namespace lysa::ui {
                     renderingWindow.setMouseCursor(currentCursor);
                 }
                 for (const auto& window: windows) {
+                    if (removedWindows.contains(window)) { continue; }
                     auto consumed = false;
                     const float lx = std::ceil(x - window->getRect().x);
                     const float ly = std::ceil(y - window->getRect().y);
@@ -197,7 +198,7 @@ namespace lysa::ui {
                 auto mouseInputEvent = std::get<InputEventMouseButton>(inputEvent.data);
                 const auto x = mouseInputEvent.position.x * scaleX;
                 const auto y = mouseInputEvent.position.y * scaleY;
-                if (resizedWindow != nullptr) {
+                if ((resizedWindow != nullptr) && (!removedWindows.contains(resizedWindow))) {
                     if ((!resizingWindow) &&
                         (mouseInputEvent.button== MouseButton::LEFT) &&
                         (mouseInputEvent.pressed)) {

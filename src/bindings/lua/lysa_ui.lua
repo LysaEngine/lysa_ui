@@ -210,6 +210,7 @@
 ---@field x number Sets the X position (bottom-left).
 ---@field y number Sets the Y position (bottom-left).
 ---@field visible boolean Whether the window is visible. The change is effective at the start of the next frame.
+---@field close fun(self:lysa.ui.Window):nil Close the window (effective next frame).
 ---@field show fun(self:lysa.ui.Window):nil Shows the window (effective next frame).
 ---@field hide fun(self:lysa.ui.Window):nil Hides the window (effective next frame).
 ---@field set_transparency fun(self:lysa.ui.Window, alpha:number):nil Sets the alpha transparency value.
