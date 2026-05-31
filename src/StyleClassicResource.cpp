@@ -15,25 +15,38 @@ namespace lysa::ui {
         splitResString(resource);
     }
     void StyleClassicResource::splitResString(const std::string &resource) {
-        const auto res = split(resource, ',');
-        if ((!res.empty()) && (!res[0].empty())) {
-            width = stof(std::string{res[0]});
-        }
-        if ((res.size() > 1) && (!res[1].empty())) {
-            height = stof(std::string{res[1]});
-        }
-        if (res.size() > 2) {
-            if (res[2] == "RAISED") {
-                style = RAISED;
-            } else if (res[2] == "LOWERED") {
-                style = LOWERED;
-            } else if (res[2] == "FLAT") {
-                style = FLAT;
+        // Parse "key=value" pairs separated by commas, in any order.
+        // Supported keys: width, height, style, color.
+        // Color is given as space-separated floats: "color=r g b a".
+        for (const auto &token : split(resource, ';')) {
+            const auto pos = token.find('=');
+            if (pos == std::string::npos) { continue; }
+            const auto key = token.substr(0, pos);
+            const std::string value{token.substr(pos + 1)};
+            if (value.empty()) { continue; }
+            if (key == "width") {
+                width = stof(value);
+            } else if (key == "height") {
+                height = stof(value);
+            } else if (key == "style") {
+                if (value == "RAISED") {
+                    style = RAISED;
+                } else if (value == "LOWERED") {
+                    style = LOWERED;
+                } else if (value == "FLAT") {
+                    style = FLAT;
+                }
+            } else if (key == "color") {
+                const auto components = split(value, ',');
+                if (components.size() >= 4) {
+                    color = float4{
+                        stof(std::string{components[0]}),
+                        stof(std::string{components[1]}),
+                        stof(std::string{components[2]}),
+                        stof(std::string{components[3]})};
+                    customColor = true;
+                }
             }
-        }
-        if (res.size() > 3) {
-            color       = float4{stof(std::string{res[3]}), stof(std::string{res[4]}), stof(std::string{res[5]}), stof(std::string{res[6]})};
-            customColor = true;
         }
     }
 

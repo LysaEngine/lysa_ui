@@ -116,18 +116,31 @@
 ---@field transparency number The transparency alpha value.
 ---@field resize_children fun(self:lysa.ui.Widget):nil Resizes children widgets.
 ---@field create_text fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text child widget.
+---@field create_text fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text child widget using a resource string.
 ---@field create_panel fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Panel Creates and adds a Panel child widget.
+---@field create_panel fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Panel Creates and adds a Panel child widget using a resource string.
 ---@field create_box fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Box Creates and adds a Box child widget.
+---@field create_box fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Box Creates and adds a Box child widget using a resource string.
 ---@field create_button fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Button Creates and adds a Button child widget.
+---@field create_button fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Button Creates and adds a Button child widget using a resource string.
 ---@field create_toggle_button fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.ToggleButton Creates and adds a ToggleButton child widget.
+---@field create_toggle_button fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.ToggleButton Creates and adds a ToggleButton child widget using a resource string.
 ---@field create_hline fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.HLine Creates and adds a horizontal Line child widget.
+---@field create_hline fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.HLine Creates and adds a horizontal Line child widget using a resource string.
 ---@field create_vline fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.VLine Creates and adds a vertical Line child widget.
+---@field create_vline fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.VLine Creates and adds a vertical Line child widget using a resource string.
 ---@field create_frame fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment, title:string):lysa.ui.Frame Creates and adds a Frame child widget.
+---@field create_frame fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment, title:string):lysa.ui.Frame Creates and adds a Frame child widget using a resource string.
 ---@field create_text_edit fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment, text:string|nil):lysa.ui.TextEdit Creates and adds a TextEdit child widget.
+---@field create_text_edit fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment, text:string|nil):lysa.ui.TextEdit Creates and adds a TextEdit child widget using a resource string.
 ---@field create_image fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Image Creates and adds an Image child widget.
+---@field create_image fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Image Creates and adds an Image child widget using a resource string.
 ---@field create_vscrollbar fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.VScrollBar Creates and adds a vertical ScrollBar child widget.
+---@field create_vscrollbar fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.VScrollBar Creates and adds a vertical ScrollBar child widget using a resource string.
 ---@field create_hscrollbar fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.HScrollBar Creates and adds a horizontal ScrollBar child widget.
+---@field create_hscrollbar fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.HScrollBar Creates and adds a horizontal ScrollBar child widget using a resource string.
 ---@field create_tree_view fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView child widget.
+---@field create_tree_view fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView child widget using a resource string.
 ---@field add_child fun(self:lysa.ui.Widget, child:lysa.ui.Widget, alignment:integer, resource:string|nil):lysa.ui.Widget Adds a child widget with alignment and optional resource string.
 
 ---@class lysa.ui.Panel : lysa.ui.Widget
@@ -226,18 +239,31 @@
 ---@field add_child fun(self:lysa.ui.Window, child:lysa.ui.Widget, alignment:integer, resource:string|nil):lysa.ui.Widget Adds a child widget to the root widget.
 ---@field remove_child fun(self:lysa.ui.Window, child:lysa.ui.Widget):nil Removes a child widget from the root widget.
 ---@field create_text fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text widget.
+---@field create_text fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text widget using a resource string.
 ---@field create_panel fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Panel Creates and adds a Panel widget.
+---@field create_panel fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Panel Creates and adds a Panel widget using a resource string.
 ---@field create_box fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Box Creates and adds a Box widget (bordered panel).
+---@field create_box fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Box Creates and adds a Box widget (bordered panel) using a resource string.
 ---@field create_button fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Button Creates and adds a Button widget.
+---@field create_button fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Button Creates and adds a Button widget using a resource string.
 ---@field create_toggle_button fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.ToggleButton Creates and adds a ToggleButton widget.
+---@field create_toggle_button fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.ToggleButton Creates and adds a ToggleButton widget using a resource string.
 ---@field create_hline fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.HLine Creates and adds a horizontal Line widget.
+---@field create_hline fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.HLine Creates and adds a horizontal Line widget using a resource string.
 ---@field create_vline fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.VLine Creates and adds a vertical Line widget.
+---@field create_vline fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.VLine Creates and adds a vertical Line widget using a resource string.
 ---@field create_frame fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment, title:string):lysa.ui.Frame Creates and adds a Frame widget with a title.
+---@field create_frame fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment, title:string):lysa.ui.Frame Creates and adds a Frame widget with a title using a resource string.
 ---@field create_text_edit fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment, text:string|nil):lysa.ui.TextEdit Creates and adds a TextEdit widget.
+---@field create_text_edit fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment, text:string|nil):lysa.ui.TextEdit Creates and adds a TextEdit widget using a resource string.
 ---@field create_image fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Image Creates and adds an Image widget.
+---@field create_image fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Image Creates and adds an Image widget using a resource string.
 ---@field create_vscrollbar fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.VScrollBar Creates and adds a vertical ScrollBar widget.
+---@field create_vscrollbar fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.VScrollBar Creates and adds a vertical ScrollBar widget using a resource string.
 ---@field create_hscrollbar fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.HScrollBar Creates and adds a horizontal ScrollBar widget.
+---@field create_hscrollbar fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.HScrollBar Creates and adds a horizontal ScrollBar widget using a resource string.
 ---@field create_tree_view fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView widget.
+---@field create_tree_view fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView widget using a resource string.
 
 ---@class lysa.ui.WindowManager
 ---@field create fun(self:lysa.ui.WindowManager, rect:any):lysa.ui.Window Creates and adds a new UI window with the given rectangle.

@@ -115,10 +115,10 @@ namespace lysa::ui {
         widget._setSize(res->width, res->height);
         switch (widget.getType()) {
         case Widget::SCROLLBAR:
-            static_cast<ScrollBar &>(widget).setResources(",,LOWERED", ",,FLAT," + to_string(fgDown));
+            static_cast<ScrollBar &>(widget).setResources("style=LOWERED", "style=FLAT;color=" + to_string(fgDown));
             break;
         case Widget::TREEVIEW:
-            static_cast<TreeView &>(widget).setResources(",,LOWERED", "18,18,RAISED", "");
+            static_cast<TreeView &>(widget).setResources("style=LOWERED", "width=18;height=18;style=RAISED", "");
             break;
         case Widget::TEXTEDIT:
             static_cast<TextEdit&>(widget).setResources(resources);

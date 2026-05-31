@@ -35,7 +35,13 @@ export namespace lysa::ui {
 
         /**
          * Constructor.
-         * @param resource Resource description string.
+         * @param resource Resource description string made of comma-separated
+         *        "key=value" pairs, in any order. Supported keys:
+         *        - width=<float>
+         *        - height=<float>
+         *        - style=FLAT|RAISED|LOWERED
+         *        - color=<r> <g> <b> <a> (space-separated floats)
+         *        Example: "style=RAISED,width=100,color=1 0 0 1".
          */
         explicit StyleClassicResource(const std::string& resource);
 
