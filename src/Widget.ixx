@@ -107,6 +107,10 @@ export namespace lysa::ui {
          */
         virtual void setSize(float width, float height);
 
+        void setWidth(const float width) { setSize(width, getHeight()); }
+
+        void setHeight(const float height) { setSize(getWidth(), height); }
+
         /**
          * Returns the size & the position of the widget.
          */

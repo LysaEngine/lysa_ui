@@ -90,8 +90,8 @@
 ---@field is_enabled fun(self:lysa.ui.Widget):boolean Returns true if the widget is reactive to user action (mouse & keyboard).
 ---@field enable fun(self:lysa.ui.Widget, enabled:boolean|nil):nil Enables or disables widget reactions to input events (default true).
 ---@field set_pos fun(self:lysa.ui.Widget, x:number, y:number):nil Moves the widget to the given position.
----@field width number The widget width in pixels. (read-only)
----@field height number The widget height in pixels. (read-only)
+---@field width number The widget width in pixels.
+---@field height number The widget height in pixels.
 ---@field set_size fun(self:lysa.ui.Widget, width:number, height:number):nil Resizes the widget in pixels.
 ---@field rect any The size and position of the widget.
 ---@field set_rect fun(self:lysa.ui.Widget, x:number, y:number, width:number, height:number):nil Changes the size and position with x, y, width, height components.

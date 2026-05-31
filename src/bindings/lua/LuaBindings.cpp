@@ -127,7 +127,7 @@ namespace lysa::ui {
             .addFunction("enable",
                 +[](Widget* self, const bool v = true){ self->enable(v); })
             .addFunction("set_pos", &Widget::setPos)
-            .addProperty("width", &Widget::getWidth)
+            .addProperty("width", &Widget::getWidth, &Widget::setWidth)
             .addProperty("height", &Widget::getHeight)
             .addFunction("set_size", &Widget::setSize)
             .addProperty("rect",

@@ -68,8 +68,6 @@ namespace lysa::ui {
 
     void Widget::setSize(const float width, const float height) {
         if (parent) { parent->refresh(); }
-        // defaultRect.width  = width;
-        // defaultRect.height = height;
         rect.width  = width;
         rect.height = height;
         eventResize();
@@ -79,11 +77,6 @@ namespace lysa::ui {
         if (parent) {
             parent->refresh();
         }
-        // if ((width != 0) && (height != 0) && (rect.width == 0) && (rect.height == 0)) {
-            // defaultRect        = rect;
-            // defaultRect.width  = width;
-            // defaultRect.height = height;
-        // }
         rect.width  = width;
         rect.height = height;
         eventResize();
