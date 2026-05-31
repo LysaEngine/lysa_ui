@@ -142,6 +142,8 @@
 ---@field create_hscrollbar fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.HScrollBar Creates and adds a horizontal ScrollBar child widget using a resource string.
 ---@field create_tree_view fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView child widget.
 ---@field create_tree_view fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView child widget using a resource string.
+---@field create_widget fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Widget Creates and adds a transparent Widget child.
+---@field create_widget fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Widget Creates and adds a transparent Widget child using a resource string.
 ---@field add_child fun(self:lysa.ui.Widget, child:lysa.ui.Widget, alignment:integer, resource:string|nil):lysa.ui.Widget Adds a child widget with alignment and optional resource string.
 
 ---@class lysa.ui.Panel : lysa.ui.Widget
@@ -268,6 +270,8 @@
 ---@field create_hscrollbar fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.HScrollBar Creates and adds a horizontal ScrollBar widget using a resource string.
 ---@field create_tree_view fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView widget.
 ---@field create_tree_view fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView widget using a resource string.
+---@field create_widget fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Widget Creates and adds a transparent Widget.
+---@field create_widget fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Widget Creates and adds a transparent Widget using a resource string.
 
 ---@class lysa.ui.WindowManager
 ---@field create fun(self:lysa.ui.WindowManager, rect:any):lysa.ui.Window Creates and adds a new UI window with the given rectangle.

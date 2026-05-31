@@ -252,6 +252,13 @@ namespace lysa::ui {
                 +[](Widget* self, const std::string& resource, const int alignment) -> std::shared_ptr<TreeView> {
                     return self->create<TreeView>(resource, static_cast<Alignment>(alignment));
                 })
+            .addFunction("create_widget",
+                +[](Widget* self, const int alignment) -> std::shared_ptr<Widget> {
+                    return self->create<Widget>(static_cast<Alignment>(alignment));
+                },
+                +[](Widget* self, const std::string& resource, const int alignment) -> std::shared_ptr<Widget> {
+                    return self->create<Widget>(resource, static_cast<Alignment>(alignment));
+                })
             // add_child: expose the non-template path via a lambda taking a shared_ptr<Widget>
             .addFunction("add_child",
                 +[](Widget* self,
@@ -523,6 +530,13 @@ namespace lysa::ui {
                 },
                 +[](Window* self, const std::string& resource, const int alignment) -> std::shared_ptr<TreeView> {
                     return self->create<TreeView>(resource, static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_widget",
+                +[](Window* self, const int alignment) -> std::shared_ptr<Widget> {
+                    return self->create<Widget>(static_cast<Alignment>(alignment));
+                },
+                +[](Window* self, const std::string& resource, const int alignment) -> std::shared_ptr<Widget> {
+                    return self->create<Widget>(resource, static_cast<Alignment>(alignment));
                 })
         .endClass()
 
