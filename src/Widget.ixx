@@ -61,7 +61,7 @@ export namespace lysa::ui {
          */
         Widget( Type type = WIDGET);
 
-        virtual ~Widget() = default;
+        ~Widget() override = default;
 
         /**
          * Returns the type of the widget.
@@ -76,7 +76,7 @@ export namespace lysa::ui {
         /**
          * Shows or hides the widget.
          */
-        void show(bool show = true);
+        void setVisible(bool show = true);
 
         /**
          * Returns true if the widget is reactive to user action (mouse & keyboard).

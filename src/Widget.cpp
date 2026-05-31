@@ -41,7 +41,7 @@ namespace lysa::ui {
         return (window && static_cast<lysa::ui::Window *>(window)->isVisible());
     }
 
-    void Widget::show(const bool S) {
+    void Widget::setVisible(const bool S) {
         if (visible == S)
             return;
         visible = S;

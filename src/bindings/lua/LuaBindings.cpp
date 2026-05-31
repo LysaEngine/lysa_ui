@@ -122,9 +122,7 @@ namespace lysa::ui {
 
         .beginClass<Widget>("Widget")
             .addProperty("type", &Widget::getType)
-            .addFunction("is_visible", &Widget::isVisible)
-            .addFunction("show",
-                +[](Widget* self, const bool v = true){ self->show(v); })
+            .addProperty("visible", &Widget::isVisible, &Widget::setVisible)
             .addFunction("is_enabled", &Widget::isEnabled)
             .addFunction("enable",
                 +[](Widget* self, const bool v = true){ self->enable(v); })

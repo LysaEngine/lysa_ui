@@ -86,8 +86,7 @@
 
 ---@class lysa.ui.Widget
 ---@field type integer The widget type (see lysa.ui.WidgetType). (read-only)
----@field is_visible fun(self:lysa.ui.Widget):boolean Returns true if the widget is visible.
----@field show fun(self:lysa.ui.Widget, visible:boolean|nil):nil Shows or hides the widget (default true).
+---@field visible boolean true if the widget is visible.
 ---@field is_enabled fun(self:lysa.ui.Widget):boolean Returns true if the widget is reactive to user action (mouse & keyboard).
 ---@field enable fun(self:lysa.ui.Widget, enabled:boolean|nil):nil Enables or disables widget reactions to input events (default true).
 ---@field set_pos fun(self:lysa.ui.Widget, x:number, y:number):nil Moves the widget to the given position.
