@@ -25,7 +25,6 @@ export namespace lysa::ui {
 
         /**
          * Constructor.
-         * @param ctx The engine context.
          * @param style The line orientation.
          */
         Line( LineStyle style = HORIZ);

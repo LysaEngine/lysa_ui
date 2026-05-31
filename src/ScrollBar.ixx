@@ -34,7 +34,6 @@ export namespace lysa::ui {
 
         /**
          * Constructor.
-         * @param ctx The engine context.
          * @param type Orientation (HORIZONTAL or VERTICAL).
          * @param min Minimum value.
          * @param max Maximum value.

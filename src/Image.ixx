@@ -21,18 +21,16 @@ export namespace lysa::ui {
     public:
         /**
          * Constructor with image.
-         * @param ctx The engine context.
          * @param image The image to display.
          * @param autoSize Whether to automatically resize the widget to the image size.
          */
-        Image( const lysa::Image& image, bool autoSize = true);
+        Image(const lysa::Image& image, bool autoSize = true);
 
         /**
          * Constructor without image.
-         * @param ctx The engine context.
          * @param autoSize Whether to automatically resize the widget.
          */
-        Image( bool autoSize = true);
+        Image(bool autoSize = true);
 
         /**
          * Sets whether to automatically resize the widget to the image size.
@@ -53,6 +51,11 @@ export namespace lysa::ui {
          * Sets the image to display.
          */
         void setImage(const lysa::Image& image);
+
+        /**
+         * Sets the image URI to load and display.
+         */
+        void setImage(const std::string& uri);
 
         void _setSize(float width, float height) override;
 

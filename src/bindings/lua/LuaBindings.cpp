@@ -325,7 +325,11 @@ namespace lysa::ui {
             >()
             .addFunction("set_auto_size", &Image::setAutoSize)
             .addProperty("color", &Image::getColor, &Image::setColor)
-            .addProperty("image", &Image::getImage, &Image::setImage)
+            .addProperty("image", &Image::getImage)
+            .addFunction("set_image",
+                luabridge::overload<const std::string&>(&Image::setImage),
+                luabridge::overload<const lysa::Image&>(&Image::setImage)
+            )
         .endClass()
 
         .deriveClass<ValueSelect, Widget>("ValueSelect")

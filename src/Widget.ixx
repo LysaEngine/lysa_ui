@@ -56,7 +56,6 @@ export namespace lysa::ui {
 
         /**
          * Creates a widget of a particular type.
-         * @param ctx The engine context.
          * @param type The type of the widget.
          */
         Widget( Type type = WIDGET);

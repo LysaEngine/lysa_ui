@@ -18,7 +18,6 @@ export namespace lysa::ui {
     public:
         /**
          * Constructor.
-         * @param ctx The engine context.
          * @param type The widget type.
          * @param min Minimum value.
          * @param max Maximum value.

@@ -181,7 +181,9 @@
 ---@class lysa.ui.Image : lysa.ui.Widget
 ---@field set_auto_size fun(self:lysa.ui.Image, autoSize:boolean):nil Sets whether to automatically resize the widget to the image size.
 ---@field color any The image color tint.
----@field image any The currently displayed image, or nil.
+---@field image any The currently displayed image, or nil. (read-only)
+---@field set_image fun(self:lysa.ui.Image, image:lysa.Image):nil
+---@field set_image fun(self:lysa.ui.Image, uri:string):nil
 
 ---@class lysa.ui.ValueSelect : lysa.ui.Widget
 ---@field min number The minimum value.

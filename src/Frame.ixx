@@ -19,7 +19,6 @@ export namespace lysa::ui {
     public:
         /**
          * Constructor.
-         * @param ctx The engine context.
          * @param title The title of the frame.
          */
         Frame( const std::string& title);

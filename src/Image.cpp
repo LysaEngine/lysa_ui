@@ -62,6 +62,10 @@ namespace lysa::ui {
         }
     }
 
+    void Image::setImage(const std::string& uri) {
+        setImage(ctx().res.get<ImageManager>().load(uri));
+    }
+
     void Image::setImage(const lysa::Image& image) {
         if (this->image == &image) {
             return;

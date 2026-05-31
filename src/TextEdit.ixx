@@ -24,7 +24,6 @@ export namespace lysa::ui {
     public:
         /**
          * Constructor.
-         * @param ctx The engine context.
          * @param text Initial text.
          */
         TextEdit( const std::string& text = "");
