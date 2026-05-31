@@ -11,24 +11,25 @@ import lysa.ui.window_manager;
 
 namespace lysa::ui {
 
-    Image::Image(const lysa::Image& image, const bool autoSize) :
+    Image::Image(const lysa::Image& image, const bool autoSize, const bool fixedSize) :
         Widget{IMAGE},
-        autoSize{autoSize} {
+        autoSize{autoSize},
+        fixedSize{fixedSize} {
         setImage(image);
     }
 
-    Image::Image(const bool autoSize) :
+    Image::Image(const bool autoSize, const bool fixedSize) :
         Widget{IMAGE},
-        autoSize{autoSize} {
+        autoSize{autoSize},
+        fixedSize{fixedSize} {
     }
 
     void Image::_setSize(const float width, const float height) {
         if (autoSize) { return; }
-        if (width == 0 && height == 0 && rect.width == 0 && rect.height == 0) {
+        if ((fixedSize || (width == 0 && height == 0)) && rect.width == 0 && rect.height == 0) {
             const auto ratio = static_cast<WindowManager*>(static_cast<Window*>(window)->_getWindowManager())->getRenderer().getAspectRatio();
             Widget::_setSize(std::round(width / ratio), height);
-        }
-        else {
+        } else if (!fixedSize) {
             Widget::_setSize(width, height);
         }
     }
@@ -74,7 +75,7 @@ namespace lysa::ui {
         if (this->image) {
             if (autoSize) {
                 autoResize();
-            } else {
+            } else if (!fixedSize) {
                 refresh();
             }
         }

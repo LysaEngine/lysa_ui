@@ -15,9 +15,6 @@ namespace lysa::ui {
         splitResString(resource);
     }
     void StyleClassicResource::splitResString(const std::string &resource) {
-        // Parse "key=value" pairs separated by commas, in any order.
-        // Supported keys: width, height, style, color.
-        // Color is given as space-separated floats: "color=r g b a".
         for (const auto &token : split(resource, ';')) {
             const auto pos = token.find('=');
             if (pos == std::string::npos) { continue; }

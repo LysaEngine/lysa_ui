@@ -23,14 +23,16 @@ export namespace lysa::ui {
          * Constructor with image.
          * @param image The image to display.
          * @param autoSize Whether to automatically resize the widget to the image size.
+         * @param fixedSize Size can't change
          */
-        Image(const lysa::Image& image, bool autoSize = true);
+        Image(const lysa::Image& image, bool autoSize = true, bool fixedSize = false);
 
         /**
          * Constructor without image.
          * @param autoSize Whether to automatically resize the widget.
+         * @param fixedSize Size can't change
          */
-        Image(bool autoSize = true);
+        Image(bool autoSize = true, bool fixedSize = false);
 
         /**
          * Sets whether to automatically resize the widget to the image size.
@@ -68,6 +70,7 @@ export namespace lysa::ui {
     private:
         float4 color{1.0f};
         bool autoSize;
+        bool fixedSize;
         const lysa::Image* image{nullptr};
 
         void autoResize();

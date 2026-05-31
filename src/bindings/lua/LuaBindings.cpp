@@ -224,6 +224,12 @@ namespace lysa::ui {
                 },
                 +[](Widget* self, const std::string& resource, const int alignment) -> std::shared_ptr<Image> {
                     return self->create<Image>(resource, static_cast<Alignment>(alignment));
+                },
+                +[](Widget* self, const std::string& resource, const int alignment, const bool autoresize) -> std::shared_ptr<Image> {
+                   return self->create<Image>(resource, static_cast<Alignment>(alignment), autoresize);
+                },
+                +[](Widget* self, const std::string& resource, const int alignment, const bool autoresize, const bool fixedSize) -> std::shared_ptr<Image> {
+                  return self->create<Image>(resource, static_cast<Alignment>(alignment), autoresize, fixedSize);
                 })
             .addFunction("create_vscrollbar",
                 +[](Widget* self, const int alignment) -> std::shared_ptr<VScrollBar> {
@@ -493,6 +499,9 @@ namespace lysa::ui {
                 },
                 +[](Window* self, const std::string& resource, const int alignment) -> std::shared_ptr<Image> {
                     return self->create<Image>(resource, static_cast<Alignment>(alignment));
+                },
+                +[](Window* self, const std::string& resource, const int alignment, const bool autoresize, const bool fixedSize) -> std::shared_ptr<Image> {
+                    return self->create<Image>(resource, static_cast<Alignment>(alignment), autoresize, fixedSize);
                 })
             .addFunction("create_vscrollbar",
                 +[](Window* self, const int alignment) -> std::shared_ptr<VScrollBar> {

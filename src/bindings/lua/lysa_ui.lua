@@ -135,6 +135,7 @@
 ---@field create_text_edit fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment, text:string|nil):lysa.ui.TextEdit Creates and adds a TextEdit child widget using a resource string.
 ---@field create_image fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Image Creates and adds an Image child widget.
 ---@field create_image fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Image Creates and adds an Image child widget using a resource string.
+---@field create_image fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment, autoresize:boolean, fixedsize:boolean):lysa.ui.Image Creates and adds an Image child widget using a resource string.
 ---@field create_vscrollbar fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.VScrollBar Creates and adds a vertical ScrollBar child widget.
 ---@field create_vscrollbar fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.VScrollBar Creates and adds a vertical ScrollBar child widget using a resource string.
 ---@field create_hscrollbar fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.HScrollBar Creates and adds a horizontal ScrollBar child widget.
@@ -260,6 +261,7 @@
 ---@field create_text_edit fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment, text:string|nil):lysa.ui.TextEdit Creates and adds a TextEdit widget using a resource string.
 ---@field create_image fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Image Creates and adds an Image widget.
 ---@field create_image fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Image Creates and adds an Image widget using a resource string.
+---@field create_image fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment, autoresize:boolean, fixedsize:boolean):lysa.ui.Image Creates and adds an Image widget using a resource string.
 ---@field create_vscrollbar fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.VScrollBar Creates and adds a vertical ScrollBar widget.
 ---@field create_vscrollbar fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.VScrollBar Creates and adds a vertical ScrollBar widget using a resource string.
 ---@field create_hscrollbar fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.HScrollBar Creates and adds a horizontal ScrollBar widget.
