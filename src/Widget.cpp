@@ -43,7 +43,6 @@ namespace lysa::ui {
 
     void Widget::setVisible(const bool show) {
         if (visible == show) { return; }
-        Log::info(show ? "Show" : "Hide");
         visible = show;
         if (visible) {
             eventShow();
