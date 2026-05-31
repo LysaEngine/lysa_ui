@@ -41,10 +41,10 @@ namespace lysa::ui {
         return (window && static_cast<lysa::ui::Window *>(window)->isVisible());
     }
 
-    void Widget::setVisible(const bool S) {
-        if (visible == S)
-            return;
-        visible = S;
+    void Widget::setVisible(const bool show) {
+        if (visible == show) { return; }
+        Log::info(show ? "Show" : "Hide");
+        visible = show;
         if (visible) {
             eventShow();
         } else {
@@ -53,8 +53,7 @@ namespace lysa::ui {
     }
 
     void Widget::enable(const bool isEnabled) {
-        if (enabled == isEnabled)
-            return;
+        if (enabled == isEnabled) { return; }
         enabled = isEnabled;
         if (enabled) {
             eventEnable();

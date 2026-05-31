@@ -98,18 +98,18 @@
 ---@field alignment integer The current widget placement alignment (see lysa.ui.Alignment).
 ---@field font any The current font of the widget.
 ---@field font_scale number The font scale.
----@field is_focused boolean True if the widget has keyboard focus. (read-only)
+---@field focused boolean True if the widget has keyboard focus. (read-only)
 ---@field parent lysa.ui.Widget|nil The parent widget, or nil. (read-only)
 ---@field remove fun(self:lysa.ui.Widget, child:lysa.ui.Widget):nil Removes a child widget.
 ---@field remove_all fun(self:lysa.ui.Widget):nil Removes all children widgets recursively.
 ---@field padding number Children padding (space between children).
 ---@field vborder number Vertical border size.
 ---@field hborder number Horizontal border size.
----@field is_draw_background boolean False if the background is transparent.
----@field is_pushed boolean True if the widget is currently pushed (e.g. mouse button down).
----@field is_pointed boolean True if the widget is currently pointed by the mouse. (read-only)
----@field is_freezed boolean True if the widget is not responding to events.
----@field is_overlapping boolean True if the widget overlaps other widgets. (read-only)
+---@field draw_background boolean False if the background is transparent.
+---@field pushed boolean True if the widget is currently pushed (e.g. mouse button down).
+---@field pointed boolean True if the widget is currently pointed by the mouse. (read-only)
+---@field freezed boolean True if the widget is not responding to events.
+---@field overlapping boolean True if the widget overlaps other widgets. (read-only)
 ---@field children_rect any The rectangle enclosing all children. (read-only)
 ---@field refresh fun(self:lysa.ui.Widget):nil Forces a full redraw of the widget.
 ---@field group_index integer The user-defined group index.
