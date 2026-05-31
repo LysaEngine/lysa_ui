@@ -407,6 +407,8 @@ export namespace lysa::ui {
 
         void _setMoveChildrenOnPush(const bool r) { moveChildrenOnPush = r; }
 
+        const std::list<std::shared_ptr<Widget>>& getChildren() const { return children; }
+
         virtual std::list<std::shared_ptr<Widget>>& _getChildren() { return children; }
 
         void _draw(Vector2DRenderer &) const;

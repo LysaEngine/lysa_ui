@@ -122,6 +122,7 @@ namespace lysa::ui {
 
         .beginClass<Widget>("Widget")
             .addProperty("type", &Widget::getType)
+            .addProperty("children", &Widget::getChildren)
             .addProperty("visible", &Widget::isVisible, &Widget::setVisible)
             .addFunction("is_enabled", &Widget::isEnabled)
             .addFunction("enable",

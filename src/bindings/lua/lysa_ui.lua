@@ -86,6 +86,7 @@
 
 ---@class lysa.ui.Widget
 ---@field type integer The widget type (see lysa.ui.WidgetType). (read-only)
+---@field children lysa.ui.Widget[]
 ---@field visible boolean true if the widget is visible.
 ---@field is_enabled fun(self:lysa.ui.Widget):boolean Returns true if the widget is reactive to user action (mouse & keyboard).
 ---@field enable fun(self:lysa.ui.Widget, enabled:boolean|nil):nil Enables or disables widget reactions to input events (default true).
@@ -166,11 +167,11 @@
 
 ---@class lysa.ui.Frame : lysa.ui.Panel
 ---@field title string The frame title.
----@field title_color any The title text color.
+---@field title_color lysa.float4 The title text color.
 
 ---@class lysa.ui.Text : lysa.ui.Widget
 ---@field text string The displayed text.
----@field text_color any The text color.
+---@field text_color lysa.float4 The text color.
 ---@field size {number, number} The {width, height} size of the rendered text. (read-only)
 
 ---@class lysa.ui.TextEdit : lysa.ui.Widget
@@ -183,8 +184,8 @@
 
 ---@class lysa.ui.Image : lysa.ui.Widget
 ---@field set_auto_size fun(self:lysa.ui.Image, autoSize:boolean):nil Sets whether to automatically resize the widget to the image size.
----@field color any The image color tint.
----@field image any The currently displayed image, or nil. (read-only)
+---@field color lysa.float4 The image color tint.
+---@field image lysa.Image The currently displayed image, or nil. (read-only)
 ---@field set_image fun(self:lysa.ui.Image, image:lysa.Image):nil
 ---@field set_image fun(self:lysa.ui.Image, uri:string):nil
 
