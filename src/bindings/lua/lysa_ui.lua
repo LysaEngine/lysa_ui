@@ -1,320 +1,320 @@
 ---@meta
 ---@diagnostic disable: missing-return, lowercase-global
 
----@class lysa.ui.Alignment
----@field NONE integer No alignment
----@field FILL integer Centered and resized to parent content size
----@field CENTER integer Centered (takes all parent content size)
----@field HCENTER integer Horizontally centered
----@field VCENTER integer Vertically centered
----@field TOP integer Stacked on the top
----@field BOTTOM integer Stacked on the bottom
----@field LEFT integer Stacked on the left
----@field RIGHT integer Stacked on the right
----@field TOPCENTER integer Stacked on the top and horizontally centered
----@field BOTTOMCENTER integer Stacked on the bottom and horizontally centered
----@field LEFTCENTER integer Stacked on the left and vertically centered
----@field RIGHTCENTER integer Stacked on the right and vertically centered
----@field TOPLEFT integer Stacked on the top and left aligned
----@field BOTTOMLEFT integer Stacked on the bottom and left aligned
----@field BOTTOMRIGHT integer Stacked on the bottom and right aligned
----@field TOPRIGHT integer Stacked on the top and right aligned
----@field LEFTTOP integer Stacked on the left then on the top
----@field LEFTBOTTOM integer Stacked on the left then on the bottom
----@field RIGHTBOTTOM integer Stacked on the right then on the bottom
----@field RIGHTTOP integer Stacked on the right then on the top
----@field CORNERTOPLEFT integer Stacked at top-left corner
----@field CORNERTOPRIGHT integer Stacked at top-right corner
----@field CORNERBOTTOMLEFT integer Stacked at bottom-left corner
----@field CORNERBOTTOMRIGHT integer Stacked at bottom-right corner
+---@class lysa.ui.Alignment Constants controlling how a widget is placed inside its parent's content area.
+---@field NONE integer No automatic alignment; position is set manually.
+---@field FILL integer Centered and resized to fill the parent's entire content area.
+---@field CENTER integer Centered horizontally and vertically within the parent (takes all available space).
+---@field HCENTER integer Horizontally centered; vertical position is not constrained.
+---@field VCENTER integer Vertically centered; horizontal position is not constrained.
+---@field TOP integer Stacked at the top of the parent.
+---@field BOTTOM integer Stacked at the bottom of the parent.
+---@field LEFT integer Stacked at the left of the parent.
+---@field RIGHT integer Stacked at the right of the parent.
+---@field TOPCENTER integer Stacked at the top and horizontally centered.
+---@field BOTTOMCENTER integer Stacked at the bottom and horizontally centered.
+---@field LEFTCENTER integer Stacked at the left and vertically centered.
+---@field RIGHTCENTER integer Stacked at the right and vertically centered.
+---@field TOPLEFT integer Stacked at the top and left-aligned.
+---@field BOTTOMLEFT integer Stacked at the bottom and left-aligned.
+---@field BOTTOMRIGHT integer Stacked at the bottom and right-aligned.
+---@field TOPRIGHT integer Stacked at the top and right-aligned.
+---@field LEFTTOP integer Stacked on the left side then aligned to the top.
+---@field LEFTBOTTOM integer Stacked on the left side then aligned to the bottom.
+---@field RIGHTBOTTOM integer Stacked on the right side then aligned to the bottom.
+---@field RIGHTTOP integer Stacked on the right side then aligned to the top.
+---@field CORNERTOPLEFT integer Pinned to the top-left corner of the parent.
+---@field CORNERTOPRIGHT integer Pinned to the top-right corner of the parent.
+---@field CORNERBOTTOMLEFT integer Pinned to the bottom-left corner of the parent.
+---@field CORNERBOTTOMRIGHT integer Pinned to the bottom-right corner of the parent.
 
----@class lysa.ui.WidgetType
----@field WIDGET integer Transparent widget
----@field PANEL integer Rectangular widget with only a background
----@field BOX integer Rectangular widget with a border and a background
----@field LINE integer A horizontal or vertical line
----@field FRAME integer A box with a title
----@field BUTTON integer A push button
----@field TOGGLEBUTTON integer A two-states button
----@field TEXT integer A single line of text
----@field TEXTEDIT integer An editable single line of text
----@field SCROLLBAR integer A scroll bar with min, max & pos
----@field TREEVIEW integer Tree of widgets
----@field IMAGE integer 2D image widget
+---@class lysa.ui.WidgetType Integer constants identifying the concrete type of a widget.
+---@field WIDGET integer Transparent container widget with no visual representation.
+---@field PANEL integer Rectangular widget with only a background fill.
+---@field BOX integer Rectangular widget with a border and a background fill.
+---@field LINE integer A horizontal or vertical separator line.
+---@field FRAME integer A box with a title label in its border.
+---@field BUTTON integer A push button that fires OnClick on release.
+---@field TOGGLEBUTTON integer A two-state (on/off) toggle button.
+---@field TEXT integer A single-line read-only text label.
+---@field TEXTEDIT integer An editable single-line text input field.
+---@field SCROLLBAR integer A scroll bar with configurable min, max, and current position.
+---@field TREEVIEW integer A hierarchical tree of expandable/collapsible items.
+---@field IMAGE integer A widget that displays a 2-D GPU image.
 
----@class lysa.ui.CheckState
----@field UNCHECK integer Unchecked / OFF state
----@field CHECK integer Checked / ON state
+---@class lysa.ui.CheckState Check/toggle state constants for CheckWidget and ToggleButton.
+---@field UNCHECK integer Unchecked / OFF state.
+---@field CHECK integer Checked / ON state.
 
----@class lysa.ui.LineStyle
----@field HORIZ integer Horizontal line
----@field VERT integer Vertical line
+---@class lysa.ui.LineStyle Orientation constants for Line widgets.
+---@field HORIZ integer Horizontal line.
+---@field VERT integer Vertical line.
 
----@class lysa.ui.ScrollBarType
----@field HORIZONTAL integer Horizontal scroll bar
----@field VERTICAL integer Vertical scroll bar
+---@class lysa.ui.ScrollBarType Orientation constants for ScrollBar widgets.
+---@field HORIZONTAL integer Horizontal scroll bar.
+---@field VERTICAL integer Vertical scroll bar.
 
----@class lysa.ui.ResizeableBorder
----@field NONE integer No resizing
----@field LEFT integer Left border resizable
----@field RIGHT integer Right border resizable
----@field TOP integer Top border resizable
----@field BOTTOM integer Bottom border resizable
+---@class lysa.ui.ResizeableBorder Bitmask constants for which borders of a Window can be dragged to resize it.
+---@field NONE integer No border is resizable.
+---@field LEFT integer The left border is resizable.
+---@field RIGHT integer The right border is resizable.
+---@field TOP integer The top border is resizable.
+---@field BOTTOM integer The bottom border is resizable.
 
----@class lysa.ui.UIEvent
----@field OnCreate string Called after widget creation
----@field OnDestroy string Called before widget destruction
----@field OnKeyDown string Key pressed while widget has keyboard focus
----@field OnKeyUp string Key released while widget has keyboard focus
----@field OnMouseDown string Mouse button pressed above the widget
----@field OnMouseUp string Mouse button released above the widget
----@field OnMouseMove string Mouse moved above the widget
----@field OnGotFocus string Widget acquired keyboard focus
----@field OnLostFocus string Widget lost keyboard focus
----@field OnShow string Visibility changed to visible
----@field OnHide string Visibility changed to hidden
----@field OnEnable string State changed to enabled
----@field OnDisable string State changed to disabled
----@field OnTextChange string Text content changed
----@field OnTextInput string Text input from the user
----@field OnClick string Widget was clicked (buttons)
----@field OnStateChange string CheckWidget state changed
----@field OnValueChange string Value of a ValueSelect widget changed
----@field OnRangeChange string Range of a ValueSelect widget changed
----@field OnResize string Window size changed
----@field OnMove string Window position changed
+---@class lysa.ui.UIEvent String event-type constants used when subscribing to widget events via EventManager.
+---@field OnCreate string Fired after the widget has been created and added to the hierarchy.
+---@field OnDestroy string Fired just before the widget is destroyed.
+---@field OnKeyDown string Fired when a key is pressed while the widget has keyboard focus.
+---@field OnKeyUp string Fired when a key is released while the widget has keyboard focus.
+---@field OnMouseDown string Fired when a mouse button is pressed over the widget.
+---@field OnMouseUp string Fired when a mouse button is released over the widget.
+---@field OnMouseMove string Fired when the mouse cursor moves over the widget.
+---@field OnGotFocus string Fired when the widget acquires keyboard focus.
+---@field OnLostFocus string Fired when the widget loses keyboard focus.
+---@field OnShow string Fired when the widget's visibility changes to visible.
+---@field OnHide string Fired when the widget's visibility changes to hidden.
+---@field OnEnable string Fired when the widget transitions to the enabled state.
+---@field OnDisable string Fired when the widget transitions to the disabled state.
+---@field OnTextChange string Fired when the widget's text content changes (TextEdit, Text).
+---@field OnTextInput string Fired on each character input from the user (TextEdit).
+---@field OnClick string Fired when a Button or ToggleButton is clicked.
+---@field OnStateChange string Fired when a CheckWidget changes state (checked ↔ unchecked).
+---@field OnValueChange string Fired when the value of a ValueSelect / ScrollBar changes.
+---@field OnRangeChange string Fired when the min/max range of a ValueSelect / ScrollBar changes.
+---@field OnResize string Fired when the window size changes.
+---@field OnMove string Fired when the window position changes.
 
----@class lysa.ui.Widget
----@field type integer The widget type (see lysa.ui.WidgetType). (read-only)
----@field children lysa.ui.Widget[]
----@field visible boolean true if the widget is visible.
----@field is_enabled fun(self:lysa.ui.Widget):boolean Returns true if the widget is reactive to user action (mouse & keyboard).
----@field enable fun(self:lysa.ui.Widget, enabled:boolean|nil):nil Enables or disables widget reactions to input events (default true).
----@field set_pos fun(self:lysa.ui.Widget, x:number, y:number):nil Moves the widget to the given position.
----@field width number The widget width in pixels.
----@field height number The widget height in pixels.
----@field set_size fun(self:lysa.ui.Widget, width:number, height:number):nil Resizes the widget in pixels.
----@field rect any The size and position of the widget.
----@field set_rect fun(self:lysa.ui.Widget, x:number, y:number, width:number, height:number):nil Changes the size and position with x, y, width, height components.
----@field alignment integer The current widget placement alignment (see lysa.ui.Alignment).
----@field font any The current font of the widget.
----@field font_scale number The font scale.
----@field focused boolean True if the widget has keyboard focus. (read-only)
----@field parent lysa.ui.Widget|nil The parent widget, or nil. (read-only)
----@field remove fun(self:lysa.ui.Widget, child:lysa.ui.Widget):nil Removes a child widget.
----@field remove_all fun(self:lysa.ui.Widget):nil Removes all children widgets recursively.
----@field padding number Children padding (space between children).
----@field vborder number Vertical border size.
----@field hborder number Horizontal border size.
----@field draw_background boolean False if the background is transparent.
----@field pushed boolean True if the widget is currently pushed (e.g. mouse button down).
----@field pointed boolean True if the widget is currently pointed by the mouse. (read-only)
----@field freezed boolean True if the widget is not responding to events.
----@field overlapping boolean True if the widget overlaps other widgets. (read-only)
----@field children_rect any The rectangle enclosing all children. (read-only)
----@field refresh fun(self:lysa.ui.Widget):nil Forces a full redraw of the widget.
----@field group_index integer The user-defined group index.
----@field transparency number The transparency alpha value.
----@field resize_children fun(self:lysa.ui.Widget):nil Resizes children widgets.
----@field create_text fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text child widget.
----@field create_text fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text child widget using a resource string.
----@field create_panel fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Panel Creates and adds a Panel child widget.
----@field create_panel fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Panel Creates and adds a Panel child widget using a resource string.
----@field create_box fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Box Creates and adds a Box child widget.
----@field create_box fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Box Creates and adds a Box child widget using a resource string.
----@field create_button fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Button Creates and adds a Button child widget.
----@field create_button fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Button Creates and adds a Button child widget using a resource string.
----@field create_toggle_button fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.ToggleButton Creates and adds a ToggleButton child widget.
----@field create_toggle_button fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.ToggleButton Creates and adds a ToggleButton child widget using a resource string.
----@field create_hline fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.HLine Creates and adds a horizontal Line child widget.
----@field create_hline fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.HLine Creates and adds a horizontal Line child widget using a resource string.
----@field create_vline fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.VLine Creates and adds a vertical Line child widget.
----@field create_vline fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.VLine Creates and adds a vertical Line child widget using a resource string.
----@field create_frame fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment, title:string):lysa.ui.Frame Creates and adds a Frame child widget.
----@field create_frame fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment, title:string):lysa.ui.Frame Creates and adds a Frame child widget using a resource string.
----@field create_text_edit fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment, text:string|nil):lysa.ui.TextEdit Creates and adds a TextEdit child widget.
----@field create_text_edit fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment, text:string|nil):lysa.ui.TextEdit Creates and adds a TextEdit child widget using a resource string.
----@field create_image fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Image Creates and adds an Image child widget.
----@field create_image fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Image Creates and adds an Image child widget using a resource string.
----@field create_image fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment, autoresize:boolean, fixedsize:boolean):lysa.ui.Image Creates and adds an Image child widget using a resource string.
----@field create_vscrollbar fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.VScrollBar Creates and adds a vertical ScrollBar child widget.
----@field create_vscrollbar fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.VScrollBar Creates and adds a vertical ScrollBar child widget using a resource string.
----@field create_hscrollbar fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.HScrollBar Creates and adds a horizontal ScrollBar child widget.
----@field create_hscrollbar fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.HScrollBar Creates and adds a horizontal ScrollBar child widget using a resource string.
----@field create_tree_view fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView child widget.
----@field create_tree_view fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView child widget using a resource string.
----@field create_widget fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Widget Creates and adds a transparent Widget child.
----@field create_widget fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Widget Creates and adds a transparent Widget child using a resource string.
----@field add_child fun(self:lysa.ui.Widget, child:lysa.ui.Widget, alignment:integer, resource:string|nil):lysa.ui.Widget Adds a child widget with alignment and optional resource string.
+---@class lysa.ui.Widget The base class for all UI widgets. Provides layout, input handling, and child management.
+---@field type integer The concrete widget type (see lysa.ui.WidgetType). (read-only)
+---@field children lysa.ui.Widget[] Ordered list of direct child widgets.
+---@field visible boolean True if the widget is visible; false hides it and all its children.
+---@field is_enabled fun(self:lysa.ui.Widget):boolean Returns true if the widget responds to mouse and keyboard input.
+---@field enable fun(self:lysa.ui.Widget, enabled:boolean|nil):nil Enables or disables the widget's response to input events (pass nil or true to enable, false to disable).
+---@field set_pos fun(self:lysa.ui.Widget, x:number, y:number):nil Moves the widget to the given position in its parent's coordinate space.
+---@field width number The widget width in virtual screen units.
+---@field height number The widget height in virtual screen units.
+---@field set_size fun(self:lysa.ui.Widget, width:number, height:number):nil Resizes the widget to the given width and height in virtual screen units.
+---@field rect lysa.Rect The current position and size of the widget as a Rect.
+---@field set_rect fun(self:lysa.ui.Widget, x:number, y:number, width:number, height:number):nil Sets the widget's position and size in one call.
+---@field alignment integer The current placement alignment within the parent (see lysa.ui.Alignment).
+---@field font lysa.Font The font used to render text within this widget.
+---@field font_scale number The scale factor applied to the widget's font.
+---@field focused boolean True if this widget currently holds keyboard focus. (read-only)
+---@field parent lysa.ui.Widget|nil The direct parent widget, or nil if this is a root widget. (read-only)
+---@field remove fun(self:lysa.ui.Widget, child:lysa.ui.Widget):nil Removes and detaches the given direct child widget.
+---@field remove_all fun(self:lysa.ui.Widget):nil Removes and detaches all descendant widgets recursively.
+---@field padding number Spacing in virtual screen units between children during layout.
+---@field vborder number Vertical inset between the widget edges and its content area.
+---@field hborder number Horizontal inset between the widget edges and its content area.
+---@field draw_background boolean False if the widget's background should be drawn transparently.
+---@field pushed boolean True if the widget is currently in a pressed state (e.g. mouse button held down over it). (read-only)
+---@field pointed boolean True if the mouse cursor is currently over this widget. (read-only)
+---@field freezed boolean True if the widget ignores all input events without being visually disabled.
+---@field overlapping boolean True if this widget visually overlaps one or more siblings. (read-only)
+---@field children_rect lysa.Rect The smallest Rect enclosing all direct children. (read-only)
+---@field refresh fun(self:lysa.ui.Widget):nil Forces a complete visual redraw of the widget and its children.
+---@field group_index integer User-defined integer tag used to identify widgets within a logical group.
+---@field transparency number Global alpha multiplier for the widget (0.0 = fully transparent, 1.0 = opaque).
+---@field resize_children fun(self:lysa.ui.Widget):nil Triggers a layout pass that repositions and resizes all direct children according to their alignment.
+---@field create_text fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text child widget with the given alignment and initial text. @overload
+---@field create_text fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text child widget, loading its style from a resource string. @overload
+---@field create_panel fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Panel Creates and adds a Panel child widget with the given alignment. @overload
+---@field create_panel fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Panel Creates and adds a Panel child widget, loading its style from a resource string. @overload
+---@field create_box fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Box Creates and adds a Box child widget with the given alignment. @overload
+---@field create_box fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Box Creates and adds a Box child widget, loading its style from a resource string. @overload
+---@field create_button fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Button Creates and adds a Button child widget with the given alignment. @overload
+---@field create_button fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Button Creates and adds a Button child widget, loading its style from a resource string. @overload
+---@field create_toggle_button fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.ToggleButton Creates and adds a ToggleButton child widget with the given alignment. @overload
+---@field create_toggle_button fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.ToggleButton Creates and adds a ToggleButton child widget, loading its style from a resource string. @overload
+---@field create_hline fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.HLine Creates and adds a horizontal Line child widget with the given alignment. @overload
+---@field create_hline fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.HLine Creates and adds a horizontal Line child widget, loading its style from a resource string. @overload
+---@field create_vline fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.VLine Creates and adds a vertical Line child widget with the given alignment. @overload
+---@field create_vline fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.VLine Creates and adds a vertical Line child widget, loading its style from a resource string. @overload
+---@field create_frame fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment, title:string):lysa.ui.Frame Creates and adds a Frame child widget with the given alignment and title. @overload
+---@field create_frame fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment, title:string):lysa.ui.Frame Creates and adds a Frame child widget, loading its style from a resource string. @overload
+---@field create_text_edit fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment, text:string|nil):lysa.ui.TextEdit Creates and adds a TextEdit child widget with the given alignment and optional initial text. @overload
+---@field create_text_edit fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment, text:string|nil):lysa.ui.TextEdit Creates and adds a TextEdit child widget, loading its style from a resource string. @overload
+---@field create_image fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Image Creates and adds an Image child widget with the given alignment. @overload
+---@field create_image fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Image Creates and adds an Image child widget, loading its style from a resource string. @overload
+---@field create_image fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment, autoresize:boolean, fixedsize:boolean):lysa.ui.Image Creates and adds an Image child widget with auto-resize and fixed-size options. @overload
+---@field create_vscrollbar fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.VScrollBar Creates and adds a vertical ScrollBar child widget with the given alignment. @overload
+---@field create_vscrollbar fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.VScrollBar Creates and adds a vertical ScrollBar child widget, loading its style from a resource string. @overload
+---@field create_hscrollbar fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.HScrollBar Creates and adds a horizontal ScrollBar child widget with the given alignment. @overload
+---@field create_hscrollbar fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.HScrollBar Creates and adds a horizontal ScrollBar child widget, loading its style from a resource string. @overload
+---@field create_tree_view fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView child widget with the given alignment. @overload
+---@field create_tree_view fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView child widget, loading its style from a resource string. @overload
+---@field create_widget fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Widget Creates and adds a transparent container Widget child with the given alignment. @overload
+---@field create_widget fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Widget Creates and adds a transparent container Widget child, loading its style from a resource string. @overload
+---@field add_child fun(self:lysa.ui.Widget, child:lysa.ui.Widget, alignment:integer, resource:string|nil):lysa.ui.Widget Adds a pre-constructed child widget with the given alignment and optional resource string.
 
----@class lysa.ui.Panel : lysa.ui.Widget
+---@class lysa.ui.Panel : lysa.ui.Widget A rectangular widget that renders only a background fill; no border.
 
----@class lysa.ui.Box : lysa.ui.Panel
+---@class lysa.ui.Box : lysa.ui.Panel A Panel with a visible border drawn around its edges.
 
----@class lysa.ui.Button : lysa.ui.Box
+---@class lysa.ui.Button : lysa.ui.Box A push button that fires the OnClick event when pressed and released by the user.
 
----@class lysa.ui.CheckWidget : lysa.ui.Widget
----@field state integer The current state of the widget (see lysa.ui.CheckState).
+---@class lysa.ui.CheckWidget : lysa.ui.Widget Base class for widgets with a binary checked/unchecked state (e.g. ToggleButton).
+---@field state integer The current check state (see lysa.ui.CheckState): UNCHECK or CHECK.
 
----@class lysa.ui.ToggleButton : lysa.ui.CheckWidget
+---@class lysa.ui.ToggleButton : lysa.ui.CheckWidget A button that alternates between checked and unchecked states on each click. Fires OnStateChange on toggle.
 
----@class lysa.ui.Line : lysa.ui.Widget
----@field style integer The current line orientation (see lysa.ui.LineStyle).
+---@class lysa.ui.Line : lysa.ui.Widget A thin separator line, either horizontal or vertical.
+---@field style integer The line orientation (see lysa.ui.LineStyle): HORIZ or VERT.
 
----@class lysa.ui.HLine : lysa.ui.Line
+---@class lysa.ui.HLine : lysa.ui.Line A horizontal separator line widget.
 
----@class lysa.ui.VLine : lysa.ui.Line
+---@class lysa.ui.VLine : lysa.ui.Line A vertical separator line widget.
 
----@class lysa.ui.Frame : lysa.ui.Panel
----@field title string The frame title.
----@field title_color lysa.float4 The title text color.
+---@class lysa.ui.Frame : lysa.ui.Panel A bordered panel with a title string rendered in its top border.
+---@field title string The text displayed in the frame's title border.
+---@field title_color lysa.float4 RGBA color of the title text.
 
----@class lysa.ui.Text : lysa.ui.Widget
----@field text string The displayed text.
----@field text_color lysa.float4 The text color.
----@field size {number, number} The {width, height} size of the rendered text. (read-only)
+---@class lysa.ui.Text : lysa.ui.Widget A single-line read-only text label.
+---@field text string The string displayed by this label.
+---@field text_color lysa.float4 RGBA color of the displayed text.
+---@field size lysa.float2 Rendered pixel size of the text as (width, height). (read-only)
 
----@class lysa.ui.TextEdit : lysa.ui.Widget
----@field is_read_only boolean True if the widget is read-only.
----@field text string The current text.
----@field sel_start integer The selection start position.
----@field first_displayed_char integer The index of the first displayed character. (read-only)
----@field displayed_text string The text currently being displayed in the text box. (read-only)
----@field set_resources fun(self:lysa.ui.TextEdit, resource:string):nil Sets the UI resources for the text edit.
+---@class lysa.ui.TextEdit : lysa.ui.Widget A single-line editable text input field. Fires OnTextChange and OnTextInput events.
+---@field is_read_only boolean True if the field is read-only; the user can view but not edit the text.
+---@field text string The current text content of the input field.
+---@field sel_start integer Character index of the start of the current text selection.
+---@field first_displayed_char integer Index of the first character currently visible in the field (scroll offset). (read-only)
+---@field displayed_text string The substring of text currently visible inside the widget bounds. (read-only)
+---@field set_resources fun(self:lysa.ui.TextEdit, resource:string):nil Reloads the visual style of this TextEdit from the given resource string.
 
----@class lysa.ui.Image : lysa.ui.Widget
----@field set_auto_size fun(self:lysa.ui.Image, autoSize:boolean):nil Sets whether to automatically resize the widget to the image size.
----@field color lysa.float4 The image color tint.
----@field image lysa.Image The currently displayed image, or nil. (read-only)
----@field set_image fun(self:lysa.ui.Image, image:lysa.Image):nil
----@field set_image fun(self:lysa.ui.Image, uri:string):nil
+---@class lysa.ui.Image : lysa.ui.Widget A widget that displays a GPU image with an optional color tint.
+---@field set_auto_size fun(self:lysa.ui.Image, autoSize:boolean):nil When true, the widget automatically resizes itself to match the displayed image's pixel dimensions.
+---@field color lysa.float4 RGBA color tint multiplied with the image pixels (default white = no tint).
+---@field image lysa.Image The GPU image currently displayed, or nil if none is set. (read-only)
+---@field set_image fun(self:lysa.ui.Image, image:lysa.Image):nil Sets the displayed image from an existing GPU Image object. @overload
+---@field set_image fun(self:lysa.ui.Image, uri:string):nil Loads and sets the displayed image from the given virtual URI. @overload
 
----@class lysa.ui.ValueSelect : lysa.ui.Widget
----@field min number The minimum value.
----@field max number The maximum value.
----@field value number The current value.
----@field step number The step increment.
+---@class lysa.ui.ValueSelect : lysa.ui.Widget Base class for widgets that expose a numeric value within a bounded range.
+---@field min number The minimum selectable value.
+---@field max number The maximum selectable value.
+---@field value number The current value, clamped to [min, max].
+---@field step number The increment applied on each user interaction step.
 
----@class lysa.ui.ScrollBar : lysa.ui.ValueSelect
----@field scroll_bar_type integer The scroll bar orientation (see lysa.ui.ScrollBarType). (read-only)
----@field set_resources fun(self:lysa.ui.ScrollBar, area:string, cage:string):nil Sets the UI resources for the scroll bar (area = scroll area, cage = scroll lift).
+---@class lysa.ui.ScrollBar : lysa.ui.ValueSelect A scroll bar widget whose value represents a scroll position within [min, max].
+---@field scroll_bar_type integer The orientation of this scroll bar (see lysa.ui.ScrollBarType). (read-only)
+---@field set_resources fun(self:lysa.ui.ScrollBar, area:string, cage:string):nil Reloads the visual style: area = resource string for the scroll track, cage = resource string for the scroll thumb.
 
----@class lysa.ui.VScrollBar : lysa.ui.ScrollBar
+---@class lysa.ui.VScrollBar : lysa.ui.ScrollBar A vertical scroll bar widget.
 
----@class lysa.ui.HScrollBar : lysa.ui.ScrollBar
+---@class lysa.ui.HScrollBar : lysa.ui.ScrollBar A horizontal scroll bar widget.
 
----@class lysa.ui.TreeViewItem : lysa.ui.Panel
----@field item lysa.ui.Widget The widget displayed for this item.
----@field level integer Depth level in the tree.
----@field selected boolean Whether the item is selected.
----@field expanded boolean Whether the item is expanded.
+---@class lysa.ui.TreeViewItem : lysa.ui.Panel A single row in a TreeView, which can contain a child widget and be expanded or collapsed.
+---@field item lysa.ui.Widget The widget rendered as the visible content of this tree row.
+---@field level integer Depth of this item in the tree hierarchy (root items have level 0).
+---@field selected boolean True if this item is currently selected.
+---@field expanded boolean True if this item's children are currently visible.
 
----@class lysa.ui.TreeView : lysa.ui.Widget
----@field set_resources fun(self:lysa.ui.TreeView, resBox:string, resScroll:string, resHandle:string):nil Sets UI resources for the tree view.
----@field remove_all_items fun(self:lysa.ui.TreeView):nil Removes all items from the tree view.
----@field add_item fun(self:lysa.ui.TreeView, parent_or_widget:lysa.ui.TreeViewItem|lysa.ui.Widget, widget:lysa.ui.Widget|nil):lysa.ui.TreeViewItem Adds a root item or a child item. Pass only a widget to add a root item; pass a parent TreeViewItem and a widget to add a child.
----@field expand fun(self:lysa.ui.TreeView, item:lysa.ui.Widget):nil Expands the tree item associated with the given widget.
+---@class lysa.ui.TreeView : lysa.ui.Widget A hierarchical list widget that displays items in an expandable/collapsible tree structure.
+---@field set_resources fun(self:lysa.ui.TreeView, resBox:string, resScroll:string, resHandle:string):nil Reloads the visual style: resBox = row style, resScroll = scroll bar style, resHandle = expand/collapse handle style.
+---@field remove_all_items fun(self:lysa.ui.TreeView):nil Removes and destroys all items from the tree.
+---@field add_item fun(self:lysa.ui.TreeView, parent_or_widget:lysa.ui.TreeViewItem|lysa.ui.Widget, widget:lysa.ui.Widget|nil):lysa.ui.TreeViewItem Adds an item to the tree. Pass only a widget to add a root-level item; pass a TreeViewItem and a widget to add a child under that item.
+---@field expand fun(self:lysa.ui.TreeView, item:lysa.ui.Widget):nil Programmatically expands the tree item associated with the given content widget.
 
----@class lysa.ui.Window
----@field resizeable_borders integer Bitmask of which borders can resize the window (see lysa.ui.ResizeableBorder).
----@field widget lysa.ui.Widget The root widget that covers the entire window. (read-only)
----@field style any The current style layout, or nil.
----@field set_widget fun(self:lysa.ui.Window, child:lysa.ui.Widget|nil, resources:string|nil, padding:number|nil):nil Sets the root widget. Call setStyle(nil) first if no layout has been set previously.
----@field set_focused_widget fun(self:lysa.ui.Window, widget:lysa.ui.Widget):nil Moves keyboard focus to the given widget.
----@field width number The client area width.
----@field height number The client area height.
----@field rect any The client area position and size.
----@field set_pos fun(self:lysa.ui.Window, x:number, y:number):nil Sets the window position (bottom-left corner).
----@field x number Sets the X position (bottom-left).
----@field y number Sets the Y position (bottom-left).
----@field visible boolean Whether the window is visible. The change is effective at the start of the next frame.
----@field close fun(self:lysa.ui.Window):nil Close the window (effective next frame).
----@field show fun(self:lysa.ui.Window):nil Shows the window (effective next frame).
----@field hide fun(self:lysa.ui.Window):nil Hides the window (effective next frame).
----@field set_transparency fun(self:lysa.ui.Window, alpha:number):nil Sets the alpha transparency value.
----@field set_minimum_size fun(self:lysa.ui.Window, width:number, height:number):nil Sets the minimum window size (default 2x2).
----@field set_maximum_size fun(self:lysa.ui.Window, width:number, height:number):nil Sets the maximum window size.
----@field minimum_width number The minimum width of the window. (read-only)
----@field minimum_height number The minimum height of the window. (read-only)
----@field maximum_width number The maximum width of the window. (read-only)
----@field maximum_height number The maximum height of the window. (read-only)
----@field font any The default font for the window.
----@field font_scale number The default font scale.
----@field text_color any The default text color.
----@field refresh fun(self:lysa.ui.Window):nil Forces a redraw of all the UI.
----@field add_child fun(self:lysa.ui.Window, child:lysa.ui.Widget, alignment:integer, resource:string|nil):lysa.ui.Widget Adds a child widget to the root widget.
----@field remove_child fun(self:lysa.ui.Window, child:lysa.ui.Widget):nil Removes a child widget from the root widget.
----@field create_text fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text widget.
----@field create_text fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text widget using a resource string.
----@field create_panel fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Panel Creates and adds a Panel widget.
----@field create_panel fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Panel Creates and adds a Panel widget using a resource string.
----@field create_box fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Box Creates and adds a Box widget (bordered panel).
----@field create_box fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Box Creates and adds a Box widget (bordered panel) using a resource string.
----@field create_button fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Button Creates and adds a Button widget.
----@field create_button fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Button Creates and adds a Button widget using a resource string.
----@field create_toggle_button fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.ToggleButton Creates and adds a ToggleButton widget.
----@field create_toggle_button fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.ToggleButton Creates and adds a ToggleButton widget using a resource string.
----@field create_hline fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.HLine Creates and adds a horizontal Line widget.
----@field create_hline fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.HLine Creates and adds a horizontal Line widget using a resource string.
----@field create_vline fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.VLine Creates and adds a vertical Line widget.
----@field create_vline fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.VLine Creates and adds a vertical Line widget using a resource string.
----@field create_frame fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment, title:string):lysa.ui.Frame Creates and adds a Frame widget with a title.
----@field create_frame fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment, title:string):lysa.ui.Frame Creates and adds a Frame widget with a title using a resource string.
----@field create_text_edit fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment, text:string|nil):lysa.ui.TextEdit Creates and adds a TextEdit widget.
----@field create_text_edit fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment, text:string|nil):lysa.ui.TextEdit Creates and adds a TextEdit widget using a resource string.
----@field create_image fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Image Creates and adds an Image widget.
----@field create_image fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Image Creates and adds an Image widget using a resource string.
----@field create_image fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment, autoresize:boolean, fixedsize:boolean):lysa.ui.Image Creates and adds an Image widget using a resource string.
----@field create_vscrollbar fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.VScrollBar Creates and adds a vertical ScrollBar widget.
----@field create_vscrollbar fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.VScrollBar Creates and adds a vertical ScrollBar widget using a resource string.
----@field create_hscrollbar fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.HScrollBar Creates and adds a horizontal ScrollBar widget.
----@field create_hscrollbar fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.HScrollBar Creates and adds a horizontal ScrollBar widget using a resource string.
----@field create_tree_view fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView widget.
----@field create_tree_view fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView widget using a resource string.
----@field create_widget fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Widget Creates and adds a transparent Widget.
----@field create_widget fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Widget Creates and adds a transparent Widget using a resource string.
+---@class lysa.ui.Window A UI window that owns a root Widget hierarchy and is managed by the WindowManager.
+---@field resizeable_borders integer Bitmask of which window borders are user-resizable (see lysa.ui.ResizeableBorder).
+---@field widget lysa.ui.Widget The root widget that covers the entire client area of the window. (read-only)
+---@field style any The currently active style layout object, or nil if no layout has been applied.
+---@field set_widget fun(self:lysa.ui.Window, child:lysa.ui.Widget|nil, resources:string|nil, padding:number|nil):nil Replaces the root widget. Call set_widget(nil) first if a layout was previously applied.
+---@field set_focused_widget fun(self:lysa.ui.Window, widget:lysa.ui.Widget):nil Moves keyboard focus to the specified widget within this window.
+---@field width number Client area width in virtual screen units.
+---@field height number Client area height in virtual screen units.
+---@field rect lysa.Rect Client area position and size as a Rect.
+---@field set_pos fun(self:lysa.ui.Window, x:number, y:number):nil Moves the window's bottom-left corner to the given position.
+---@field x number Current X position of the window's bottom-left corner.
+---@field y number Current Y position of the window's bottom-left corner.
+---@field visible boolean Whether the window is visible; changes take effect at the start of the next frame.
+---@field close fun(self:lysa.ui.Window):nil Closes and removes the window (effective at the start of the next frame).
+---@field show fun(self:lysa.ui.Window):nil Makes the window visible (effective at the start of the next frame).
+---@field hide fun(self:lysa.ui.Window):nil Hides the window without destroying it (effective at the start of the next frame).
+---@field set_transparency fun(self:lysa.ui.Window, alpha:number):nil Sets the global alpha transparency for the entire window (0.0 = invisible, 1.0 = fully opaque).
+---@field set_minimum_size fun(self:lysa.ui.Window, width:number, height:number):nil Sets the minimum dimensions the user can resize the window to (default 2×2).
+---@field set_maximum_size fun(self:lysa.ui.Window, width:number, height:number):nil Sets the maximum dimensions the user can resize the window to.
+---@field minimum_width number The minimum width the window can be resized to. (read-only)
+---@field minimum_height number The minimum height the window can be resized to. (read-only)
+---@field maximum_width number The maximum width the window can be resized to. (read-only)
+---@field maximum_height number The maximum height the window can be resized to. (read-only)
+---@field font lysa.Font The default font applied to widgets that do not specify their own.
+---@field font_scale number The default font scale applied to widgets that do not specify their own.
+---@field text_color lysa.float4 The default text RGBA color applied to widgets that do not specify their own.
+---@field refresh fun(self:lysa.ui.Window):nil Forces a full redraw of all widgets in this window at the start of the next frame.
+---@field add_child fun(self:lysa.ui.Window, child:lysa.ui.Widget, alignment:integer, resource:string|nil):lysa.ui.Widget Adds a pre-constructed widget to the root widget with the given alignment and optional resource string.
+---@field remove_child fun(self:lysa.ui.Window, child:lysa.ui.Widget):nil Removes the given widget from the root widget.
+---@field create_text fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text widget. @overload
+---@field create_text fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text widget, loading its style from a resource string. @overload
+---@field create_panel fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Panel Creates and adds a Panel widget. @overload
+---@field create_panel fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Panel Creates and adds a Panel widget, loading its style from a resource string. @overload
+---@field create_box fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Box Creates and adds a Box widget (bordered panel). @overload
+---@field create_box fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Box Creates and adds a Box widget (bordered panel), loading its style from a resource string. @overload
+---@field create_button fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Button Creates and adds a Button widget. @overload
+---@field create_button fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Button Creates and adds a Button widget, loading its style from a resource string. @overload
+---@field create_toggle_button fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.ToggleButton Creates and adds a ToggleButton widget. @overload
+---@field create_toggle_button fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.ToggleButton Creates and adds a ToggleButton widget, loading its style from a resource string. @overload
+---@field create_hline fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.HLine Creates and adds a horizontal Line widget. @overload
+---@field create_hline fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.HLine Creates and adds a horizontal Line widget, loading its style from a resource string. @overload
+---@field create_vline fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.VLine Creates and adds a vertical Line widget. @overload
+---@field create_vline fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.VLine Creates and adds a vertical Line widget, loading its style from a resource string. @overload
+---@field create_frame fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment, title:string):lysa.ui.Frame Creates and adds a Frame widget with the given title. @overload
+---@field create_frame fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment, title:string):lysa.ui.Frame Creates and adds a Frame widget with the given title, loading its style from a resource string. @overload
+---@field create_text_edit fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment, text:string|nil):lysa.ui.TextEdit Creates and adds a TextEdit widget with optional initial text. @overload
+---@field create_text_edit fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment, text:string|nil):lysa.ui.TextEdit Creates and adds a TextEdit widget, loading its style from a resource string. @overload
+---@field create_image fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Image Creates and adds an Image widget. @overload
+---@field create_image fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Image Creates and adds an Image widget, loading its style from a resource string. @overload
+---@field create_image fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment, autoresize:boolean, fixedsize:boolean):lysa.ui.Image Creates and adds an Image widget with auto-resize and fixed-size options. @overload
+---@field create_vscrollbar fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.VScrollBar Creates and adds a vertical ScrollBar widget. @overload
+---@field create_vscrollbar fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.VScrollBar Creates and adds a vertical ScrollBar widget, loading its style from a resource string. @overload
+---@field create_hscrollbar fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.HScrollBar Creates and adds a horizontal ScrollBar widget. @overload
+---@field create_hscrollbar fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.HScrollBar Creates and adds a horizontal ScrollBar widget, loading its style from a resource string. @overload
+---@field create_tree_view fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView widget. @overload
+---@field create_tree_view fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView widget, loading its style from a resource string. @overload
+---@field create_widget fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Widget Creates and adds a transparent container Widget. @overload
+---@field create_widget fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Widget Creates and adds a transparent container Widget, loading its style from a resource string. @overload
 
----@class lysa.ui.WindowManager
----@field create fun(self:lysa.ui.WindowManager, rect:any):lysa.ui.Window Creates and adds a new UI window with the given rectangle.
----@field add fun(self:lysa.ui.WindowManager, window:lysa.ui.Window):lysa.ui.Window Adds an existing UI window to the manager.
----@field remove fun(self:lysa.ui.WindowManager, window:lysa.ui.Window):nil Removes a UI window (effective at the start of the next frame).
----@field default_font lysa.Font The default font loaded at creation. (read-only)
----@field default_font_scale number The default font scale.
----@field default_text_color lysa.float4 The default text color.
----@field aspect_ratio number The aspect ratio of the managed rendering window. (read-only)
----@field refresh fun(self:lysa.ui.WindowManager):nil Forces a redraw of all UI at the start of the next frame.
----@field resize_delta number The pixel delta used for window border resizing (default 5.0). (read-only)
----@field set_enable_window_resizing fun(self:lysa.ui.WindowManager, enable:boolean):nil Enables or disables UI window resizing by the user.
+---@class lysa.ui.WindowManager The central manager for all UI windows attached to a rendering target.
+---@field create fun(self:lysa.ui.WindowManager, rect:lysa.Rect):lysa.ui.Window Creates and registers a new UI window with the given position and size.
+---@field add fun(self:lysa.ui.WindowManager, window:lysa.ui.Window):lysa.ui.Window Registers an existing UI window with this manager so it receives update and render calls.
+---@field remove fun(self:lysa.ui.WindowManager, window:lysa.ui.Window):nil Unregisters and destroys the given UI window (effective at the start of the next frame).
+---@field default_font lysa.Font The default font loaded at manager creation, applied to new windows that do not specify their own. (read-only)
+---@field default_font_scale number The default font scale applied to new windows that do not specify their own.
+---@field default_text_color lysa.float4 The default text RGBA color applied to new windows that do not specify their own.
+---@field aspect_ratio number The aspect ratio of the rendering window this manager is attached to. (read-only)
+---@field refresh fun(self:lysa.ui.WindowManager):nil Forces a full redraw of all managed windows at the start of the next frame.
+---@field resize_delta number Pixel distance from a window border within which a drag starts a resize operation (default 5.0). (read-only)
+---@field set_enable_window_resizing fun(self:lysa.ui.WindowManager, enable:boolean):nil Globally enables or disables user-driven window resizing by dragging borders.
 
----@class lysa.ui
----@field Alignment lysa.ui.Alignment
----@field WidgetType lysa.ui.WidgetType
----@field CheckState lysa.ui.CheckState
----@field LineStyle lysa.ui.LineStyle
----@field ScrollBarType lysa.ui.ScrollBarType
----@field ResizeableBorder lysa.ui.ResizeableBorder
----@field UIEvent lysa.ui.UIEvent
----@field Widget lysa.ui.Widget
----@field Panel lysa.ui.Panel
----@field Box lysa.ui.Box
----@field Button lysa.ui.Button
----@field CheckWidget lysa.ui.CheckWidget
----@field ToggleButton lysa.ui.ToggleButton
----@field Line lysa.ui.Line
----@field HLine lysa.ui.HLine
----@field VLine lysa.ui.VLine
----@field Frame lysa.ui.Frame
----@field Text lysa.ui.Text
----@field TextEdit lysa.ui.TextEdit
----@field Image lysa.ui.Image
----@field ValueSelect lysa.ui.ValueSelect
----@field ScrollBar lysa.ui.ScrollBar
----@field VScrollBar lysa.ui.VScrollBar
----@field HScrollBar lysa.ui.HScrollBar
----@field TreeViewItem lysa.ui.TreeViewItem
----@field TreeView lysa.ui.TreeView
----@field Window lysa.ui.Window
----@field WindowManager lysa.ui.WindowManager
+---@class lysa.ui The lysa.ui sub-module — immediate-mode UI widgets and window management.
+---@field Alignment lysa.ui.Alignment Widget placement alignment constants.
+---@field WidgetType lysa.ui.WidgetType Widget type identifier constants.
+---@field CheckState lysa.ui.CheckState Check/toggle state constants.
+---@field LineStyle lysa.ui.LineStyle Line orientation constants.
+---@field ScrollBarType lysa.ui.ScrollBarType Scroll bar orientation constants.
+---@field ResizeableBorder lysa.ui.ResizeableBorder Window border resize permission constants.
+---@field UIEvent lysa.ui.UIEvent Event type string constants for widget event subscriptions.
+---@field Widget lysa.ui.Widget Base widget type (transparent container).
+---@field Panel lysa.ui.Panel Background-only rectangular widget type.
+---@field Box lysa.ui.Box Bordered rectangular widget type.
+---@field Button lysa.ui.Button Push button widget type.
+---@field CheckWidget lysa.ui.CheckWidget Base type for widgets with a binary check state.
+---@field ToggleButton lysa.ui.ToggleButton Two-state toggle button widget type.
+---@field Line lysa.ui.Line Base separator line widget type.
+---@field HLine lysa.ui.HLine Horizontal separator line widget type.
+---@field VLine lysa.ui.VLine Vertical separator line widget type.
+---@field Frame lysa.ui.Frame Titled bordered panel widget type.
+---@field Text lysa.ui.Text Read-only text label widget type.
+---@field TextEdit lysa.ui.TextEdit Editable text input field widget type.
+---@field Image lysa.ui.Image GPU image display widget type.
+---@field ValueSelect lysa.ui.ValueSelect Base type for numeric value selection widgets.
+---@field ScrollBar lysa.ui.ScrollBar Base scroll bar widget type.
+---@field VScrollBar lysa.ui.VScrollBar Vertical scroll bar widget type.
+---@field HScrollBar lysa.ui.HScrollBar Horizontal scroll bar widget type.
+---@field TreeViewItem lysa.ui.TreeViewItem Single expandable row within a TreeView.
+---@field TreeView lysa.ui.TreeView Hierarchical expandable list widget type.
+---@field Window lysa.ui.Window UI window type managed by the WindowManager.
+---@field WindowManager lysa.ui.WindowManager Central manager for all UI windows.
 
 ---@type lysa.ui
 lysa.ui = {}
