@@ -96,6 +96,22 @@ set(LYSA_UI_MODULES
        )
 build_target(${PROJECT_NAME} "${LYSA_UI_SRC}" "${LYSA_UI_MODULES}")
 
+#######################################################
+find_program(PYTHON_EXECUTABLE python)
+
+if (PYTHON_EXECUTABLE)
+    message(STATUS "Python found: ${PYTHON_EXECUTABLE}")
+    set(DOCS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/docs")
+
+    add_custom_target(lysa_ui_docs_lua
+            COMMAND ${PYTHON_EXECUTABLE} ${VIREO_RHI_PROJECT_DIR}/docs/gen_lua_docs.py --lua ../src/bindings/lua/lysa_ui.lua --out ./html --project-brief "Lysa 3D Engine" --head-template ./lua-header.html --foot-template ./lua-footer.html
+            WORKING_DIRECTORY ${DOCS_DIRECTORY}
+            COMMENT "Generating Lua Nodes documentation with gen_lua_docs.py"
+            VERBATIM
+    )
+else()
+    message(STATUS "Python not found, lysa_ui_docs_lua target will not be available.")
+endif()
 
 #######################################################
 find_program(DOXYPRESS_EXECUTABLE doxypress)

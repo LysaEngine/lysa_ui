@@ -1,0 +1,8 @@
+/*!
+\page z_lua_api Lua API
+
+Lua UI API namespaces :
+
+- [lysa.ui](namespacelysa.ui_lua.html)
+
+*/

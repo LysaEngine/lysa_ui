@@ -11,5 +11,7 @@ Documentation
 ---------------------------------------------------------------------------
 - \ref about
 - \ref manual_000
+- \ref lysa.ui "Classes"
+- \ref z_lua_api
 
 */

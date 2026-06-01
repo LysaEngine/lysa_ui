@@ -538,5 +538,9 @@ function initNavTree(toroot,relpath)
        navTo(o,toroot,hashUrl(),relpath);
      }
   })
-}
+  $(document).ready(function() {
+    var $list = $('ul.tablist').first();
+    $list.append('<li><a href="z_lua_api.html" ><span>Lua API</span></a></li>');
+    $list.append('<li><a href="https://github.com/LysaEngine/lysa_ui" target="_blank"><span>GitHub</span></a></li>');
+  });}
 
