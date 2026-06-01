@@ -83,7 +83,7 @@ namespace lysa::ui {
     }
 
     void Widget::setResource(std::shared_ptr<UIResource> res) {
-        resource = std::move(R);
+        resource = std::move(res);
         refresh();
     }
 
