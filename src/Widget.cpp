@@ -543,7 +543,12 @@ namespace lysa::ui {
         if (redrawOnMouseEvent) {
             refresh();
         }
-        ctx().events.push({UIEvent::OnMouseDown, UIEventMouseButton{.button = button, .x = x, .y = y}, id});
+        if (!consumed) {
+            ctx().events.push({
+                UIEvent::OnMouseDown,
+                UIEventMouseButton{.button = button, .x = x, .y = y},
+            id});
+        }
         return consumed;
     }
 
@@ -561,12 +566,13 @@ namespace lysa::ui {
                 }
             }
         }
-        if (redrawOnMouseEvent) { refresh();}
-        ctx().events.push(Event { UIEvent::OnMouseUp, UIEventMouseButton{
-            .button = button,
-            .x = x,
-            .y = y
-        }, id});
+        if (redrawOnMouseEvent) { refresh(); }
+        if (!consumed) {
+            ctx().events.push(Event {
+                UIEvent::OnMouseUp,
+                UIEventMouseButton{ .button = button, .x = x, .y = y},
+                id});
+        }
         return consumed;
     }
 
@@ -590,7 +596,12 @@ namespace lysa::ui {
         if (redrawOnMouseMove && (pointed != p)) {
             refresh();
         }
-        ctx().events.push({UIEvent::OnMouseMove, UIEventMouseMove{.buttonsState = B, .x = x, .y = y}, id});
+        if (!consumed) {
+            ctx().events.push({
+                UIEvent::OnMouseMove,
+                UIEventMouseMove{.buttonsState = B, .x = x, .y = y},
+            id});
+        }
         return consumed;
     }
 
