@@ -41,6 +41,7 @@
 ---@field SCROLLBAR integer A scroll bar with configurable min, max, and current position.
 ---@field TREEVIEW integer A hierarchical tree of expandable/collapsible items.
 ---@field IMAGE integer A widget that displays a 2-D GPU image.
+---@field POPUP integer A popup panel placed at fixed (x, y) coordinates and drawn on top of siblings.
 
 ---@class lysa.ui.CheckState Check/toggle state constants for CheckWidget and ToggleButton.
 ---@field UNCHECK integer Unchecked / OFF state.
@@ -121,6 +122,8 @@
 ---@field create_text fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text child widget, loading its style from a resource string. @overload
 ---@field create_panel fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Panel Creates and adds a Panel child widget with the given alignment. @overload
 ---@field create_panel fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Panel Creates and adds a Panel child widget, loading its style from a resource string. @overload
+---@field create_popup fun(self:lysa.ui.Widget, x:number, y:number):lysa.ui.Popup Creates and adds a Popup child widget at the given position, rendered on top of siblings. @overload
+---@field create_popup fun(self:lysa.ui.Widget, resource:string, x:number, y:number):lysa.ui.Popup Creates and adds a Popup child widget at the given position, loading its style from a resource string. @overload
 ---@field create_box fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Box Creates and adds a Box child widget with the given alignment. @overload
 ---@field create_box fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Box Creates and adds a Box child widget, loading its style from a resource string. @overload
 ---@field create_button fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Button Creates and adds a Button child widget with the given alignment. @overload
@@ -149,6 +152,10 @@
 ---@field add_child fun(self:lysa.ui.Widget, child:lysa.ui.Widget, alignment:integer, resource:string|nil):lysa.ui.Widget Adds a pre-constructed child widget with the given alignment and optional resource string.
 
 ---@class lysa.ui.Panel : lysa.ui.Widget A rectangular widget that renders only a background fill; no border.
+
+---@class lysa.ui.Popup : lysa.ui.Panel A Panel placed at a fixed (x, y) position relative to its parent and always drawn on top of sibling widgets.
+---@field x number Horizontal offset from the parent widget's top-left corner (read-only).
+---@field y number Vertical offset from the parent widget's top-left corner (read-only).
 
 ---@class lysa.ui.Box : lysa.ui.Panel A Panel with a visible border drawn around its edges.
 
@@ -249,6 +256,8 @@
 ---@field create_text fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text widget, loading its style from a resource string. @overload
 ---@field create_panel fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Panel Creates and adds a Panel widget. @overload
 ---@field create_panel fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Panel Creates and adds a Panel widget, loading its style from a resource string. @overload
+---@field create_popup fun(self:lysa.ui.Window, x:number, y:number):lysa.ui.Popup Creates and adds a Popup widget at the given position, rendered on top of siblings. @overload
+---@field create_popup fun(self:lysa.ui.Window, resource:string, x:number, y:number):lysa.ui.Popup Creates and adds a Popup widget at the given position, loading its style from a resource string. @overload
 ---@field create_box fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Box Creates and adds a Box widget (bordered panel). @overload
 ---@field create_box fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Box Creates and adds a Box widget (bordered panel), loading its style from a resource string. @overload
 ---@field create_button fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Button Creates and adds a Button widget. @overload
@@ -297,6 +306,7 @@
 ---@field UIEvent lysa.ui.UIEvent Event type string constants for widget event subscriptions.
 ---@field Widget lysa.ui.Widget Base widget type (transparent container).
 ---@field Panel lysa.ui.Panel Background-only rectangular widget type.
+---@field Popup lysa.ui.Popup Popup panel at fixed coordinates, drawn on top of siblings.
 ---@field Box lysa.ui.Box Bordered rectangular widget type.
 ---@field Button lysa.ui.Button Push button widget type.
 ---@field CheckWidget lysa.ui.CheckWidget Base type for widgets with a binary check state.

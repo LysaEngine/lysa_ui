@@ -71,6 +71,7 @@ namespace lysa::ui {
             .addVariable("SCROLLBAR", Widget::SCROLLBAR)
             .addVariable("TREEVIEW", Widget::TREEVIEW)
             .addVariable("IMAGE", Widget::IMAGE)
+            .addVariable("POPUP", Widget::POPUP)
         .endNamespace()
 
         .beginNamespace("CheckState")
@@ -170,6 +171,13 @@ namespace lysa::ui {
                 },
                 +[](Widget* self, const std::string& resource, const int alignment) -> std::shared_ptr<Panel> {
                     return self->create<Panel>(resource, static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_popup",
+                +[](Widget* self, const float x, const float y) -> std::shared_ptr<Popup> {
+                    return self->add(std::make_shared<Popup>(x, y), Alignment::NONE, "", true);
+                },
+                +[](Widget* self, const std::string& resource, const float x, const float y) -> std::shared_ptr<Popup> {
+                    return self->add(std::make_shared<Popup>(x, y), Alignment::NONE, resource, true);
                 })
             .addFunction("create_box",
                 +[](Widget* self, const int alignment) -> std::shared_ptr<Box> {
@@ -273,6 +281,12 @@ namespace lysa::ui {
 
         .deriveClass<Panel, Widget>("Panel")
             .addConstructor<void()>()
+        .endClass()
+
+        .deriveClass<Popup, Panel>("Popup")
+            .addConstructor<void(float, float)>()
+            .addProperty("x", &Popup::getX)
+            .addProperty("y", &Popup::getY)
         .endClass()
 
         .deriveClass<Box, Panel>("Box")
@@ -452,6 +466,13 @@ namespace lysa::ui {
                 },
                 +[](Window* self, const std::string& resource, const int alignment) -> std::shared_ptr<Panel> {
                     return self->create<Panel>(resource, static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_popup",
+                +[](Window* self, const float x, const float y) -> std::shared_ptr<Popup> {
+                    return self->add(std::make_shared<Popup>(x, y), Alignment::NONE, "", true);
+                },
+                +[](Window* self, const std::string& resource, const float x, const float y) -> std::shared_ptr<Popup> {
+                    return self->add(std::make_shared<Popup>(x, y), Alignment::NONE, resource, true);
                 })
             .addFunction("create_box",
                 +[](Window* self, const int alignment) -> std::shared_ptr<Box> {

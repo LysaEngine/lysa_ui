@@ -52,6 +52,8 @@ export namespace lysa::ui {
             TREEVIEW,
             //! 2D Image
             IMAGE,
+            //! popup panel at fixed (x, y) coordinates, drawn on top of siblings
+            POPUP,
         };
 
         /**
