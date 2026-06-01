@@ -85,6 +85,7 @@
 ---@field OnMove string Fired when the window position changes.
 
 ---@class lysa.ui.Widget The base class for all UI widgets. Provides layout, input handling, and child management.
+---@field id integer The unique ID
 ---@field type integer The concrete widget type (see lysa.ui.WidgetType). (read-only)
 ---@field children lysa.ui.Widget[] Ordered list of direct child widgets.
 ---@field visible boolean True if the widget is visible; false hides it and all its children.

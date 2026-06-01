@@ -121,6 +121,7 @@ namespace lysa::ui {
         .endNamespace()
 
         .beginClass<Widget>("Widget")
+            .addProperty("id", &Widget::id)
             .addProperty("type", &Widget::getType)
             .addProperty("children", &Widget::getChildren)
             .addProperty("visible", &Widget::isVisible, &Widget::setVisible)
