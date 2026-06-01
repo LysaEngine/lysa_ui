@@ -19,11 +19,14 @@ export namespace lysa::ui {
 
     /**
      * Manages all the UI windows for a rendering window.
+     *
+     * The WindowManager must be created as soon as possible to
+     * be the first subscriber to receive input event and stop
+     * them to be passed to scenes if they are consumed by a widget.
      */
     class WindowManager {
     public:
         /**
-         * Constructor.
          * @param renderingWindow The rendering window to manage UI for.
          * @param defaultFontURI URI of the default font.
          * @param defaultFontScale Default scale for the font.
