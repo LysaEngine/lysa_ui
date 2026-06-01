@@ -82,7 +82,7 @@ namespace lysa::ui {
         eventResize();
     }
 
-    void Widget::setResource(std::shared_ptr<UIResource> R) {
+    void Widget::setResource(std::shared_ptr<UIResource> res) {
         resource = std::move(R);
         refresh();
     }
@@ -176,14 +176,14 @@ namespace lysa::ui {
         }
     }
 
-    void Widget::remove(const std::shared_ptr<Widget>& W) {
-        const auto it = std::ranges::find(children, W);
+    void Widget::remove(const std::shared_ptr<Widget>& child) {
+        const auto it = std::ranges::find(children, child);
         if (it != children.end()) {
-            W->parent = nullptr;
+            child->parent = nullptr;
             // for (const auto& child : W->_getChildren()) {
             //     W->remove(child);
             // }
-            children.remove(W);
+            children.remove(child);
             resizeChildren();
         }
         refresh();
@@ -249,11 +249,11 @@ namespace lysa::ui {
         refresh();
     }
 
-    void Widget::eventMove(const float X, const float Y) {
-        const float diffX = rect.x - X;
-        const float diffY = rect.y - Y;
-        rect.x            = X;
-        rect.y            = Y;
+    void Widget::eventMove(const float x, const float y) {
+        const float diffX = rect.x - x;
+        const float diffY = rect.y - y;
+        rect.x = x;
+        rect.y = y;
         for (const auto &w : children) {
             w->setPos(w->rect.x - diffX, w->rect.y - diffY);
         }
@@ -576,7 +576,7 @@ namespace lysa::ui {
         }
         auto consumed = false;
         auto p = rect.contains(x, y);
-        for (auto &w : children) {
+        for (const auto &w : children) {
             p = w->getRect().contains(x, y);
             if (w->redrawOnMouseMove && (w->pointed != p)) {
                 w->pointed = p;
@@ -607,18 +607,18 @@ namespace lysa::ui {
         refresh();
     }
 
-    void Widget::setPadding(const float P) {
-        padding = P;
+    void Widget::setPadding(const float padding) {
+        this->padding = padding;
         eventResize();
     }
 
-    void Widget::setDrawBackground(const bool D) {
-        drawBackground = D;
+    void Widget::setDrawBackground(const bool drawBackground) {
+        this->drawBackground = drawBackground;
         refresh();
     }
 
-    void Widget::setAlignment(const Alignment ALIGN) {
-        alignment = ALIGN;
+    void Widget::setAlignment(const Alignment alignment) {
+        this->alignment = alignment;
         eventResize();
     }
 

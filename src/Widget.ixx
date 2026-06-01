@@ -330,7 +330,7 @@ export namespace lysa::ui {
         /**
          * Changes widget resources.
          */
-        void setResource(std::shared_ptr<UIResource> resource);
+        void setResource(std::shared_ptr<UIResource> res);
 
         /**
          * Returns the user defined group index.
