@@ -442,6 +442,12 @@ export namespace lysa::ui {
 
         virtual void eventLostFocus();
 
+        bool getConsumeMouseEvent() const { return consumeMouseEvent; }
+
+        void setConsumeMouseEvent(const bool consumeMouseEvent) {
+            this->consumeMouseEvent = consumeMouseEvent;
+        }
+
         virtual void _setSize(float width, float height);
 
         void _allowFocus(bool allow = true);
@@ -471,6 +477,7 @@ export namespace lysa::ui {
         float hborder{0};
         float vborder{0};
         float padding{0};
+        bool consumeMouseEvent{true};
         bool overlap{false};
         bool focused{false};
         bool allowFocus{false};

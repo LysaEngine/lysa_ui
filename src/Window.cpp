@@ -94,6 +94,7 @@ namespace lysa::ui {
         widget->eventCreate();
         widget->setPos(0, 0);
         widget->_setSize(getWidth(), getHeight());
+        widget->setConsumeMouseEvent(false);
         // focusedWidget = widget->setFocus();
         unFreeze(widget);
     }

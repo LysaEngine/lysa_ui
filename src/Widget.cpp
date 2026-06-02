@@ -522,15 +522,14 @@ namespace lysa::ui {
     }
 
     bool Widget::eventMouseDown(const MouseButton button, const float x, const float y) {
-        if (!enabled) { return false;}
+        if (!enabled || !rect.contains(x, y)) { return false;}
         pushed = true;
         if (redrawOnMouseEvent) { resizeChildren();   }
         auto consumed = false;
         Widget *wfocus = nullptr;
         for (auto &w : children) {
             if (w->getRect().contains(x, y)) {
-                consumed = true;
-                w->eventMouseDown(button, x, y);
+                consumed |= w->eventMouseDown(button, x, y);
                 wfocus = w.get();
                 if (w->redrawOnMouseEvent) {
                     w->refresh();
@@ -548,19 +547,20 @@ namespace lysa::ui {
                 UIEvent::OnMouseDown,
                 UIEventMouseButton{.button = button, .x = x, .y = y},
             id});
+            return consumeMouseEvent;
         }
         return consumed;
     }
 
     bool Widget::eventMouseUp(const MouseButton button, const float x, const float y) {
-        if (!enabled) { return false; }
+        if (!enabled || !rect.contains(x, y)) { return false;}
         pushed = false;
         if (redrawOnMouseEvent) { resizeChildren(); }
         auto consumed = false;
         for (const auto &w : children) {
             if (w->getRect().contains(x, y) || w->isPushed()) {
-                consumed = true;
-                w->eventMouseUp(button, x, y);
+                consumed |= w->eventMouseUp(button, x, y);
+                Log::info(consumed ? "consumed &" : "not&"  );
                 if (w->redrawOnMouseEvent) {
                     w->refresh();
                 }
@@ -572,16 +572,16 @@ namespace lysa::ui {
                 UIEvent::OnMouseUp,
                 UIEventMouseButton{ .button = button, .x = x, .y = y},
                 id});
+            return consumeMouseEvent;
         }
+        Log::info(consumed ? "consumed" : "not" );
         return consumed;
     }
 
     bool Widget::eventMouseMove(const uint32 B, const float x, const float y) {
-        if (!enabled) {
-            return false;
-        }
-        auto consumed = false;
         auto p = rect.contains(x, y);
+        if (!enabled || !p) { return false;}
+        auto consumed = false;
         for (const auto &w : children) {
             p = w->getRect().contains(x, y);
             if (w->redrawOnMouseMove && (w->pointed != p)) {
@@ -589,8 +589,7 @@ namespace lysa::ui {
                 w->refresh();
             }
             if (p) {
-                w->eventMouseMove(B, x, y);
-                consumed = true;
+                consumed |= w->eventMouseMove(B, x, y);
             }
         }
         if (redrawOnMouseMove && (pointed != p)) {
@@ -601,6 +600,7 @@ namespace lysa::ui {
                 UIEvent::OnMouseMove,
                 UIEventMouseMove{.buttonsState = B, .x = x, .y = y},
             id});
+            return consumeMouseEvent;
         }
         return consumed;
     }
