@@ -173,6 +173,7 @@ namespace lysa::ui {
             .addProperty("freezed", &Widget::isFreezed, &Widget::setFreezed)
             .addProperty("overlapping", &Widget::isOverlapping)
             .addProperty("children_rect", &Widget::getChildrenRect)
+            .addProperty("user_data", &Widget::getLuaUserData, &Widget::setLuaUserData)
             .addFunction("refresh", &Widget::refresh)
             .addProperty("group_index", &Widget::getGroupIndex, &Widget::setGroupIndex)
             .addProperty("transparency", &Widget::getTransparency, &Widget::setTransparency)

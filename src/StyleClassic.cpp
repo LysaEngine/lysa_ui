@@ -6,6 +6,7 @@
 */
 module lysa.ui.style_classic;
 
+import lysa.log;
 import lysa.types;
 import lysa.utils;
 import lysa.ui.image;
@@ -61,12 +62,13 @@ namespace lysa::ui {
                 drawFrame((Frame &)widget, res, renderer);
                 break;
             case Widget::IMAGE: {
-                auto &pic = dynamic_cast<const Image &>(widget);
-                if (pic.getImage()) {
-                    renderer.setPenColor(pic.getColor());
-                    renderer.drawFilledRect(widget.getRect(), pic.getImage()->id);
+                    auto &pic = dynamic_cast<const Image &>(widget);
+                    if (pic.getImage()) {
+                        renderer.setPenColor(pic.getColor());
+                        renderer.drawFilledRect(widget.getRect(), pic.getImage()->id);
+                    }
                 }
-            }
+                break;
             case Widget::SELECTION:
                 drawSelection((const Selection &)widget, res, renderer);
             break;

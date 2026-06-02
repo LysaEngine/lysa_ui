@@ -6,6 +6,9 @@
 */
 export module lysa.ui.widget;
 
+#ifdef LUA_BINDINGS
+import lua_bridge;
+#endif
 import lysa.context;
 import lysa.exception;
 import lysa.rect;
@@ -362,6 +365,17 @@ export namespace lysa::ui {
          */
         void setUserData(void *data);
 
+#ifdef LUA_BINDINGS
+        /**
+        * Returns the Lua user data.
+        */
+        luabridge::LuaRef getLuaUserData() const { return luaUserData; }
+
+        /**
+         */
+        void setLuaUserData(const luabridge::LuaRef& data) { luaUserData = data; }
+#endif
+
         /**
          * Returns the transparency alpha value.
          */
@@ -488,6 +502,9 @@ export namespace lysa::ui {
         bool enabled{true};
         bool visible{true};
         void *userData{nullptr};
+#ifdef LUA_BINDINGS
+        luabridge::LuaRef luaUserData{nullptr};
+#endif
         int32 groupIndex{0};
         Rect childrenRect;
         std::shared_ptr<Font> font{nullptr};
