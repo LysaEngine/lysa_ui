@@ -31,13 +31,16 @@ export namespace lysa::ui {
         static const std::string OnEnable;      //!< Called after state change to enabled (all widgets)
         static const std::string OnDisable;     //!< Called after state change to disabled (all widgets)
         static const std::string OnTextChange;  //!< Text content of the widget has changed
-        static const std::string OnTextInput;  //!< Text content from the user
+        static const std::string OnTextInput;   //!< Text content from the user
         static const std::string OnClick;       //!< Called when the user clicks on the widget (buttons)
         static const std::string OnStateChange; //!< A CheckWidget state changed
         static const std::string OnValueChange; //!< Value of a ValueSelect widget changed
         static const std::string OnRangeChange; //!< Range of a ValueSelect widget changed
         static const std::string OnResize;      //!< A Window size changed
         static const std::string OnMove;        //!< A Window position changed
+        static const std::string OnInsertItem;  //!< An item was inserted into a List
+        static const std::string OnRemoveItem;  //!< An item was removed from a List
+        static const std::string OnSelectItem;  //!< The selected item of a List changed
     };
 
     /**
@@ -102,6 +105,14 @@ export namespace lysa::ui {
         const std::string text;
     };
 
+    /**
+    * Parameters for UIEvent::OnInsertItem, UIEvent::OnRemoveItem & UIEvent::OnSelectItem.
+    */
+    struct UIEventItem : UIEvent {
+        int32 index;                    //!< Item index (0-based), or List::NO_SELECTION
+        std::shared_ptr<Widget> item;   //!< Item widget, or nullptr
+    };
+
     const event_type UIEvent::OnCreate{"on_create"};
     const event_type UIEvent::OnDestroy{"on_destroy"};
     const event_type UIEvent::OnKeyDown{"on_key_down"};
@@ -124,8 +135,7 @@ export namespace lysa::ui {
     const event_type UIEvent::OnValueChange{"on_value_change"};
     //const event_type UIEvent::OnValueUserChange{"on_value_use_change"};
     const event_type UIEvent::OnRangeChange{"on_range_change"};
-    /*     const event_type UIEvent::OnInsertItem{"on_insert_item"};
-        const event_type UIEvent::OnRemoveItem{"on_remove_item"};
-        const event_type UIEvent::OnSelectItem{"on_select_item"};
-     */
+    const event_type UIEvent::OnInsertItem{"on_insert_item"};
+    const event_type UIEvent::OnRemoveItem{"on_remove_item"};
+    const event_type UIEvent::OnSelectItem{"on_select_item"};
 }

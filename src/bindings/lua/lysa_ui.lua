@@ -42,6 +42,11 @@
 ---@field TREEVIEW integer A hierarchical tree of expandable/collapsible items.
 ---@field IMAGE integer A widget that displays a 2-D GPU image.
 ---@field POPUP integer A popup panel placed at fixed (x, y) coordinates and drawn on top of siblings.
+---@field LIST integer Base type for list-of-widgets containers.
+---@field LISTBOX integer A scrollable list of widgets with selection highlight.
+---@field SELECTION integer A selection highlight rectangle used inside a ListBox.
+---@field PROGRESSBAR integer A rectangular progress bar widget.
+---@field SCROLLBOX integer A scrollable container with horizontal and vertical scroll bars.
 
 ---@class lysa.ui.CheckState Check/toggle state constants for CheckWidget and ToggleButton.
 ---@field UNCHECK integer Unchecked / OFF state.
@@ -54,6 +59,15 @@
 ---@class lysa.ui.ScrollBarType Orientation constants for ScrollBar widgets.
 ---@field HORIZONTAL integer Horizontal scroll bar.
 ---@field VERTICAL integer Vertical scroll bar.
+
+---@class lysa.ui.ProgressBarType Orientation constants for ProgressBar widgets.
+---@field HORIZONTAL integer Horizontal progress bar (fills left to right).
+---@field VERTICAL integer Vertical progress bar (fills bottom to top).
+
+---@class lysa.ui.ProgressBarDisplay Optional text display mode drawn over the progress bar.
+---@field NONE integer No text displayed.
+---@field PERCENT integer Display the current value as a percentage.
+---@field VALUE integer Display the raw current value.
 
 ---@class lysa.ui.ResizeableBorder Bitmask constants for which borders of a Window can be dragged to resize it.
 ---@field NONE integer No border is resizable.
@@ -84,6 +98,9 @@
 ---@field OnRangeChange string Fired when the min/max range of a ValueSelect / ScrollBar changes.
 ---@field OnResize string Fired when the window size changes.
 ---@field OnMove string Fired when the window position changes.
+---@field OnInsertItem string Fired when an item is inserted into a List (ListBox, etc.).
+---@field OnRemoveItem string Fired when an item is removed from a List.
+---@field OnSelectItem string Fired when the selected item of a List changes.
 
 ---@class lysa.ui.Widget The base class for all UI widgets. Provides layout, input handling, and child management.
 ---@field id integer The unique ID
@@ -149,6 +166,16 @@
 ---@field create_tree_view fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView child widget, loading its style from a resource string. @overload
 ---@field create_widget fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Widget Creates and adds a transparent container Widget child with the given alignment. @overload
 ---@field create_widget fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Widget Creates and adds a transparent container Widget child, loading its style from a resource string. @overload
+---@field create_list_box fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.ListBox Creates and adds a ListBox child widget with the given alignment. @overload
+---@field create_list_box fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.ListBox Creates and adds a ListBox child widget, loading its style from a resource string. @overload
+---@field create_progress_bar fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.ProgressBar Creates and adds a ProgressBar child widget with the given alignment. @overload
+---@field create_progress_bar fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.ProgressBar Creates and adds a ProgressBar child widget, loading its style from a resource string. @overload
+---@field create_vprogress_bar fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.VProgressBar Creates and adds a vertical ProgressBar child widget with the given alignment. @overload
+---@field create_vprogress_bar fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.VProgressBar Creates and adds a vertical ProgressBar child widget, loading its style from a resource string. @overload
+---@field create_hprogress_bar fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.HProgressBar Creates and adds a horizontal ProgressBar child widget with the given alignment. @overload
+---@field create_hprogress_bar fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.HProgressBar Creates and adds a horizontal ProgressBar child widget, loading its style from a resource string. @overload
+---@field create_scroll_box fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.ScrollBox Creates and adds a ScrollBox child widget with the given alignment. @overload
+---@field create_scroll_box fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment):lysa.ui.ScrollBox Creates and adds a ScrollBox child widget, loading its style from a resource string. @overload
 ---@field add_child fun(self:lysa.ui.Widget, child:lysa.ui.Widget, alignment:integer, resource:string|nil):lysa.ui.Widget Adds a pre-constructed child widget with the given alignment and optional resource string.
 
 ---@class lysa.ui.Panel : lysa.ui.Widget A rectangular widget that renders only a background fill; no border.
@@ -223,6 +250,39 @@
 ---@field add_item fun(self:lysa.ui.TreeView, parent_or_widget:lysa.ui.TreeViewItem|lysa.ui.Widget, widget:lysa.ui.Widget|nil):lysa.ui.TreeViewItem Adds an item to the tree. Pass only a widget to add a root-level item; pass a TreeViewItem and a widget to add a child under that item.
 ---@field expand fun(self:lysa.ui.TreeView, item:lysa.ui.Widget):nil Programmatically expands the tree item associated with the given content widget.
 
+---@class lysa.ui.List : lysa.ui.Widget Base class for all list-of-widgets widgets. Fires OnInsertItem, OnRemoveItem and OnSelectItem events.
+---@field NO_SELECTION integer Sentinel value returned by selected_index when nothing is selected.
+---@field count integer Number of items currently in the list. (read-only)
+---@field selected_index integer Index (0-based) of the selected item, or NO_SELECTION if nothing is selected. (read-only)
+---@field selected_item lysa.ui.Widget|nil The currently selected widget, or nil. (read-only)
+---@field add_item fun(self:lysa.ui.List, item:lysa.ui.Widget, alignment:integer, resource:string):integer Adds a widget at the end of the list and returns its 0-based index.
+---@field remove_item fun(self:lysa.ui.List, index:integer):nil Removes the item at the given 0-based index.
+---@field remove_all_items fun(self:lysa.ui.List):nil Removes all items from the list.
+---@field get_item fun(self:lysa.ui.List, index:integer):lysa.ui.Widget Returns the widget at the given 0-based index.
+---@field select fun(self:lysa.ui.List, index:integer):nil Selects the item at the given index; pass NO_SELECTION to clear the selection.
+
+---@class lysa.ui.ListBox : lysa.ui.List A scrollable list of widgets with a selection highlight rectangle. Supports keyboard navigation.
+---@field set_resources fun(self:lysa.ui.ListBox, resBox:string, resScroll:string, resSel:string):nil Reloads the visual style: resBox = inner background box, resScroll = vertical scroll bar, resSel = selection highlight.
+---@field selection_widget lysa.ui.Selection The internal selection highlight widget. (read-only)
+
+---@class lysa.ui.Selection : lysa.ui.Panel A selection highlight rectangle drawn behind the selected item of a ListBox.
+
+---@class lysa.ui.ProgressBar : lysa.ui.ValueSelect A rectangular progress bar widget that fills as its value increases.
+---@field orientation integer The fill orientation (see lysa.ui.ProgressBarType): HORIZONTAL or VERTICAL.
+---@field display integer The optional text display mode (see lysa.ui.ProgressBarDisplay): NONE, PERCENT, or VALUE.
+---@field set_resources fun(self:lysa.ui.ProgressBar, resBox:string):nil Reloads the visual style from the given inner box resource string.
+
+---@class lysa.ui.VProgressBar : lysa.ui.ProgressBar A vertical progress bar (fills bottom to top).
+
+---@class lysa.ui.HProgressBar : lysa.ui.ProgressBar A horizontal progress bar (fills left to right).
+
+---@class lysa.ui.ScrollBox : lysa.ui.Box A scrollable container with horizontal and vertical scroll bars. Add children via add_content.
+---@field set_resources fun(self:lysa.ui.ScrollBox, resBox:string, resVScroll:string, resHScroll:string):nil Reloads the visual style: resBox = inner box, resVScroll = vertical scroll bar, resHScroll = horizontal scroll bar.
+---@field add_content fun(self:lysa.ui.ScrollBox, child:lysa.ui.Widget, alignment:integer, resource:string):lysa.ui.Widget Adds a child widget to the scrollable inner box.
+---@field remove_content fun(self:lysa.ui.ScrollBox, child:lysa.ui.Widget):nil Removes a child widget from the inner box.
+---@field remove_all_content fun(self:lysa.ui.ScrollBox):nil Removes all children from the inner box.
+---@field inner_box lysa.ui.Box The scrollable inner box containing the added content widgets. (read-only)
+
 ---@class lysa.ui.Window A UI window that owns a root Widget hierarchy and is managed by the WindowManager.
 ---@field resizeable_borders integer Bitmask of which window borders are user-resizable (see lysa.ui.ResizeableBorder).
 ---@field widget lysa.ui.Widget The root widget that covers the entire client area of the window. (read-only)
@@ -283,6 +343,16 @@
 ---@field create_tree_view fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.TreeView Creates and adds a TreeView widget, loading its style from a resource string. @overload
 ---@field create_widget fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.Widget Creates and adds a transparent container Widget. @overload
 ---@field create_widget fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.Widget Creates and adds a transparent container Widget, loading its style from a resource string. @overload
+---@field create_list_box fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.ListBox Creates and adds a ListBox widget. @overload
+---@field create_list_box fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.ListBox Creates and adds a ListBox widget, loading its style from a resource string. @overload
+---@field create_progress_bar fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.ProgressBar Creates and adds a ProgressBar widget. @overload
+---@field create_progress_bar fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.ProgressBar Creates and adds a ProgressBar widget, loading its style from a resource string. @overload
+---@field create_vprogress_bar fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.VProgressBar Creates and adds a vertical ProgressBar widget. @overload
+---@field create_vprogress_bar fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.VProgressBar Creates and adds a vertical ProgressBar widget, loading its style from a resource string. @overload
+---@field create_hprogress_bar fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.HProgressBar Creates and adds a horizontal ProgressBar widget. @overload
+---@field create_hprogress_bar fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.HProgressBar Creates and adds a horizontal ProgressBar widget, loading its style from a resource string. @overload
+---@field create_scroll_box fun(self:lysa.ui.Window, alignment:lysa.ui.Alignment):lysa.ui.ScrollBox Creates and adds a ScrollBox widget. @overload
+---@field create_scroll_box fun(self:lysa.ui.Window, resource:string, alignment:lysa.ui.Alignment):lysa.ui.ScrollBox Creates and adds a ScrollBox widget, loading its style from a resource string. @overload
 
 ---@class lysa.ui.WindowManager The central manager for all UI windows attached to a rendering target.
 ---@field create fun(self:lysa.ui.WindowManager, rect:lysa.Rect):lysa.ui.Window Creates and registers a new UI window with the given position and size.
@@ -302,6 +372,8 @@
 ---@field CheckState lysa.ui.CheckState Check/toggle state constants.
 ---@field LineStyle lysa.ui.LineStyle Line orientation constants.
 ---@field ScrollBarType lysa.ui.ScrollBarType Scroll bar orientation constants.
+---@field ProgressBarType lysa.ui.ProgressBarType Progress bar orientation constants.
+---@field ProgressBarDisplay lysa.ui.ProgressBarDisplay Progress bar text display mode constants.
 ---@field ResizeableBorder lysa.ui.ResizeableBorder Window border resize permission constants.
 ---@field UIEvent lysa.ui.UIEvent Event type string constants for widget event subscriptions.
 ---@field Widget lysa.ui.Widget Base widget type (transparent container).
@@ -324,6 +396,13 @@
 ---@field HScrollBar lysa.ui.HScrollBar Horizontal scroll bar widget type.
 ---@field TreeViewItem lysa.ui.TreeViewItem Single expandable row within a TreeView.
 ---@field TreeView lysa.ui.TreeView Hierarchical expandable list widget type.
+---@field List lysa.ui.List Base type for list-of-widgets containers.
+---@field ListBox lysa.ui.ListBox Scrollable list with selection highlight widget type.
+---@field Selection lysa.ui.Selection Selection highlight rectangle used inside a ListBox.
+---@field ProgressBar lysa.ui.ProgressBar Rectangular progress bar widget type.
+---@field VProgressBar lysa.ui.VProgressBar Vertical progress bar widget type.
+---@field HProgressBar lysa.ui.HProgressBar Horizontal progress bar widget type.
+---@field ScrollBox lysa.ui.ScrollBox Scrollable container with horizontal and vertical scroll bars.
 ---@field Window lysa.ui.Window UI window type managed by the WindowManager.
 ---@field WindowManager lysa.ui.WindowManager Central manager for all UI windows.
 

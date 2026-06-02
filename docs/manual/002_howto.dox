@@ -14,6 +14,10 @@ Table of contents
 - \ref howto_ui_scrollbar
 - \ref howto_ui_togglebutton
 - \ref howto_ui_treeview
+- \ref howto_ui_listbox
+- \ref howto_ui_progressbar
+- \ref howto_ui_scrollbox
+- \ref howto_ui_popup
 - \ref howto_ui_style
 - \ref howto_ui_visibility
 
@@ -348,7 +352,116 @@ tree->removeAllItems();
 
 ---
 
-\section howto_ui_style 12. Applying a style
+\section howto_ui_listbox 12. ListBox widget
+
+`ListBox` displays a scrollable list of arbitrary widgets with keyboard navigation (Up/Down arrows)
+and a `Selection` highlight rectangle behind the selected item:
+
+```cpp
+const auto list = panel->create<lysa::ui::ListBox>(
+    "200,180", lysa::ui::Alignment::LEFT);
+// resBox = inner box style, resScroll = scroll bar style, resSel = selection highlight style
+list->setResources("flat", "flat", "flat");
+
+// Add items — each item is an arbitrary Widget
+for (int i = 0; i < 10; ++i) {
+    auto label = std::make_shared<lysa::ui::Text>("Item " + std::to_string(i));
+    list->addItem(label, lysa::ui::Alignment::LEFT, "20,20");
+}
+
+// Programmatic selection
+list->select(0);
+
+// Query selection
+int idx = list->getSelectedIndex();           // -1 when nothing selected
+auto item = list->getSelectedItem();          // nullptr when nothing selected
+
+// Remove one item or clear all
+list->removeItem(2);
+list->removeAllItems();
+
+// React to selection changes
+lysa::ctx().events.subscribe(lysa::ui::UIEvent::OnSelectItem, list->id,
+    [list](const lysa::Event& e) {
+        const auto& payload = static_cast<const lysa::ui::UIEventItem&>(e);
+        lysa::Log::info("Selected index: " + std::to_string(payload.index));
+    });
+```
+
+---
+
+\section howto_ui_progressbar 13. ProgressBar widget
+
+`ProgressBar` (and its aliases `HProgressBar` / `VProgressBar`) fills proportionally to its
+current value within a `[min, max]` range. An optional text overlay can display the percentage
+or the raw value:
+
+```cpp
+// Horizontal bar: range 0–100, initial value 30
+const auto bar = panel->create<lysa::ui::HProgressBar>(
+    "200,20", lysa::ui::Alignment::TOP,
+    0.0f, 100.0f, 30.0f);
+bar->setResources("flat");
+
+// Show percentage text over the bar
+bar->setDisplay(lysa::ui::ProgressBar::PERCENT);
+
+// Update value at runtime
+bar->setValue(75.0f);
+
+// Vertical variant
+const auto vBar = panel->create<lysa::ui::VProgressBar>(
+    "20,150", lysa::ui::Alignment::RIGHT,
+    0.0f, 100.0f, 50.0f);
+```
+
+---
+
+\section howto_ui_scrollbox 14. ScrollBox widget
+
+`ScrollBox` is a bordered container that automatically adds horizontal and vertical scroll bars
+when its content overflows. Add children via `addContent()` rather than `create<T>()`:
+
+```cpp
+const auto sbox = panel->create<lysa::ui::ScrollBox>(
+    "300,200", lysa::ui::Alignment::CENTER);
+// resBox = inner box, resVScroll = vertical bar, resHScroll = horizontal bar
+sbox->setResources("flat", "flat", "flat");
+
+// Add content widgets
+for (int i = 0; i < 20; ++i) {
+    auto row = std::make_shared<lysa::ui::Text>("Row " + std::to_string(i));
+    sbox->addContent(row, lysa::ui::Alignment::TOPLEFT, "300,20");
+}
+
+// Access the inner box directly if needed
+auto inner = sbox->getInnerBox();
+
+// Remove individual content or clear all
+sbox->removeContent(row);
+sbox->removeAllContent();
+```
+
+---
+
+\section howto_ui_popup 15. Popup widget
+
+`Popup` is a `Panel` placed at fixed (x, y) coordinates relative to its parent and always drawn
+on top of all sibling widgets. Use it for context menus, tooltips, or floating overlays:
+
+```cpp
+// Create a popup at position (50, 80) inside uiWindow
+const auto pop = uiWindow->create<lysa::ui::Popup>("120,90", 50.0f, 80.0f);
+pop->create<lysa::ui::Text>(lysa::ui::Alignment::CENTER, "I am a popup!");
+
+// Show or hide it on demand
+pop->show();
+pop->hide();
+```
+
+---
+
+\section howto_ui_style 16. Applying a style
 
 Every `Window` uses `StyleClassic` by default. You can set a custom style or reconfigure
 the classic style options:
@@ -382,7 +495,7 @@ const auto tinted = panel->create<lysa::ui::Box>("120,40,200,100,50", lysa::ui::
 
 ---
 
-\section howto_ui_visibility 13. Show, hide, and enable
+\section howto_ui_visibility 17. Show, hide, and enable
 
 Visibility changes take effect at the start of the next frame. Use `show()` / `hide()` as
 convenient aliases:

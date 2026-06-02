@@ -23,12 +23,16 @@ namespace lysa::ui {
             box->setDrawBackground(false);
             box->setPadding(1);
             vScroll->setStep(2);
+            ctx().events.subscribe(UIEvent::OnValueChange, vScroll->id, [this](auto evt) {
+                this->onVScrollChange(std::any_cast<UIEventValue>(evt.payload));
+            });
         }
     }
 
     void TreeView::removeAllItems() {
         box->removeAll();
         items.clear();
+        computeSizes();
     }
 
     std::shared_ptr<TreeView::Item>& TreeView::addItem(std::shared_ptr<Widget> item) {
@@ -40,10 +44,11 @@ namespace lysa::ui {
         newWidget->add(item, Alignment::LEFT);
         newWidget->_setSize(1000.0f, item->getHeight());
         newWidget->setDrawBackground(false);
+        computeSizes();
         return newWidget;
     }
 
-    std::shared_ptr<TreeView::Item>& TreeView::addItem(const std::shared_ptr<Item>& parent, std::shared_ptr<Widget> item) const {
+    std::shared_ptr<TreeView::Item>& TreeView::addItem(const std::shared_ptr<Item>& parent, std::shared_ptr<Widget> item) {
         parent->children.push_back(std::make_shared<Item>(item));
         auto& newWidget = parent->children.back();
         newWidget->level = parent->level + 1;
@@ -62,18 +67,36 @@ namespace lysa::ui {
         newWidget->_setSize(1000.0f, item->getHeight());
         newWidget->setDrawBackground(false);
         //expand(parent->item);
+        computeSizes();
         return newWidget;
     }
 
     void TreeView::expand(const std::shared_ptr<Widget>& item) const {
-        for (const auto& widget : box->_getChildren()) {
-            if (const auto itemWidget = dynamic_cast<Item*>(item.get())) {
-                if (itemWidget->item == item) {
-                    throw Exception("not implemented");
-                    // log("found");
-                }
-            }
-        }
+        throw Exception("not implemented");
+        // for (const auto& widget : box->_getChildren()) {
+        //     if (const auto itemWidget = dynamic_cast<Item*>(item.get())) {
+        //         if (itemWidget->item == item) {
+        //             throw Exception("not implemented");
+        //             // log("found");
+        //         }
+        //     }
+        // }
     }
+
+    void TreeView::computeSizes() {
+        if (box == nullptr) { return; }
+        innerHeight = box->getHeight() - box->getVBorder() * 2;
+        itemsHeight = 0;
+        for (const auto& child : box->getChildren()) {
+            itemsHeight += child->getHeight() + box->getPadding() * 2;
+        }
+        vScroll->setMax(itemsHeight - innerHeight + vScroll->getStep());
+    }
+
+    void TreeView::onVScrollChange(const UIEventValue& event) {
+        box->setChildrenOffset(0, event.value);
+        refresh();
+    }
+
 
 }

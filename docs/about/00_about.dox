@@ -21,6 +21,7 @@ Features
 - **Widget Types**:
   - `Widget` — transparent base widget; all other types derive from it.
   - `Panel` — rectangular widget with a background only.
+  - `Popup` — `Panel` placed at fixed (x, y) coordinates and always drawn on top of sibling widgets.
   - `Box` — rectangular widget with a border and a background.
   - `Frame` — `Box` with an optional title string and configurable title color.
   - `Button` — clickable `Box` that fires `UIEvent::OnClick`.
@@ -31,14 +32,19 @@ Features
   - `Image` — displays a `lysa::Image` resource with optional color tint and auto-sizing.
   - `Line` / `HLine` / `VLine` — horizontal or vertical divider lines.
   - `ScrollBar` / `HScrollBar` / `VScrollBar` — range-based scroll bars.
+  - `ScrollBox` — scrollable container with automatic horizontal and vertical scroll bars; content is added to an inner `Box`.
   - `TreeView` — hierarchical list widget with expand/collapse and scroll support.
-  - `ValueSelect` — abstract base for range-bound numeric widgets (`ScrollBar`).
+  - `List` — abstract base for list-of-widgets containers; fires `OnInsertItem`, `OnRemoveItem`, and `OnSelectItem`.
+  - `ListBox` — scrollable list of arbitrary widgets with keyboard navigation and a configurable selection highlight (`Selection`).
+  - `ProgressBar` / `HProgressBar` / `VProgressBar` — horizontal or vertical progress bar with optional percentage or raw-value text overlay.
+  - `ValueSelect` — abstract base for range-bound numeric widgets (`ScrollBar`, `ProgressBar`).
 - **Window Management**: `WindowManager` manages multiple virtual `Window` objects overlaid on a
   single `RenderingWindow`, with focus, resize, and z-ordering support.
 - **Styling**: `Style` base class with a built-in `StyleClassic` implementation providing a 3D
   raised/lowered/flat classic vector look. Custom styles can be added by subclassing `Style`.
 - **Event System**: All widget interactions are routed through the engine's `EventManager` using
-  `UIEvent` signal constants (`OnClick`, `OnTextChange`, `OnValueChange`, and more).
+  `UIEvent` signal constants (`OnClick`, `OnTextChange`, `OnValueChange`, `OnInsertItem`,
+  `OnRemoveItem`, `OnSelectItem`, and more).
 - **Lua Scripting**: All widget types expose their full API to Lua when compiled with `LUA_BINDINGS=ON`.
 
 Architecture

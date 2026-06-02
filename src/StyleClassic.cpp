@@ -9,6 +9,7 @@ module lysa.ui.style_classic;
 import lysa.types;
 import lysa.utils;
 import lysa.ui.image;
+import lysa.ui.list_box;
 
 namespace lysa::ui {
 
@@ -66,6 +67,9 @@ namespace lysa::ui {
                     renderer.drawFilledRect(widget.getRect(), pic.getImage()->id);
                 }
             }
+            case Widget::SELECTION:
+                drawSelection((const Selection &)widget, res, renderer);
+            break;
                 /*case Widget::GRIDCELL:
                     DrawGridCell((GGridCell&)W, D, res);
                     break;
@@ -74,9 +78,6 @@ namespace lysa::ui {
                     break;
                 case Widget::CHECKMARK:
                     DrawCheckmark((GCheckmark&)W, D, res);
-                    break;
-                case Widget::SELECTION:
-                    DrawSelection((GSelection&)W, D, res);
                     break;
                 case Widget::TRACKBAR:
                     DrawTrackBar((GTrackBar&)W, D, res);
@@ -97,9 +98,10 @@ namespace lysa::ui {
                 case Widget::TEXTEDIT:
                     drawTextEdit((TextEdit&)widget, renderer);
                     break;
-                /*case Widget::PROGRESSBAR:
-                    DrawProgressBar((GProgressBar&)W, D, res, R);
-                    break;
+            case Widget::PROGRESSBAR:
+                drawProgressBar((const ProgressBar &)widget, res, renderer);
+                break;
+            /*
                 case Widget::TABS:
                     DrawTabs((GTabs&)W, D, res, R);
                     break;*/
@@ -123,26 +125,27 @@ namespace lysa::ui {
         case Widget::TEXTEDIT:
             static_cast<TextEdit&>(widget).setResources(resources);
             break;
-
+        case Widget::LISTBOX:
+            static_cast<ListBox &>(widget).setResources(
+                "style=LOWERED",
+                "width=18;height=18;style=RAISED",
+                "style=FLAT;color=" + to_string(focus));
+            break;
+        case Widget::PROGRESSBAR:
+            static_cast<ProgressBar &>(widget).setResources("style=LOWERED");
+            break;
+        case Widget::SCROLLBOX:
+            static_cast<ScrollBox &>(widget).setResources(
+                "style=LOWERED",
+                "width=18;height=18;style=RAISED",
+                "width=18;height=18;style=RAISED");
+            break;
             // XXX
             /*case Widget::UPDOWN:
                 ((GUpDown&)W).SetResources(RES, RES);
                 break;
             case Widget::TRACKBAR:
                 ((GTrackBar&)W).SetResources("12,12,RAISED");
-                break;
-            case Widget::PROGRESSBAR:
-                ((GProgressBar&)W).SetResources(RES);
-                break;
-            case Widget::LISTBOX:
-                ((GListBox&)W).SetResources(std::string(",,LOWERED") + (res->flat ? ",FLAT" : ""),
-                                            std::string("18,18,RAISED") + (res->flat ? ",FLAT" : ""),
-                                            "");
-                break;
-            case Widget::SCROLLBOX:
-                ((GScrollBox&)W).SetResources(std::string(",,LOWERED") + (res->flat ? ",FLAT" : ""),
-                                              std::string("18,18,RAISED") + (res->flat ? ",FLAT" : ""),
-                                              std::string("18,18,RAISED") + (res->flat ? ",FLAT" : ""));
                 break;
             case Widget::TABS:
                 ((GTabs&)W).SetResources(",,RAISED");
@@ -158,19 +161,24 @@ namespace lysa::ui {
         switch (widget.getType()) {
         case Widget::BOX:
         case Widget::BUTTON:
+        case Widget::LISTBOX:
+        case Widget::SCROLLBOX:
             // case Widget::TABBUTTON:
             widget.setVBorder(2);
             widget.setHBorder(2);
             break;
         case Widget::FRAME: {
-            widget.setHBorder(4);
-            float w, h;
-            widget.getFont()->getSize(
-                static_cast<Frame &>(widget).getTitle(),
-                widget.getFontScale(), w, h); // TODO text scale in Frame
-            widget.setVBorder(h - 2);
-        } break;
-            /*case Widget::LINE:
+                widget.setHBorder(4);
+                float w, h;
+                widget.getFont()->getSize(
+                    static_cast<Frame &>(widget).getTitle(),
+                    widget.getFontScale(), w, h); // TODO text scale in Frame
+                widget.setVBorder(h - 2);
+            }
+            break;
+            widget.setVBorder(2);
+            widget.setHBorder(2);
+        /*case Widget::LINE:
             {
                 GLine &L = (GLine&)W;
                 if (L.Style() == GLine::HORIZ) {
@@ -386,6 +394,60 @@ namespace lysa::ui {
         }
     }
 
+    void StyleClassic::drawSelection(
+        const Selection &widget,
+        const StyleClassicResource &resources,
+        Vector2DRenderer &renderer) const {
+        if (!widget.isDrawBackground()) { return; }
+        auto c = resources.customColor ? resources.color : focus;
+        c.a = widget.getTransparency();
+        renderer.setPenColor(c);
+        renderer.drawFilledRect(widget.getRect());
+    }
+
+    void StyleClassic::drawProgressBar(
+        const ProgressBar &widget,
+        const StyleClassicResource &resources,
+        Vector2DRenderer &renderer) const {
+        const auto range = widget.getMax() - widget.getMin();
+        if (range <= 0.0f) { return; }
+        const auto ratio = (widget.getValue() - widget.getMin()) / range;
+        const auto& r = widget.getRect();
+        const auto x = r.x + widget.getHBorder();
+        const auto y = r.y + widget.getVBorder();
+        const auto w = r.width - widget.getHBorder() * 2;
+        const auto h = r.height - widget.getVBorder() * 2;
+        auto c = resources.customColor ? resources.color : fgUp;
+        c.a = widget.getTransparency();
+        renderer.setPenColor(c);
+        if (widget.getOrientation() == ProgressBar::VERTICAL) {
+            const auto fh = h * ratio;
+            renderer.drawFilledRect(x, y, w, fh, INVALID_ID);
+        }
+        else {
+            const auto fw = w * ratio;
+            renderer.drawFilledRect(x, y, fw, h, INVALID_ID);
+        }
+        if (widget.getDisplay() != ProgressBar::NONE) {
+            std::string text;
+            if (widget.getDisplay() == ProgressBar::PERCENT) {
+                text = std::to_string(static_cast<int32>(ratio * 100.0f)) + "%";
+            }
+            else {
+                text = std::to_string(static_cast<int32>(widget.getValue()));
+            }
+            float tw, th;
+            widget.getFont()->getSize(text, widget.getFontScale(), tw, th);
+            renderer.setPenColor(float4{0.0f, 0.0f, 0.0f, widget.getTransparency()});
+            renderer.drawText(
+                text,
+                *widget.getFont(),
+                widget.getFontScale(),
+                r.x + (r.width - tw) / 2,
+                r.y + (r.height - th) / 2);
+        }
+    }
+
     /*
     //----------------------------------------------
         void GLayoutVector::DrawArrow(GArrow&W, GLayoutVectorResource&, Vector2DRenderer&, float)
@@ -467,47 +529,6 @@ namespace lysa::ui {
             }
 
         }
-
-    //----------------------------------------------
-        void GLayoutVector::DrawProgressBar(GProgressBar&W, GLayoutVectorResource&, Vector2DRenderer&, float)
-        {
-            D.SetPenColor(fgDown);
-            if (W.Max() > W.Min()) {
-                if (W.GProgressBar::Type() == GProgressBar::HORIZ)	{
-                    D.DrawRect(W.Left() + 1,
-                               W.Top() + 1,
-                               (W.Value() - W.Min()) * (W.Width() - 1*2) /
-                               ABS(W.Max() - W.Min()),
-                               W.Height() - 1*2);
-                    if (W.DisplayType() != GProgressBar::NONE) {
-                        Ustd::stringz text;
-                        uint32_t x = (W.Width() - 1*2 -
-                                    W.Font().Width(text))/2;
-                        _LONG y = (W.Height() - 1*2 -
-                                   W.Font().Height())/2;
-                        W.Font().Draw(D, text, x + W.Left() + 1, y + W.Top() + 1);
-                    }
-                }
-                else
-                {
-                    uint32_t size = (W.Value()- W.Min()) * (W.Height()-1*2) /
-                                  ABS(W.Max()-W.Min());
-                    D.DrawRect(W.Left() + 1, W.Top() + W.Height() -
-                                             size - 1, W.Width() - 1*2,
-                               size);
-                }
-            }
-        }
-
-
-    //--------------------------------------------------------------------------
-        void GLayoutVector::DrawSelection(GSelection&W, Vector2DRenderer&D,
-                                          GLayoutVectorResource&)
-        {
-            D.SetPenColor(fgDown);
-            D.DrawRect(W.Rect());
-        }
-
 
 
     //--------------------------------------------------------------------------

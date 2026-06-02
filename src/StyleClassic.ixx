@@ -14,8 +14,11 @@ import lysa.ui.check_widget;
 import lysa.ui.frame;
 import lysa.ui.line;
 import lysa.ui.panel;
+import lysa.ui.progress_bar;
 import lysa.ui.uiresource;
 import lysa.ui.scroll_bar;
+import lysa.ui.scroll_box;
+import lysa.ui.selection;
 import lysa.ui.style;
 import lysa.ui.style_classic_resource;
 import lysa.ui.text;
@@ -67,10 +70,12 @@ export namespace lysa::ui {
 
         void drawTextEdit(const TextEdit&, Vector2DRenderer&) const;
 
+        void drawSelection(const Selection &, const StyleClassicResource &, Vector2DRenderer &) const;
+
+        void drawProgressBar(const ProgressBar &, const StyleClassicResource &, Vector2DRenderer &) const;
+
         /*void drawArrow(GArrow&, GLayoutVectorResource&, VectorRenderer&);
         void drawCheckmark(GCheckmark&, GLayoutVectorResource&, VectorRenderer&);
-        void drawProgressBar(GProgressBar&, GLayoutVectorResource&, VectorRenderer&);
-        void drawSelection(GSelection&, GLayoutVectorResource&, VectorRenderer&);
         void drawTrackBar(GTrackBar&, GLayoutVectorResource&, VectorRenderer&);
         void drawRoundButton(GRoundButton&, GLayoutVectorResource&, VectorRenderer&);
         void drawTabButton(GTabButton&, GLayoutVectorResource&, VectorRenderer&);

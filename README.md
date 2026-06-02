@@ -10,12 +10,16 @@ Please refer to the [Documentation](https://henrimichelon.github.io/LysaUI/) for
 
 ### Widgets
 - **Widget / Panel / Box** — transparent, background-only, and bordered container primitives
+- **Popup** — panel placed at fixed (x, y) coordinates and always drawn on top of sibling widgets
 - **Button** — clickable box with push state; **ToggleButton** for two-state toggle
 - **Text** — single-line read-only label; **TextEdit** — editable field with selection, read-only mode, and long-text scrolling
 - **Frame** — bordered panel with optional title and title color
 - **Image** — 2D image display with auto-sizing and color tint
 - **ScrollBar** — horizontal or vertical scroll control with page and step scrolling (`HScrollBar` / `VScrollBar` helpers)
+- **ScrollBox** — scrollable container with automatic horizontal and vertical scroll bars; content is added to an inner box
 - **TreeView** — hierarchical list with expand/collapse handles, item selection, and vertical scrolling
+- **ListBox** — scrollable list of arbitrary widgets with keyboard navigation and a configurable selection highlight; base `List` class is extensible
+- **ProgressBar** — horizontal or vertical progress bar with optional percentage or raw-value text overlay (`HProgressBar` / `VProgressBar` helpers)
 - **Line** — horizontal or vertical separator (`HLine` / `VLine` helpers)
 
 ### Layout & Alignment
@@ -38,11 +42,18 @@ Please refer to the [Documentation](https://henrimichelon.github.io/LysaUI/) for
 - Typed event signals for the full widget lifecycle: create/destroy, show/hide, enable/disable
 - Input events: mouse down/up/move with coordinates, keyboard down/up, text input
 - Semantic events: `OnClick`, `OnStateChange`, `OnValueChange`, `OnRangeChange`, `OnTextChange`
+- List events: `OnInsertItem`, `OnRemoveItem`, `OnSelectItem`
 - Window events: `OnResize`, `OnMove`, `OnGotFocus`, `OnLostFocus`
 - Integrated with the Lysa engine's centralized event dispatcher; Lua callbacks supported when Lua bindings are enabled
 
 ## License
 
 This project is licensed under the MIT License
+
+
+## Note
+
+The original version of this UI components was developed for the [NMO-SDK](https://github.com/HenriMichelon/nmo-sdk) project
+between 1996 and 2001, then ported betwen 2024 and 2026 to C++ 23 for the [Lysa engine](https://github.com/LysaEngine). 
 
 

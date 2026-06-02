@@ -54,6 +54,16 @@ export namespace lysa::ui {
             IMAGE,
             //! popup panel at fixed (x, y) coordinates, drawn on top of siblings
             POPUP,
+            //! %A list of widgets (abstract container)
+            LIST,
+            //! %A scrollable list with a selection highlight
+            LISTBOX,
+            //! Selection highlight rectangle (internal to LISTBOX)
+            SELECTION,
+            //! %A progress bar with min, max & value
+            PROGRESSBAR,
+            //! %A scrollable container (horizontal & vertical)
+            SCROLLBOX,
         };
 
         /**
@@ -367,6 +377,23 @@ export namespace lysa::ui {
          */
         void resizeChildren();
 
+        /**
+         * Returns the horizontal children scroll offset (subtracted from child positions).
+         */
+        float getChildrenOffsetX() const { return childrenOffsetX; }
+
+        /**
+         * Returns the vertical children scroll offset (subtracted from child positions).
+         */
+        float getChildrenOffsetY() const { return childrenOffsetY; }
+
+        /**
+         * Sets the children scroll offset. Children are laid out by resizeChildren()
+         * starting from the client rect minus this offset, enabling scrollable content.
+         * Default is (0, 0): no effect.
+         */
+        void setChildrenOffset(float x, float y);
+
         std::shared_ptr<Widget> setFocus(bool = true);
 
         virtual void eventCreate();
@@ -447,6 +474,8 @@ export namespace lysa::ui {
         void* style{nullptr};
         bool mouseMoveOnFocus{false};
         float fontScale{0.0f};
+        float childrenOffsetX{0};
+        float childrenOffsetY{0};
 
         // virtual Rect _getDefaultRect() { return defaultRect; }
 

@@ -72,6 +72,11 @@ namespace lysa::ui {
             .addVariable("TREEVIEW", Widget::TREEVIEW)
             .addVariable("IMAGE", Widget::IMAGE)
             .addVariable("POPUP", Widget::POPUP)
+            .addVariable("LIST", Widget::LIST)
+            .addVariable("LISTBOX", Widget::LISTBOX)
+            .addVariable("SELECTION", Widget::SELECTION)
+            .addVariable("PROGRESSBAR", Widget::PROGRESSBAR)
+            .addVariable("SCROLLBOX", Widget::SCROLLBOX)
         .endNamespace()
 
         .beginNamespace("CheckState")
@@ -87,6 +92,17 @@ namespace lysa::ui {
         .beginNamespace("ScrollBarType")
             .addVariable("HORIZONTAL", ScrollBar::HORIZONTAL)
             .addVariable("VERTICAL", ScrollBar::VERTICAL)
+        .endNamespace()
+
+        .beginNamespace("ProgressBarType")
+            .addVariable("HORIZONTAL", ProgressBar::HORIZONTAL)
+            .addVariable("VERTICAL", ProgressBar::VERTICAL)
+        .endNamespace()
+
+        .beginNamespace("ProgressBarDisplay")
+            .addVariable("NONE", ProgressBar::NONE)
+            .addVariable("PERCENT", ProgressBar::PERCENT)
+            .addVariable("VALUE", ProgressBar::VALUE)
         .endNamespace()
 
         .beginNamespace("ResizeableBorder")
@@ -119,6 +135,9 @@ namespace lysa::ui {
             .addVariable("OnRangeChange", &UIEvent::OnRangeChange)
             .addVariable("OnResize", &UIEvent::OnResize)
             .addVariable("OnMove", &UIEvent::OnMove)
+            .addVariable("OnInsertItem", &UIEvent::OnInsertItem)
+            .addVariable("OnRemoveItem", &UIEvent::OnRemoveItem)
+            .addVariable("OnSelectItem", &UIEvent::OnSelectItem)
         .endNamespace()
 
         .beginClass<Widget>("Widget")
@@ -269,6 +288,41 @@ namespace lysa::ui {
                 +[](Widget* self, const std::string& resource, const int alignment) -> std::shared_ptr<Widget> {
                     return self->create<Widget>(resource, static_cast<Alignment>(alignment));
                 })
+            .addFunction("create_list_box",
+                +[](Widget* self, const int alignment) -> std::shared_ptr<ListBox> {
+                    return self->create<ListBox>(static_cast<Alignment>(alignment));
+                },
+                +[](Widget* self, const std::string& resource, const int alignment) -> std::shared_ptr<ListBox> {
+                    return self->create<ListBox>(resource, static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_progress_bar",
+                +[](Widget* self, const int alignment) -> std::shared_ptr<ProgressBar> {
+                    return self->create<ProgressBar>(static_cast<Alignment>(alignment));
+                },
+                +[](Widget* self, const std::string& resource, const int alignment) -> std::shared_ptr<ProgressBar> {
+                    return self->create<ProgressBar>(resource, static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_vprogress_bar",
+                +[](Widget* self, const int alignment) -> std::shared_ptr<VProgressBar> {
+                    return self->create<VProgressBar>(static_cast<Alignment>(alignment));
+                },
+                +[](Widget* self, const std::string& resource, const int alignment) -> std::shared_ptr<VProgressBar> {
+                    return self->create<VProgressBar>(resource, static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_hprogress_bar",
+                +[](Widget* self, const int alignment) -> std::shared_ptr<HProgressBar> {
+                    return self->create<HProgressBar>(static_cast<Alignment>(alignment));
+                },
+                +[](Widget* self, const std::string& resource, const int alignment) -> std::shared_ptr<HProgressBar> {
+                    return self->create<HProgressBar>(resource, static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_scroll_box",
+                +[](Widget* self, const int alignment) -> std::shared_ptr<ScrollBox> {
+                    return self->create<ScrollBox>(static_cast<Alignment>(alignment));
+                },
+                +[](Widget* self, const std::string& resource, const int alignment) -> std::shared_ptr<ScrollBox> {
+                    return self->create<ScrollBox>(resource, static_cast<Alignment>(alignment));
+                })
             // add_child: expose the non-template path via a lambda taking a shared_ptr<Widget>
             .addFunction("add_child",
                 +[](Widget* self,
@@ -402,6 +456,66 @@ namespace lysa::ui {
                                     std::shared_ptr<Widget>>(&TreeView::addItem)
             )
             .addFunction("expand", &TreeView::expand)
+        .endClass()
+
+        .deriveClass<List, Widget>("List")
+            .addProperty("count", &List::getCount)
+            .addProperty("selected_index", &List::getSelectedIndex)
+            .addProperty("selected_item", &List::getSelectedItem)
+            .addFunction("add_item",
+                +[](List* self,
+                    const std::shared_ptr<Widget>& item,
+                    const int alignment,
+                    const std::string& resource) -> int32 {
+                    return self->addItem(item, static_cast<Alignment>(alignment), resource);
+                })
+            .addFunction("remove_item", &List::removeItem)
+            .addFunction("remove_all_items", &List::removeAllItems)
+            .addFunction("get_item", &List::getItem)
+            .addFunction("select", &List::select)
+        .endClass()
+
+        .deriveClass<ListBox, List>("ListBox")
+            .addConstructor<void()>()
+            .addFunction("set_resources", &ListBox::setResources)
+            .addProperty("selection_widget", &ListBox::getSelectionWidget)
+        .endClass()
+
+        .deriveClass<Selection, Panel>("Selection")
+            .addConstructor<void()>()
+        .endClass()
+
+        .deriveClass<ProgressBar, ValueSelect>("ProgressBar")
+            .addConstructor<
+                void(),
+                void(ProgressBar::Orientation, float, float, float, float)
+            >()
+            .addProperty("orientation", &ProgressBar::getOrientation, &ProgressBar::setOrientation)
+            .addProperty("display", &ProgressBar::getDisplay, &ProgressBar::setDisplay)
+            .addFunction("set_resources", &ProgressBar::setResources)
+        .endClass()
+
+        .deriveClass<VProgressBar, ProgressBar>("VProgressBar")
+            .addConstructor<void(), void(float, float, float)>()
+        .endClass()
+
+        .deriveClass<HProgressBar, ProgressBar>("HProgressBar")
+            .addConstructor<void(), void(float, float, float)>()
+        .endClass()
+
+        .deriveClass<ScrollBox, Box>("ScrollBox")
+            .addConstructor<void()>()
+            .addFunction("set_resources", &ScrollBox::setResources)
+            .addFunction("add_content",
+                +[](ScrollBox* self,
+                    const std::shared_ptr<Widget>& child,
+                    const int alignment,
+                    const std::string& resource) -> std::shared_ptr<Widget> {
+                    return self->addContent(child, static_cast<Alignment>(alignment), resource);
+                })
+            .addFunction("remove_content", &ScrollBox::removeContent)
+            .addFunction("remove_all_content", &ScrollBox::removeAllContent)
+            .addProperty("inner_box", &ScrollBox::getInnerBox)
         .endClass()
 
         .beginClass<Window>("Window")
@@ -560,6 +674,41 @@ namespace lysa::ui {
                 },
                 +[](Window* self, const std::string& resource, const int alignment) -> std::shared_ptr<Widget> {
                     return self->create<Widget>(resource, static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_list_box",
+                +[](Window* self, const int alignment) -> std::shared_ptr<ListBox> {
+                    return self->create<ListBox>(static_cast<Alignment>(alignment));
+                },
+                +[](Window* self, const std::string& resource, const int alignment) -> std::shared_ptr<ListBox> {
+                    return self->create<ListBox>(resource, static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_progress_bar",
+                +[](Window* self, const int alignment) -> std::shared_ptr<ProgressBar> {
+                    return self->create<ProgressBar>(static_cast<Alignment>(alignment));
+                },
+                +[](Window* self, const std::string& resource, const int alignment) -> std::shared_ptr<ProgressBar> {
+                    return self->create<ProgressBar>(resource, static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_vprogress_bar",
+                +[](Window* self, const int alignment) -> std::shared_ptr<VProgressBar> {
+                    return self->create<VProgressBar>(static_cast<Alignment>(alignment));
+                },
+                +[](Window* self, const std::string& resource, const int alignment) -> std::shared_ptr<VProgressBar> {
+                    return self->create<VProgressBar>(resource, static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_hprogress_bar",
+                +[](Window* self, const int alignment) -> std::shared_ptr<HProgressBar> {
+                    return self->create<HProgressBar>(static_cast<Alignment>(alignment));
+                },
+                +[](Window* self, const std::string& resource, const int alignment) -> std::shared_ptr<HProgressBar> {
+                    return self->create<HProgressBar>(resource, static_cast<Alignment>(alignment));
+                })
+            .addFunction("create_scroll_box",
+                +[](Window* self, const int alignment) -> std::shared_ptr<ScrollBox> {
+                    return self->create<ScrollBox>(static_cast<Alignment>(alignment));
+                },
+                +[](Window* self, const std::string& resource, const int alignment) -> std::shared_ptr<ScrollBox> {
+                    return self->create<ScrollBox>(resource, static_cast<Alignment>(alignment));
                 })
         .endClass()
 

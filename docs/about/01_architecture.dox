@@ -45,10 +45,13 @@ Widget Hierarchy
 ```
 Widget
 ├── Panel
+│   ├── Popup
 │   ├── Box
 │   │   ├── Button
-│   │   └── (ScrollBar internals)
-│   └── Frame
+│   │   ├── ScrollBox
+│   │   └── (internal scroll bar containers)
+│   ├── Frame
+│   └── Selection
 ├── CheckWidget
 │   └── ToggleButton
 ├── Line
@@ -58,9 +61,14 @@ Widget
 ├── TextEdit
 ├── Image
 ├── ValueSelect
-│   └── ScrollBar
-│       ├── HScrollBar
-│       └── VScrollBar
+│   ├── ScrollBar
+│   │   ├── HScrollBar
+│   │   └── VScrollBar
+│   └── ProgressBar
+│       ├── HProgressBar
+│       └── VProgressBar
+├── List
+│   └── ListBox
 └── TreeView
 ```
 
@@ -135,6 +143,9 @@ All widget events are dispatched through the engine's `EventManager`. Widgets fi
 | `UIEvent::OnDestroy` | `UIEvent` | Widget destroyed |
 | `UIEvent::OnResize` | `UIEvent` | Window resized |
 | `UIEvent::OnMove` | `UIEvent` | Window moved |
+| `UIEvent::OnInsertItem` | `UIEventItem` | Item inserted into a `List` / `ListBox` |
+| `UIEvent::OnRemoveItem` | `UIEventItem` | Item removed from a `List` / `ListBox` |
+| `UIEvent::OnSelectItem` | `UIEventItem` | Selected item changed in a `List` / `ListBox` |
 
 Subscribe using `lysa::ctx().events.subscribe(UIEvent::OnClick, widget->id, handler)`.
 
@@ -143,6 +154,8 @@ Lua Scripting
 
 When the engine is compiled with `LUA_BINDINGS=ON`, every widget type inherits from `LuaScript` and
 exposes its full public API to Lua via LuaBridge. All `UIEvent` signal constants and `Alignment`,
-`CheckWidget::State`, `Line::LineStyle`, `ScrollBar::Type`, and `Window::ResizeableBorder` enums are
-available in the `lysa.ui` Lua namespace.
+`CheckWidget::State`, `Line::LineStyle`, `ScrollBar::Type`, `ProgressBar::Orientation`,
+`ProgressBar::Display`, and `Window::ResizeableBorder` enums are available in the `lysa.ui` Lua
+namespace. The new widget types (`ListBox`, `ProgressBar`, `ScrollBox`, and their variants) are
+fully accessible with the same `create_*` factory pattern used for existing widgets.
 */

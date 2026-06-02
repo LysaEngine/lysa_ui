@@ -54,7 +54,11 @@ set(LYSA_UI_SRC
         ${SRC_DIR}/Frame.cpp
         ${SRC_DIR}/Image.cpp
         ${SRC_DIR}/Line.cpp
+        ${SRC_DIR}/List.cpp
+        ${SRC_DIR}/ListBox.cpp
+        ${SRC_DIR}/ProgressBar.cpp
         ${SRC_DIR}/ScrollBar.cpp
+        ${SRC_DIR}/ScrollBox.cpp
         ${SRC_DIR}/Style.cpp
         ${SRC_DIR}/StyleClassic.cpp
         ${SRC_DIR}/StyleClassicResource.cpp
@@ -78,9 +82,14 @@ set(LYSA_UI_MODULES
         ${SRC_DIR}/Frame.ixx
         ${SRC_DIR}/Image.ixx
         ${SRC_DIR}/Line.ixx
+        ${SRC_DIR}/List.ixx
+        ${SRC_DIR}/ListBox.ixx
         ${SRC_DIR}/Panel.ixx
         ${SRC_DIR}/Popup.ixx
+        ${SRC_DIR}/ProgressBar.ixx
         ${SRC_DIR}/ScrollBar.ixx
+        ${SRC_DIR}/ScrollBox.ixx
+        ${SRC_DIR}/Selection.ixx
         ${SRC_DIR}/Style.ixx
         ${SRC_DIR}/StyleClassic.ixx
         ${SRC_DIR}/StyleClassicResource.ixx

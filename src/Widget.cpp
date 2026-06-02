@@ -710,6 +710,14 @@ namespace lysa::ui {
         refresh();
     }
 
+    void Widget::setChildrenOffset(const float x, const float y) {
+        if ((childrenOffsetX == x) && (childrenOffsetY == y)) { return; }
+        childrenOffsetX = x;
+        childrenOffsetY = y;
+        resizeChildren();
+        refresh();
+    }
+
     uint32 Widget::getGroupIndex() const { return groupIndex; }
 
     void *Widget::getUserData() const { return userData; }

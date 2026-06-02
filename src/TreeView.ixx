@@ -10,6 +10,7 @@ import lysa.context;
 import lysa.exception;
 import lysa.types;
 import lysa.ui.box;
+import lysa.ui.event;
 import lysa.ui.panel;
 import lysa.ui.scroll_bar;
 import lysa.ui.text;
@@ -64,7 +65,7 @@ export namespace lysa::ui {
          * @param item The widget to add as a child item.
          * @return Shared pointer to the created tree item.
          */
-        std::shared_ptr<Item>& addItem(const std::shared_ptr<Item>& parent, std::shared_ptr<Widget> item) const;
+        std::shared_ptr<Item>& addItem(const std::shared_ptr<Item>& parent, std::shared_ptr<Widget> item);
 
         /**
          * Expands a specific item.
@@ -79,5 +80,11 @@ export namespace lysa::ui {
         std::list<std::shared_ptr<Item>> items;
         std::shared_ptr<Box> box;
         std::shared_ptr<VScrollBar> vScroll;
+
+        // Recompute total items height & update the scroll bar range.
+        void computeSizes();
+
+        // Scroll handler bound to vScroll OnValueChange.
+        void onVScrollChange(const UIEventValue& event);
     };
 }
