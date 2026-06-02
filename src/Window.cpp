@@ -93,7 +93,7 @@ namespace lysa::ui {
         static_cast<Style*>(widget->_getStyle())->addResource(*widget, resources);
         widget->eventCreate();
         widget->setPos(0, 0);
-        widget->_setSize(getWidth(), getHeight());
+        widget->setSize(getWidth(), getHeight());
         widget->setConsumeMouseEvent(false);
         // focusedWidget = widget->setFocus();
         unFreeze(widget);
@@ -320,7 +320,7 @@ namespace lysa::ui {
     }
 
     void Window::eventResize() {
-        if (widget) { widget->_setSize(rect.width, rect.height); }
+        if (widget) { widget->setSize(rect.width, rect.height); }
         onResize();
         // emit(UIEvent::OnResize);
         refresh();

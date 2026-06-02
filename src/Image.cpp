@@ -24,20 +24,20 @@ namespace lysa::ui {
         fixedSize{fixedSize} {
     }
 
-    void Image::_setSize(const float width, const float height) {
+    void Image::setSize(const float width, const float height) {
         if (autoSize) { return; }
         if ((fixedSize || (width == 0 && height == 0)) && rect.width == 0 && rect.height == 0) {
             const auto ratio = static_cast<WindowManager*>(static_cast<Window*>(window)->_getWindowManager())->getRenderer().getAspectRatio();
-            Widget::_setSize(std::round(width / ratio), height);
+            Widget::setSize(std::round(width / ratio), height);
         } else if (!fixedSize) {
-            Widget::_setSize(width, height);
+            Widget::setSize(width, height);
         }
     }
 
     void Image::autoResize() {
         if (window) {
             const auto ratio = static_cast<WindowManager*>(static_cast<Window*>(window)->_getWindowManager())->getRenderer().getAspectRatio();
-            Widget::_setSize(std::round(image->getWidth() / ratio), static_cast<float>(image->getHeight()));
+            Widget::setSize(std::round(image->getWidth() / ratio), static_cast<float>(image->getHeight()));
         }
     }
 

@@ -23,7 +23,7 @@ namespace lysa::ui {
         if (window) {
             float w, h;
             getSize(w, h);
-            _setSize(w, h);
+            setSize(w, h);
             if (parent) {
                 parent->refresh();
             } else {
@@ -37,7 +37,7 @@ namespace lysa::ui {
         if (window) {
             float w, h;
             getSize(w, h);
-            _setSize(w, h);
+            setSize(w, h);
             if (parent) {
                 parent->refresh();
             } else {
@@ -62,25 +62,16 @@ namespace lysa::ui {
         }
     }
 
-    void Text::_setSize(const float width, const float height) {
+    void Text::setSize(const float width, const float height) {
         if (!window) { return; }
         if (width == 0 && height == 0 && rect.width == 0 && rect.height == 0) {
             float w, h;
             getSize(w, h);
-            Widget::_setSize(w, h);
+            Widget::setSize(w, h);
         } else {
-            Widget::_setSize(width, height);
+            Widget::setSize(width, height);
         }
     }
-
-    // Rect Text::_getDefaultRect() {
-    //     if (rect.width == 0 && rect.height == 0) {
-    //         float w, h;
-    //         getSize(w, h);
-    //         _setSize(w, h);
-    //     }
-    //     return Widget::_getDefaultRect();
-    // }
 
     void Text::eventCreate() {
         if (all(textColor == float4{0.0f})) {

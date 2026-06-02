@@ -448,8 +448,6 @@ export namespace lysa::ui {
             this->consumeMouseEvent = consumeMouseEvent;
         }
 
-        virtual void _setSize(float width, float height);
-
         void _allowFocus(bool allow = true);
 
         void _setRedrawOnMouseEvent(const bool r) { redrawOnMouseEvent = r; }

@@ -56,7 +56,7 @@ export namespace lysa::ui {
          */
         void getSize(float &width, float &height) const;
 
-        void _setSize(float width, float height) override;
+        void setSize(float width, float height) override;
 
     // protected:
         // Rect _getDefaultRect() override;

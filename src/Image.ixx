@@ -59,7 +59,7 @@ export namespace lysa::ui {
          */
         void setImage(const std::string& uri);
 
-        void _setSize(float width, float height) override;
+        void setSize(float width, float height) override;
 
         /**
          * Returns the currently displayed image.

@@ -42,7 +42,7 @@ namespace lysa::ui {
         newWidget->handle = std::make_shared<Text>(" ");
         newWidget->add(newWidget->handle,Alignment:: LEFT, treeTabsSize);
         newWidget->add(item, Alignment::LEFT);
-        newWidget->_setSize(1000.0f, item->getHeight());
+        newWidget->setSize(1000.0f, item->getHeight());
         newWidget->setDrawBackground(false);
         computeSizes();
         return newWidget;
@@ -64,7 +64,7 @@ namespace lysa::ui {
         }
         parent->handle->setText("-");
         newWidget->add(item, Alignment::LEFT);
-        newWidget->_setSize(1000.0f, item->getHeight());
+        newWidget->setSize(1000.0f, item->getHeight());
         newWidget->setDrawBackground(false);
         //expand(parent->item);
         computeSizes();

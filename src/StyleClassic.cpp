@@ -116,7 +116,7 @@ namespace lysa::ui {
     void StyleClassic::addResource(Widget &widget, const std::string &resources) {
         const auto& res = std::make_shared<StyleClassicResource>(resources);
         widget.setResource(res);
-        widget._setSize(res->width, res->height);
+        widget.setSize(res->width, res->height);
         switch (widget.getType()) {
         case Widget::SCROLLBAR:
             static_cast<ScrollBar &>(widget).setResources("style=LOWERED", "style=FLAT;color=" + to_string(fgDown));

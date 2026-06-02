@@ -144,11 +144,11 @@ namespace lysa::ui {
             liftSize = size - nbvalues;
         }
         if (type == VERTICAL) {
-            liftCage->_setSize(rect.width, liftSize);
+            liftCage->setSize(rect.width, liftSize);
             liftSize = liftCage->getHeight();
         }
         else {
-            liftCage->_setSize(liftSize, rect.height);
+            liftCage->setSize(liftSize, rect.height);
             liftSize = liftCage->getWidth();
         }
         const auto liftPos = ((value - min) * (size - liftSize)) / nbvalues;

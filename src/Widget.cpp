@@ -73,15 +73,6 @@ namespace lysa::ui {
         eventResize();
     }
 
-    void Widget::_setSize(const float width, const float height) {
-        if (parent) {
-            parent->refresh();
-        }
-        rect.width  = width;
-        rect.height = height;
-        eventResize();
-    }
-
     void Widget::setResource(std::shared_ptr<UIResource> res) {
         resource = std::move(res);
         refresh();
@@ -299,8 +290,8 @@ namespace lysa::ui {
         }
         auto it = children.begin();
         while ((clientRect.width > 0) && (clientRect.height > 0) && (it != children.end())) {
-            auto &child     = *it;
-            Rect  childRect = child->getRect();
+            auto &child = *it;
+            Rect childRect = child->getRect();
             if (childRect.width > (clientRect.width)) {
                 childRect.width = clientRect.width;
             }
@@ -560,7 +551,6 @@ namespace lysa::ui {
         for (const auto &w : children) {
             if (w->getRect().contains(x, y) || w->isPushed()) {
                 consumed |= w->eventMouseUp(button, x, y);
-                Log::info(consumed ? "consumed &" : "not&"  );
                 if (w->redrawOnMouseEvent) {
                     w->refresh();
                 }
@@ -574,7 +564,6 @@ namespace lysa::ui {
                 id});
             return consumeMouseEvent;
         }
-        Log::info(consumed ? "consumed" : "not" );
         return consumed;
     }
 
@@ -677,7 +666,7 @@ namespace lysa::ui {
 
     void Widget::setRect(const float x, const float y, const float width, const float height) {
         setPos(x, y);
-        _setSize(width, height);
+        setSize(width, height);
     }
 
     void Widget::setRect(const Rect &rect) { setRect(rect.x, rect.y, rect.width, rect.height); }
