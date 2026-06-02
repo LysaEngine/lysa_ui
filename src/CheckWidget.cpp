@@ -11,6 +11,11 @@ import lysa.ui.event;
 
 namespace lysa::ui {
 
+    CheckWidget::CheckWidget(const Type type):
+        Widget{type} {
+        consumeMouseEvent = false;
+    }
+
     void CheckWidget::setState(const State newState) {
         if (state == newState) { return; }
         state = newState;

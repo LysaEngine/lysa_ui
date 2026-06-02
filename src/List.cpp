@@ -12,6 +12,7 @@ namespace lysa::ui {
 
     List::List(const Type type):
         Widget{type} {
+        consumeMouseEvent = true;
     }
 
     int32 List::addItem(

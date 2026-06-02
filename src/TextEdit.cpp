@@ -17,6 +17,7 @@ namespace lysa::ui {
         Widget{TEXTEDIT},
         text(text)  {
         allowFocus = true;
+        consumeMouseEvent = true;
     }
 
     void TextEdit::computeNDispChar() {

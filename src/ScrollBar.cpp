@@ -20,6 +20,7 @@ namespace lysa::ui {
         ValueSelect{SCROLLBAR, min, max, value, step},
         type{type} {
         allowFocus = true;
+        consumeMouseEvent = true;
     }
 
     void ScrollBar::setResources(const std::string& area, const std::string& cage) {
@@ -35,6 +36,8 @@ namespace lysa::ui {
             });
             liftCage->_setRedrawOnMouseEvent(true);
             liftCage->_setMoveChildrenOnPush(true);
+            liftArea->setConsumeMouseEvent(true);
+            liftCage->setConsumeMouseEvent(true);
         }
     }
 

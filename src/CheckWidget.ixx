@@ -35,10 +35,10 @@ export namespace lysa::ui {
          */
         virtual void setState(State newState);
 
-    protected:
-        explicit CheckWidget(const Type type): Widget{type} { }
-
         bool eventMouseDown(MouseButton button, float x, float y) override;
+
+    protected:
+        CheckWidget(Type type);
 
     private:
         State state{UNCHECK};

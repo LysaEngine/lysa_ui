@@ -13,6 +13,7 @@ namespace lysa::ui {
     Button::Button(): Box{BUTTON} {
         moveChildrenOnPush = true;
         redrawOnMouseEvent = true;
+        consumeMouseEvent = true;
         allowFocus = true;
     }
 

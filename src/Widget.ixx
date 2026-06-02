@@ -475,7 +475,7 @@ export namespace lysa::ui {
         float hborder{0};
         float vborder{0};
         float padding{0};
-        bool consumeMouseEvent{true};
+        bool consumeMouseEvent{false};
         bool overlap{false};
         bool focused{false};
         bool allowFocus{false};
