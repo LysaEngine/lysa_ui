@@ -21,18 +21,20 @@ export namespace lysa::ui {
     public:
         /**
          * Constructor with image.
+         * If autosize is `false` the image is sampled to match the widget size : it's recommended to have an image with mips levels
          * @param image The image to display.
          * @param autoSize Whether to automatically resize the widget to the image size.
-         * @param fixedSize Size can't change
+         * @param fixedSize Widget size is fixed at creation with the resources string and never change
          */
-        Image(const lysa::Image& image, bool autoSize = true, bool fixedSize = false);
+        Image(const lysa::Image& image, bool autoSize = false, bool fixedSize = true);
 
         /**
          * Constructor without image.
-         * @param autoSize Whether to automatically resize the widget.
-         * @param fixedSize Size can't change
+         * If autosize is `false` the image is sampled to match the widget size : it's recommended to have an image with mips levels
+         * @param autoSize Whether to automatically resize the widget to the image size.
+         * @param fixedSize Widget size is fixed at creation with the resources string and never change
          */
-        Image(bool autoSize = true, bool fixedSize = false);
+        Image(bool autoSize = false, bool fixedSize = true);
 
         /**
          * Sets whether to automatically resize the widget to the image size.

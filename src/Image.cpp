@@ -14,7 +14,7 @@ namespace lysa::ui {
     Image::Image(const lysa::Image& image, const bool autoSize, const bool fixedSize) :
         Widget{IMAGE},
         autoSize{autoSize},
-        fixedSize{fixedSize} {
+        fixedSize{autoSize ? false : fixedSize} {
         consumeMouseEvent = true;
         setImage(image);
     }
@@ -22,7 +22,7 @@ namespace lysa::ui {
     Image::Image(const bool autoSize, const bool fixedSize) :
         Widget{IMAGE},
         autoSize{autoSize},
-        fixedSize{fixedSize} {
+        fixedSize{autoSize ? false : fixedSize} {
         consumeMouseEvent = true;
     }
 
