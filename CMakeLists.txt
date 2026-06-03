@@ -107,10 +107,7 @@ set(LYSA_UI_MODULES
 build_target(${PROJECT_NAME} "${LYSA_UI_SRC}" "${LYSA_UI_MODULES}")
 
 #######################################################
-find_program(PYTHON_EXECUTABLE python)
-
 if (PYTHON_EXECUTABLE)
-    message(STATUS "Python found: ${PYTHON_EXECUTABLE}")
     set(DOCS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/docs")
 
     add_custom_target(lysa_ui_docs_lua
@@ -124,10 +121,7 @@ else()
 endif()
 
 #######################################################
-find_program(DOXYPRESS_EXECUTABLE doxypress)
-
 if (DOXYPRESS_EXECUTABLE)
-    message(STATUS "DoxyPress found: ${DOXYPRESS_EXECUTABLE}")
     set(DOCS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/docs")
 
     add_custom_target(lysa_ui_docs
