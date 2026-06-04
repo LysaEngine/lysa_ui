@@ -166,7 +166,7 @@ desired size :
 
 ```cpp
 // aspectRatio = pixel_width / pixel_height
-const float ar = windowManager.getRenderer().getAspectRatio();
+const float ar = windowManager.getAspectRatio();
 
 // A visually square widget on a 16:9 screen: height_units = width_units / ar
 const float sideUnits = 100.0f;

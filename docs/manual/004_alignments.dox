@@ -5,7 +5,7 @@ Every child widget is placed inside its parent's **content area** according to
 its lysa::ui::Alignment value, set when the child is added:
 
 ```cpp
-parent->create<lysa::ui::Button>("80,30", lysa::ui::Alignment::TOP, "Save");
+parent->create<lysa::ui::Button>("width=80;height=30", lysa::ui::Alignment::TOP, "Save");
 parent->add(myWidget, lysa::ui::Alignment::LEFT, "");
 ```
 
@@ -341,8 +341,8 @@ claim edges first and fill the center last:
 
 ```cpp
 // Classic toolbar + sidebar + content layout
-const auto toolbar  = panel->create<lysa::ui::Box>("0,40", lysa::ui::Alignment::TOP);
-const auto sidebar  = panel->create<lysa::ui::Box>("150,0", lysa::ui::Alignment::LEFT);
+const auto toolbar  = panel->create<lysa::ui::Box>("width=0;height=40", lysa::ui::Alignment::TOP);
+const auto sidebar  = panel->create<lysa::ui::Box>("width=150;height=0", lysa::ui::Alignment::LEFT);
 const auto content  = panel->create<lysa::ui::Box>("", lysa::ui::Alignment::FILL);
 ```
 

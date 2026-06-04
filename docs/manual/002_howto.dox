@@ -105,11 +105,11 @@ The first argument is a resource string (size or style hint), the second is the 
 ```cpp
 // Create a centered panel of size 200x300
 const auto panel = uiWindow->create<lysa::ui::Box>(
-    "200,300", lysa::ui::Alignment::CENTER);
+    "width=200;height=300", lysa::ui::Alignment::CENTER);
 
 // Add a button inside the panel
 const auto button = panel->create<lysa::ui::Button>(
-    "100,40", lysa::ui::Alignment::TOPCENTER);
+    "width=100;height=40", lysa::ui::Alignment::TOPCENTER);
 
 // Add a text label inside the button
 button->create<lysa::ui::Text>(
@@ -143,8 +143,8 @@ Children are laid out in the order they are added.
 panel->create<lysa::ui::Panel>(lysa::ui::Alignment::FILL);
 
 // Stack buttons along the left edge
-panel->create<lysa::ui::Button>("80,30", lysa::ui::Alignment::LEFT, "OK");
-panel->create<lysa::ui::Button>("80,30", lysa::ui::Alignment::LEFT, "Cancel");
+panel->create<lysa::ui::Button>("width=80;height=30", lysa::ui::Alignment::LEFT, "OK");
+panel->create<lysa::ui::Button>("width=80;height=30", lysa::ui::Alignment::LEFT, "Cancel");
 
 // Pin a label to the bottom-right corner
 panel->create<lysa::ui::Text>(lysa::ui::Alignment::CORNERBOTTOMRIGHT, "v1.0");
@@ -226,7 +226,7 @@ container->setSize(w + 20.0f, h + 10.0f);
 
 ```cpp
 const auto edit = panel->create<lysa::ui::TextEdit>(
-    "200,28", lysa::ui::Alignment::CENTER, "Enter name…");
+    "width=200;height=28", lysa::ui::Alignment::CENTER, "Enter name…");
 
 // Read-only mode
 edit->setReadOnly(true);
@@ -259,7 +259,7 @@ const auto imgWidget = panel->create<lysa::ui::Image>(
 
 // Fixed-size image with a color tint
 const auto icon = panel->create<lysa::ui::Image>(
-    "32,32", lysa::ui::Alignment::LEFT, *logo, false);
+    "width=32;height=32", lysa::ui::Alignment::LEFT, *logo, false);
 icon->setColor(lysa::float4{1.0f, 0.5f, 0.5f, 1.0f});
 
 // Swap the image at runtime
@@ -276,12 +276,12 @@ within a numeric range:
 ```cpp
 // Horizontal bar: range 0–100, initial value 50, step 1
 const auto hBar = panel->create<lysa::ui::HScrollBar>(
-    "200,20", lysa::ui::Alignment::BOTTOM,
+    "width=200;height=20", lysa::ui::Alignment::BOTTOM,
     0.0f, 100.0f, 50.0f, 1.0f);
 
 // Vertical bar
 const auto vBar = panel->create<lysa::ui::VScrollBar>(
-    "20,150", lysa::ui::Alignment::RIGHT,
+    "width=20;height=150", lysa::ui::Alignment::RIGHT,
     0.0f, 200.0f, 0.0f, 5.0f);
 
 // Change range and value programmatically
@@ -305,7 +305,7 @@ programmatically, or listen for `UIEvent::OnStateChange`:
 
 ```cpp
 const auto toggle = panel->create<lysa::ui::ToggleButton>(
-    "120,30", lysa::ui::Alignment::CENTER);
+    "width=120;height=30", lysa::ui::Alignment::CENTER);
 toggle->create<lysa::ui::Text>(lysa::ui::Alignment::CENTER, "Fullscreen");
 
 // Set initial state
@@ -328,7 +328,7 @@ vertical scroll bar:
 
 ```cpp
 const auto tree = panel->create<lysa::ui::TreeView>(
-    "250,300", lysa::ui::Alignment::LEFT);
+    "width=250;height=300", lysa::ui::Alignment::LEFT);
 tree->setResources("raised", "flat", "raised");
 
 // Add root items
@@ -359,14 +359,14 @@ and a `Selection` highlight rectangle behind the selected item:
 
 ```cpp
 const auto list = panel->create<lysa::ui::ListBox>(
-    "200,180", lysa::ui::Alignment::LEFT);
+    "width=200;height=180", lysa::ui::Alignment::LEFT);
 // resBox = inner box style, resScroll = scroll bar style, resSel = selection highlight style
 list->setResources("flat", "flat", "flat");
 
 // Add items — each item is an arbitrary Widget
 for (int i = 0; i < 10; ++i) {
     auto label = std::make_shared<lysa::ui::Text>("Item " + std::to_string(i));
-    list->addItem(label, lysa::ui::Alignment::LEFT, "20,20");
+    list->addItem(label, lysa::ui::Alignment::LEFT, "width=20;height=20");
 }
 
 // Programmatic selection
@@ -399,7 +399,7 @@ or the raw value:
 ```cpp
 // Horizontal bar: range 0–100, initial value 30
 const auto bar = panel->create<lysa::ui::HProgressBar>(
-    "200,20", lysa::ui::Alignment::TOP,
+    "width=200;height=20", lysa::ui::Alignment::TOP,
     0.0f, 100.0f, 30.0f);
 bar->setResources("flat");
 
@@ -411,7 +411,7 @@ bar->setValue(75.0f);
 
 // Vertical variant
 const auto vBar = panel->create<lysa::ui::VProgressBar>(
-    "20,150", lysa::ui::Alignment::RIGHT,
+    "width=20;height=150", lysa::ui::Alignment::RIGHT,
     0.0f, 100.0f, 50.0f);
 ```
 
@@ -424,14 +424,14 @@ when its content overflows. Add children via `addContent()` rather than `create<
 
 ```cpp
 const auto sbox = panel->create<lysa::ui::ScrollBox>(
-    "300,200", lysa::ui::Alignment::CENTER);
+    "width=300;height=200", lysa::ui::Alignment::CENTER);
 // resBox = inner box, resVScroll = vertical bar, resHScroll = horizontal bar
 sbox->setResources("flat", "flat", "flat");
 
 // Add content widgets
 for (int i = 0; i < 20; ++i) {
     auto row = std::make_shared<lysa::ui::Text>("Row " + std::to_string(i));
-    sbox->addContent(row, lysa::ui::Alignment::TOPLEFT, "300,20");
+    sbox->addContent(row, lysa::ui::Alignment::TOPLEFT, "width=300;height=20");
 }
 
 // Access the inner box directly if needed
@@ -451,7 +451,7 @@ on top of all sibling widgets. Use it for context menus, tooltips, or floating o
 
 ```cpp
 // Create a popup at position (50, 80) inside uiWindow
-const auto pop = uiWindow->create<lysa::ui::Popup>("120,90", 50.0f, 80.0f);
+const auto pop = uiWindow->create<lysa::ui::Popup>("width=120;height=90", 50.0f, 80.0f);
 pop->create<lysa::ui::Text>(lysa::ui::Alignment::CENTER, "I am a popup!");
 
 // Show or hide it on demand
@@ -482,15 +482,15 @@ Widget resource strings are parsed by the active style. For `StyleClassic`, a re
 can encode the desired size and appearance:
 
 ```cpp
-// "width,height"       — size only, default RAISED
-// "width,height,flat"  — flat appearance
-// "width,height,low"   — lowered appearance
-// "width,height,r,g,b" — custom background color (0–255)
+// "width=W;height=H"                    — size only, default RAISED
+// "width=W;height=H;style=FLAT"         — flat appearance
+// "width=W;height=H;style=LOWERED"      — lowered appearance
+// "width=W;height=H;color=r,g,b,a"      — custom background color (0.0–1.0)
 
-const auto box    = panel->create<lysa::ui::Box>("120,40",        lysa::ui::Alignment::CENTER);
-const auto flat   = panel->create<lysa::ui::Box>("120,40,flat",   lysa::ui::Alignment::CENTER);
-const auto sunken = panel->create<lysa::ui::Box>("120,40,low",    lysa::ui::Alignment::CENTER);
-const auto tinted = panel->create<lysa::ui::Box>("120,40,200,100,50", lysa::ui::Alignment::CENTER);
+const auto box    = panel->create<lysa::ui::Box>("width=120;height=40",                          lysa::ui::Alignment::CENTER);
+const auto flat   = panel->create<lysa::ui::Box>("width=120;height=40;style=FLAT",               lysa::ui::Alignment::CENTER);
+const auto sunken = panel->create<lysa::ui::Box>("width=120;height=40;style=LOWERED",            lysa::ui::Alignment::CENTER);
+const auto tinted = panel->create<lysa::ui::Box>("width=120;height=40;color=0.78,0.39,0.20,1.0", lysa::ui::Alignment::CENTER);
 ```
 
 ---
