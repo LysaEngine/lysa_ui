@@ -132,7 +132,6 @@
 ---@field freezed boolean True if the widget ignores all input events without being visually disabled.
 ---@field overlapping boolean True if this widget visually overlaps one or more siblings. (read-only)
 ---@field children_rect lysa.Rect The smallest Rect enclosing all direct children. (read-only)
----@field refresh fun(self:lysa.ui.Widget):nil Forces a complete visual redraw of the widget and its children.
 ---@field group_index integer User-defined integer tag used to identify widgets within a logical group.
 ---@field transparency number Global alpha multiplier for the widget (0.0 = fully transparent, 1.0 = opaque).
 ---@field resize_children fun(self:lysa.ui.Widget):nil Triggers a layout pass that repositions and resizes all direct children according to their alignment.

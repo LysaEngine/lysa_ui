@@ -725,7 +725,6 @@ namespace lysa::ui {
             .addProperty("default_font_scale", &WindowManager::getDefaultFontScale, &WindowManager::setDefaultFontScale)
             .addProperty("default_text_color", &WindowManager::getDefaultTextColor, &WindowManager::setDefaultTextColor)
             .addProperty("aspect_ratio", &WindowManager::getAspectRatio)
-            .addFunction("refresh", &WindowManager::refresh)
             .addProperty("resize_delta", &WindowManager::getResizeDelta)
             .addFunction("set_enable_window_resizing", &WindowManager::setEnableWindowResizing)
         .endClass()

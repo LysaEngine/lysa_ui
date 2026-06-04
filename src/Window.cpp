@@ -258,9 +258,6 @@ namespace lysa::ui {
     }
 
     void Window::refresh() {
-        if (windowManager) {
-            static_cast<WindowManager*>(windowManager)->refresh();
-        }
         dirty = true;
     }
 

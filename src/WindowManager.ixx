@@ -88,11 +88,6 @@ export namespace lysa::ui {
         float getAspectRatio() const { return renderingWindow.getRenderTarget().getAspectRatio(); }
 
         /**
-         * Forces a redrawing of all the UI at the start of the next frame.
-         */
-        void refresh() { dirty = true; }
-
-        /**
          * Returns the 2D renderer used by the manager.
          */
         Vector2DRenderer& getRenderer() { return renderer; }
@@ -129,7 +124,6 @@ export namespace lysa::ui {
         std::set<std::shared_ptr<Window>> removedWindows{};
         std::shared_ptr<Window> focusedWindow{nullptr};
         std::shared_ptr<Window> resizedWindow{nullptr};
-        bool dirty{false};
         bool enableWindowResizing{true};
         bool resizingWindow{false};
         bool resizingWindowOriginBorder{false};
