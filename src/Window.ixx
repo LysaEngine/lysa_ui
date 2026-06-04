@@ -386,11 +386,11 @@ export namespace lysa::ui {
 
         void setTextColor(const float4& color) { textColor = color; }
 
-        void refresh();
+        void refresh() const;
 
         void eventCreate();
 
-        void eventDestroy();
+        void eventDestroy(Vector2DRenderer& renderer);
 
         void eventShow();
 
@@ -436,6 +436,8 @@ export namespace lysa::ui {
             visibilityChanged = false;
         }
 
+        Vector2DRenderer& getRenderer() const;
+
     private:
         Rect rect;
         float minWidth{2.0f};
@@ -454,8 +456,6 @@ export namespace lysa::ui {
         bool visibilityChange{false};
         std::shared_ptr<Font> font{nullptr};
         float fontScale{1.0f};
-        unique_id drawSession{INVALID_ID};
-        bool dirty{false};
 
         void unFreeze(const std::shared_ptr<Widget> &);
     };

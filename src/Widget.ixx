@@ -338,7 +338,7 @@ export namespace lysa::ui {
         /**
          * Force a refresh of the entire widget.
          */
-        void refresh() const;
+        void refresh();
 
         /**
          * Changes widget resources.
@@ -412,7 +412,7 @@ export namespace lysa::ui {
 
         virtual void eventCreate();
 
-        virtual void eventDestroy();
+        virtual void eventDestroy(Vector2DRenderer& renderer);
 
         virtual void eventShow();
 
@@ -458,7 +458,7 @@ export namespace lysa::ui {
 
         virtual std::list<std::shared_ptr<Widget>>& _getChildren() { return children; }
 
-        void _draw(Vector2DRenderer &) const;
+        void _draw(Vector2DRenderer &renderer);
 
         void _setWindow(void* window) { this->window = window; }
 
@@ -513,6 +513,13 @@ export namespace lysa::ui {
         int32 groupIndex{0};
         Rect childrenRect;
         std::shared_ptr<Font> font{nullptr};
+        bool dirty{true};
+        unique_id drawSessionBefore{INVALID_ID};
+        unique_id drawSessionAfter{INVALID_ID};
+
+        void clearDrawSessions() const;
+
+        void changeDrawVisibility(bool visible);
 
         std::shared_ptr<Widget> setNextFocus();
     };

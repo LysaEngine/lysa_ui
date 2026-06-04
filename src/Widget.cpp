@@ -19,16 +19,32 @@ namespace lysa::ui {
 
     Widget::Widget( const Type type) : type{type} {}
 
-    void Widget::_draw(Vector2DRenderer &R) const {
-        if (!isVisible()) {
+    void Widget::_draw(Vector2DRenderer &renderer) {
+        if (!isVisible() || (!dirty)) {
             return;
         }
+        dirty = false;
+        drawSessionBefore = renderer.beginDraw(drawSessionBefore);
         const auto *s = static_cast<Style *>(style);
-        s->draw(*this, *resource, R, true);
+        s->draw(*this, *resource, renderer, true);
+        renderer.endDraw();
         for (auto &child : children) {
-            child->_draw(R);
+            child->_draw(renderer);
         }
-        s->draw(*this, *resource, R, false);
+        drawSessionAfter = renderer.beginDraw(drawSessionAfter);
+        s->draw(*this, *resource, renderer, false);
+        renderer.endDraw();
+    }
+
+    void Widget::clearDrawSessions() const {
+        if (window != nullptr) {
+            auto& renderer = static_cast<Window*>(window)->getRenderer();
+            renderer.clearSession(drawSessionBefore);
+            renderer.clearSession(drawSessionAfter);
+        }
+        for (auto &child : children) {
+            child->clearDrawSessions();
+        }
     }
 
     bool Widget::isVisible() const {
@@ -38,12 +54,26 @@ namespace lysa::ui {
                 return false;
             }
         } while ((p = p->parent) != nullptr);
-        return (window && static_cast<lysa::ui::Window *>(window)->isVisible());
+        return (window && static_cast<Window*>(window)->isVisible());
+    }
+
+    void Widget::changeDrawVisibility(const bool visible) {
+        if (window) {
+            auto& renderer = static_cast<Window*>(window)->getRenderer();
+            renderer.setVisible(drawSessionBefore, visible);
+            renderer.setVisible(drawSessionAfter, visible);
+            for (auto& child : children) {
+                child->changeDrawVisibility(visible);
+            }
+        }
     }
 
     void Widget::setVisible(const bool show) {
         if (visible == show) { return; }
         visible = show;
+        clearDrawSessions();
+        // changeDrawVisibility(visible);
+
         if (visible) {
             eventShow();
         } else {
@@ -54,6 +84,7 @@ namespace lysa::ui {
     void Widget::enable(const bool isEnabled) {
         if (enabled == isEnabled) { return; }
         enabled = isEnabled;
+        clearDrawSessions();
         if (enabled) {
             eventEnable();
         } else {
@@ -181,6 +212,7 @@ namespace lysa::ui {
     }
 
     void Widget::removeAll() {
+        clearDrawSessions();
         for (const auto &child : children) {
             child->removeAll();
         }
@@ -192,9 +224,11 @@ namespace lysa::ui {
         ctx().events.push({UIEvent::OnCreate,  UIEvent{}, id});
     }
 
-    void Widget::eventDestroy() {
+    void Widget::eventDestroy(Vector2DRenderer& renderer) {
+        renderer.clearSession(drawSessionBefore);
+        renderer.clearSession(drawSessionAfter);
         for (const auto &child : children) {
-            child->eventDestroy();
+            child->eventDestroy(renderer);
         }
         ctx().events.push({UIEvent::OnDestroy,  UIEvent{}, id});
         children.clear();
@@ -623,9 +657,11 @@ namespace lysa::ui {
         eventResize();
     }
 
-    void Widget::refresh() const {
-        if ((!freeze) && (window)) {
-            static_cast<Window *>(window)->refresh();
+    void Widget::refresh() {
+        if (freeze) { return; }
+        dirty = true;
+        for (auto &w : children) {
+            w->refresh();
         }
     }
 

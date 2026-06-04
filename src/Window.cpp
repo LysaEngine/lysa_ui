@@ -42,17 +42,18 @@ namespace lysa::ui {
         }
     }
 
+    Vector2DRenderer& Window::getRenderer() const {
+        return static_cast<WindowManager*>(windowManager)->getRenderer();
+    }
+
     void Window::draw() {
-        if (!isVisible() || !dirty) {
+        if (!isVisible()) {
             return;
         }
-        dirty = false;
         Vector2DRenderer& renderer = static_cast<WindowManager*>(windowManager)->getRenderer();
         renderer.setTranslate({rect.x, rect.y});
         renderer.setTransparency(1.0f - transparency);
-        drawSession = renderer.beginDraw(drawSession);
         widget->_draw(renderer);
-        renderer.endDraw();
     }
 
     void Window::unFreeze(const std::shared_ptr<Widget> &widget) {
@@ -136,8 +137,8 @@ namespace lysa::ui {
         if (widget != nullptr) { widget->resizeChildren(); }
     }
 
-    void Window::eventDestroy() {
-        if (widget) { widget->eventDestroy(); }
+    void Window::eventDestroy(Vector2DRenderer& renderer) {
+        if (widget) { widget->eventDestroy(renderer); }
         // emit(UIEvent::OnDestroy);
         onDestroy();
         widget.reset();
@@ -257,8 +258,10 @@ namespace lysa::ui {
         return consumed;
     }
 
-    void Window::refresh() {
-        dirty = true;
+    void Window::refresh() const {
+        if (widget) {
+            widget->refresh();
+        }
     }
 
     void Window::setFocusedWidget(const std::shared_ptr<Widget> &W) {

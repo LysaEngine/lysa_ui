@@ -39,7 +39,7 @@ namespace lysa::ui {
         if (onInputHandler) ctx().events.unsubscribe(onInputHandler);
         if (onProcessHandler) ctx().events.unsubscribe(onProcessHandler);
         for (const auto& window: windows) {
-            window->eventDestroy();
+            window->eventDestroy(renderer);
         }
         windows.clear();
     }
@@ -49,7 +49,7 @@ namespace lysa::ui {
         for(const auto&window : removedWindows) {
             window->_detach();
             if (window->isVisible()) { window->eventHide(); }
-            window->eventDestroy();
+            window->eventDestroy(renderer);
             windows.remove(window);
         }
         removedWindows.clear();
