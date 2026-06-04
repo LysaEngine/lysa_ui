@@ -90,7 +90,7 @@ export namespace lysa::ui {
         /**
          * Forces a redrawing of all the UI at the start of the next frame.
          */
-        void refresh() { needRedraw = true; }
+        void refresh() { dirty = true; }
 
         /**
          * Returns the 2D renderer used by the manager.
@@ -129,7 +129,7 @@ export namespace lysa::ui {
         std::set<std::shared_ptr<Window>> removedWindows{};
         std::shared_ptr<Window> focusedWindow{nullptr};
         std::shared_ptr<Window> resizedWindow{nullptr};
-        bool needRedraw{false};
+        bool dirty{false};
         bool enableWindowResizing{true};
         bool resizingWindow{false};
         bool resizingWindowOriginBorder{false};

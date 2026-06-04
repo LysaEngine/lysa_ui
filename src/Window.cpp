@@ -43,9 +43,10 @@ namespace lysa::ui {
     }
 
     void Window::draw() {
-        if (!isVisible()) {
+        if (!isVisible() || !dirty) {
             return;
         }
+        dirty = false;
         Vector2DRenderer& renderer = static_cast<WindowManager*>(windowManager)->getRenderer();
         renderer.setTranslate({rect.x, rect.y});
         renderer.setTransparency(1.0f - transparency);
@@ -256,8 +257,11 @@ namespace lysa::ui {
         return consumed;
     }
 
-    void Window::refresh() const {
-        if (windowManager) { static_cast<WindowManager*>(windowManager)->refresh(); }
+    void Window::refresh() {
+        if (windowManager) {
+            static_cast<WindowManager*>(windowManager)->refresh();
+        }
+        dirty = true;
     }
 
     void Window::setFocusedWidget(const std::shared_ptr<Widget> &W) {

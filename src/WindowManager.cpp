@@ -51,13 +51,13 @@ namespace lysa::ui {
             if (window->isVisible()) { window->eventHide(); }
             window->eventDestroy();
             windows.remove(window);
-            needRedraw = true;
+            dirty = true;
         }
         removedWindows.clear();
         for (auto& window: windows) {
             if (window->_isVisibilityChanged()) {
                 window->_commitVisibility();
-                needRedraw = true;
+                dirty = true;
                 if (window->isVisible()) {
                     if (focusedWindow) { focusedWindow->eventLostFocus(); }
                     focusedWindow = window;
@@ -77,10 +77,11 @@ namespace lysa::ui {
                 }
             }
         }
-        if (!needRedraw) { return; }
-        needRedraw = false;
-        for (const auto& window: windows) {
-            window->draw();
+        if (dirty) {
+            dirty = false;
+            for (const auto& window: windows) {
+                window->draw();
+            }
         }
     }
 
@@ -92,7 +93,7 @@ namespace lysa::ui {
         }
         window->eventCreate();
         if (window->isVisible()) { window->eventShow(); }
-        needRedraw = true;
+        dirty = true;
         return window;
     }
 

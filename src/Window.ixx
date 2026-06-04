@@ -21,8 +21,6 @@ export namespace lysa::ui {
 
     /**
      * A virtual UI Window displayed inside a rendering Window.
-     *
-     * All UI widgets must belong to a UI window.
      */
     class Window : public UniqueResource, public std::enable_shared_from_this<Window> {
     public:
@@ -388,7 +386,7 @@ export namespace lysa::ui {
 
         void setTextColor(const float4& color) { textColor = color; }
 
-        void refresh() const;
+        void refresh();
 
         void eventCreate();
 
@@ -457,6 +455,7 @@ export namespace lysa::ui {
         std::shared_ptr<Font> font{nullptr};
         float fontScale{1.0f};
         unique_id drawSession{INVALID_ID};
+        bool dirty{false};
 
         void unFreeze(const std::shared_ptr<Widget> &);
     };
