@@ -519,7 +519,7 @@ export namespace lysa::ui {
 
         void clearDrawSessions() const;
 
-        void changeDrawVisibility(bool visible);
+        void changeDrawVisibility() const;
 
         std::shared_ptr<Widget> setNextFocus();
     };

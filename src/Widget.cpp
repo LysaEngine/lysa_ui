@@ -28,7 +28,7 @@ namespace lysa::ui {
         const auto *s = static_cast<Style *>(style);
         s->draw(*this, *resource, renderer, true);
         renderer.endDraw();
-        for (auto &child : children) {
+        for (const auto &child : children) {
             child->_draw(renderer);
         }
         drawSessionAfter = renderer.beginDraw(drawSessionAfter);
@@ -57,13 +57,14 @@ namespace lysa::ui {
         return (window && static_cast<Window*>(window)->isVisible());
     }
 
-    void Widget::changeDrawVisibility(const bool visible) {
+    void Widget::changeDrawVisibility() const {
         if (window) {
             auto& renderer = static_cast<Window*>(window)->getRenderer();
-            renderer.setVisible(drawSessionBefore, visible);
-            renderer.setVisible(drawSessionAfter, visible);
-            for (auto& child : children) {
-                child->changeDrawVisibility(visible);
+            const auto v = isVisible();
+            renderer.setVisible(drawSessionBefore, v);
+            renderer.setVisible(drawSessionAfter, v);
+            for (const auto& child : children) {
+                child->changeDrawVisibility();
             }
         }
     }
@@ -71,8 +72,8 @@ namespace lysa::ui {
     void Widget::setVisible(const bool show) {
         if (visible == show) { return; }
         visible = show;
-        clearDrawSessions();
-        // changeDrawVisibility(visible);
+        // clearDrawSessions();
+        changeDrawVisibility();
 
         if (visible) {
             eventShow();
