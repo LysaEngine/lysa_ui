@@ -49,6 +49,9 @@ export namespace lysa::ui {
      */
     class HLine : public Line {
     public:
+        /**
+         * Creates a horizontal line widget.
+         */
         HLine() : Line(HORIZ) {}
     };
 
@@ -58,6 +61,9 @@ export namespace lysa::ui {
      */
     class VLine : public Line {
     public:
+        /**
+         * Creates a vertical line widget.
+         */
         VLine() : Line(VERT) {}
     };
 }

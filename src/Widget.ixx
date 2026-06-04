@@ -122,8 +122,14 @@ export namespace lysa::ui {
          */
         virtual void setSize(float width, float height);
 
+        /**
+         * Resizes the widget width, in pixels.
+         */
         void setWidth(const float width) { setSize(width, getHeight()); }
 
+        /**
+         * Resizes the widget height, in pixels.
+         */
         void setHeight(const float height) { setSize(getWidth(), height); }
 
         /**
@@ -367,11 +373,12 @@ export namespace lysa::ui {
 
 #ifdef LUA_BINDINGS
         /**
-        * Returns the Lua user data.
-        */
+         * Returns the Lua user data.
+         */
         luabridge::LuaRef getLuaUserData() const { return luaUserData; }
 
         /**
+         * Sets the Lua user data.
          */
         void setLuaUserData(const luabridge::LuaRef& data) { luaUserData = data; }
 #endif
@@ -408,42 +415,122 @@ export namespace lysa::ui {
          */
         void setChildrenOffset(float x, float y);
 
-        std::shared_ptr<Widget> setFocus(bool = true);
+        /**
+         * Requests keyboard focus for this widget.
+         * @param focus True to request focus, false to release it.
+         * @return Shared pointer to this widget.
+         */
+        std::shared_ptr<Widget> setFocus(bool focus = true);
 
+        /**
+         * Called after the widget is created and added to its parent.
+         */
         virtual void eventCreate();
 
+        /**
+         * Called before the widget is destroyed.
+         * @param renderer The 2D renderer to release any associated resources.
+         */
         virtual void eventDestroy(Vector2DRenderer& renderer);
 
+        /**
+         * Called when the widget becomes visible.
+         */
         virtual void eventShow();
 
+        /**
+         * Called when the widget is hidden.
+         */
         virtual void eventHide();
 
+        /**
+         * Called when the widget is enabled.
+         */
         virtual void eventEnable();
 
+        /**
+         * Called when the widget is disabled.
+         */
         virtual void eventDisable();
 
+        /**
+         * Called when the widget position changes.
+         * @param x New X position.
+         * @param y New Y position.
+         */
         virtual void eventMove(float x, float y);
 
+        /**
+         * Called when the widget is resized.
+         */
         virtual void eventResize();
 
+        /**
+         * Called on a text input event.
+         * @param text The input text.
+         * @return True if the event was consumed.
+         */
         virtual bool eventTextInput(const std::string& text);
 
+        /**
+         * Called when a keyboard key is pressed.
+         * @param key The key pressed.
+         * @return True if the event was consumed.
+         */
         virtual bool eventKeyDown(Key key);
 
+        /**
+         * Called when a keyboard key is released.
+         * @param key The key released.
+         * @return True if the event was consumed.
+         */
         virtual bool eventKeyUp(Key key);
 
+        /**
+         * Called when a mouse button is pressed over the widget.
+         * @param button The mouse button pressed.
+         * @param x Mouse X coordinate.
+         * @param y Mouse Y coordinate.
+         * @return True if the event was consumed.
+         */
         virtual bool eventMouseDown(MouseButton button, float x, float y);
 
+        /**
+         * Called when a mouse button is released over the widget.
+         * @param button The mouse button released.
+         * @param x Mouse X coordinate.
+         * @param y Mouse Y coordinate.
+         * @return True if the event was consumed.
+         */
         virtual bool eventMouseUp(MouseButton button, float x, float y);
 
-        virtual bool eventMouseMove(uint32, float x, float y);
+        /**
+         * Called when the mouse is moved over the widget.
+         * @param buttonsState State of mouse buttons.
+         * @param x Mouse X coordinate.
+         * @param y Mouse Y coordinate.
+         * @return True if the event was consumed.
+         */
+        virtual bool eventMouseMove(uint32 buttonsState, float x, float y);
 
+        /**
+         * Called when the widget gains keyboard focus.
+         */
         virtual void eventGotFocus();
 
+        /**
+         * Called when the widget loses keyboard focus.
+         */
         virtual void eventLostFocus();
 
+        /**
+         * Returns true if the widget consumes mouse events (prevents propagation to parent).
+         */
         bool getConsumeMouseEvent() const { return consumeMouseEvent; }
 
+        /**
+         * Sets whether mouse events are consumed by this widget (preventing propagation to parent).
+         */
         void setConsumeMouseEvent(const bool consumeMouseEvent) {
             this->consumeMouseEvent = consumeMouseEvent;
         }

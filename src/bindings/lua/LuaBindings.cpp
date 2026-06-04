@@ -150,7 +150,7 @@ namespace lysa::ui {
                 +[](Widget* self, const bool v = true){ self->enable(v); })
             .addFunction("set_pos", &Widget::setPos)
             .addProperty("width", &Widget::getWidth, &Widget::setWidth)
-            .addProperty("height", &Widget::getHeight)
+            .addProperty("height", &Widget::getHeight, &Widget::setHeight)
             .addFunction("set_size", &Widget::setSize)
             .addProperty("rect",
                 &Widget::getRect,
@@ -178,6 +178,14 @@ namespace lysa::ui {
             .addProperty("group_index", &Widget::getGroupIndex, &Widget::setGroupIndex)
             .addProperty("transparency", &Widget::getTransparency, &Widget::setTransparency)
             .addFunction("resize_children", &Widget::resizeChildren)
+            .addFunction("set_focus",
+                +[](Widget* self, const bool focus = true) -> std::shared_ptr<Widget> {
+                    return self->setFocus(focus);
+                })
+            .addProperty("consume_mouse_event", &Widget::getConsumeMouseEvent, &Widget::setConsumeMouseEvent)
+            .addProperty("children_offset_x", &Widget::getChildrenOffsetX)
+            .addProperty("children_offset_y", &Widget::getChildrenOffsetY)
+            .addFunction("set_children_offset", &Widget::setChildrenOffset)
             .addFunction("create_text",
                 +[](Widget* self, const int alignment, const std::string& text) -> std::shared_ptr<Text> {
                     return self->create<Text>(static_cast<Alignment>(alignment), text);
@@ -552,6 +560,7 @@ namespace lysa::ui {
             .addProperty("minimum_height", &Window::getMinimumHeight)
             .addProperty("maximum_width", &Window::getMaximumWidth)
             .addProperty("maximum_height", &Window::getMaximumHeight)
+            .addProperty("aspect_ratio", &Window::getAspectRatio)
             .addProperty("font", &Window::getFont, &Window::setFont)
             .addProperty("font_scale", &Window::getFontScale, &Window::setFontScale)
             .addProperty("text_color", &Window::getTextColor, &Window::setTextColor)

@@ -127,14 +127,20 @@
 ---@field vborder number Vertical inset between the widget edges and its content area.
 ---@field hborder number Horizontal inset between the widget edges and its content area.
 ---@field draw_background boolean False if the widget's background should be drawn transparently.
----@field pushed boolean True if the widget is currently in a pressed state (e.g. mouse button held down over it). (read-only)
+---@field pushed boolean True if the widget is currently in a pressed state (e.g. mouse button held down over it).
 ---@field pointed boolean True if the mouse cursor is currently over this widget. (read-only)
 ---@field freezed boolean True if the widget ignores all input events without being visually disabled.
 ---@field overlapping boolean True if this widget visually overlaps one or more siblings. (read-only)
 ---@field children_rect lysa.Rect The smallest Rect enclosing all direct children. (read-only)
 ---@field group_index integer User-defined integer tag used to identify widgets within a logical group.
 ---@field transparency number Global alpha multiplier for the widget (0.0 = fully transparent, 1.0 = opaque).
+---@field refresh fun(self:lysa.ui.Widget):nil Forces a full redraw of the widget on the next frame.
 ---@field resize_children fun(self:lysa.ui.Widget):nil Triggers a layout pass that repositions and resizes all direct children according to their alignment.
+---@field set_focus fun(self:lysa.ui.Widget, focus:boolean|nil):lysa.ui.Widget Requests keyboard focus for this widget (pass nil or true to acquire, false to release). Returns the widget itself.
+---@field consume_mouse_event boolean When true, mouse events are consumed by this widget and not propagated to its parent.
+---@field children_offset_x number Horizontal scroll offset subtracted from child positions during layout (read-only; use set_children_offset to change).
+---@field children_offset_y number Vertical scroll offset subtracted from child positions during layout (read-only; use set_children_offset to change).
+---@field set_children_offset fun(self:lysa.ui.Widget, x:number, y:number):nil Sets the scroll offset applied to children during layout, enabling scrollable content.
 ---@field create_text fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text child widget with the given alignment and initial text. @overload
 ---@field create_text fun(self:lysa.ui.Widget, resource:string, alignment:lysa.ui.Alignment, text:string):lysa.ui.Text Creates and adds a Text child widget, loading its style from a resource string. @overload
 ---@field create_panel fun(self:lysa.ui.Widget, alignment:lysa.ui.Alignment):lysa.ui.Panel Creates and adds a Panel child widget with the given alignment. @overload
@@ -207,7 +213,7 @@
 ---@class lysa.ui.Text : lysa.ui.Widget A single-line read-only text label.
 ---@field text string The string displayed by this label.
 ---@field text_color lysa.float4 RGBA color of the displayed text.
----@field size lysa.float2 Rendered pixel size of the text as (width, height). (read-only)
+---@field get_size fun(self:lysa.ui.Text):number, number Returns the rendered pixel size of the text as (width, height).
 
 ---@class lysa.ui.TextEdit : lysa.ui.Widget A single-line editable text input field. Fires OnTextChange and OnTextInput events.
 ---@field is_read_only boolean True if the field is read-only; the user can view but not edit the text.
@@ -306,6 +312,7 @@
 ---@field minimum_height number The minimum height the window can be resized to. (read-only)
 ---@field maximum_width number The maximum width the window can be resized to. (read-only)
 ---@field maximum_height number The maximum height the window can be resized to. (read-only)
+---@field aspect_ratio number Aspect ratio (width / height) of the Window client area. (read-only)
 ---@field font lysa.Font The default font applied to widgets that do not specify their own.
 ---@field font_scale number The default font scale applied to widgets that do not specify their own.
 ---@field text_color lysa.float4 The default text RGBA color applied to widgets that do not specify their own.
@@ -362,7 +369,6 @@
 ---@field default_font_scale number The default font scale applied to new windows that do not specify their own.
 ---@field default_text_color lysa.float4 The default text RGBA color applied to new windows that do not specify their own.
 ---@field aspect_ratio number The aspect ratio of the rendering window this manager is attached to. (read-only)
----@field refresh fun(self:lysa.ui.WindowManager):nil Forces a full redraw of all managed windows at the start of the next frame.
 ---@field resize_delta number Pixel distance from a window border within which a drag starts a resize operation (default 5.0). (read-only)
 ---@field set_enable_window_resizing fun(self:lysa.ui.WindowManager, enable:boolean):nil Globally enables or disables user-driven window resizing by dragging borders.
 

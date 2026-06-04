@@ -88,6 +88,12 @@ export namespace lysa::ui {
      */
     class VProgressBar : public ProgressBar {
     public:
+        /**
+         * Creates a vertical progress bar.
+         * @param min Minimum value.
+         * @param max Maximum value.
+         * @param value Initial value.
+         */
         VProgressBar(const float min = 0, const float max = 0, const float value = 0):
             ProgressBar(VERTICAL, min, max, 1, value) {
         }
@@ -98,6 +104,12 @@ export namespace lysa::ui {
      */
     class HProgressBar : public ProgressBar {
     public:
+        /**
+         * Creates a horizontal progress bar.
+         * @param min Minimum value.
+         * @param max Maximum value.
+         * @param value Initial value.
+         */
         HProgressBar(const float min = 0, const float max = 0, const float value = 0):
             ProgressBar(HORIZONTAL, min, max, 1, value) {
         }

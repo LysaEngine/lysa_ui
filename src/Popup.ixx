@@ -40,6 +40,9 @@ export namespace lysa::ui {
          */
         float getY() const { return posY; }
 
+        /**
+         * Positions the popup at its fixed (x, y) coordinates after creation.
+         */
         void eventCreate() override {
             Panel::eventCreate();
             setPos(posX, posY);

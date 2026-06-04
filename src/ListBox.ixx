@@ -24,6 +24,9 @@ export namespace lysa::ui {
      */
     class ListBox : public List {
     public:
+        /**
+         * Creates a default ListBox widget.
+         */
         ListBox();
 
         int32 addItem(
@@ -31,6 +34,10 @@ export namespace lysa::ui {
             Alignment alignment = Alignment::LEFT,
             const std::string& resource = "") override;
 
+        /**
+         * Removes the item at the given index and updates the scroll range.
+         * @param index Index (0-based) of the item to remove.
+         */
         void removeItem(int32 index) override;
 
         /**

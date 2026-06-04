@@ -17,6 +17,9 @@ export namespace lysa::ui {
      */
     class ToggleButton : public CheckWidget {
     public:
+        /**
+         * Creates a default ToggleButton widget.
+         */
         ToggleButton();
 
     protected:

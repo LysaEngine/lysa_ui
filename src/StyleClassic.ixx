@@ -36,10 +36,28 @@ export namespace lysa::ui {
     public:
         ~StyleClassic() override = default;
 
+        /**
+         * Draws a widget using the classic 3D look.
+         * @param widget Widget to draw.
+         * @param resources Resources used for drawing.
+         * @param renderer The 2D renderer.
+         * @param before True when called before drawing children, false after.
+         */
         void draw(const Widget &widget, UIResource &resources, Vector2DRenderer &renderer, bool before) const override;
 
+        /**
+         * Parses and applies a resource description string to a widget.
+         * @param widget Widget to associate resources with.
+         * @param resources String describing the style resources.
+         */
         void addResource(Widget &widget, const std::string &resources) override;
 
+        /**
+         * Adjusts widget size to classic style constraints (borders, padding, etc.).
+         * @param widget The widget being resized.
+         * @param rect The rectangle to adjust.
+         * @param resources The widget's UI resources.
+         */
         void resize(Widget &widget, Rect &rect, UIResource &resources) override;
 
     private:

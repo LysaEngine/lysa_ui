@@ -35,6 +35,13 @@ export namespace lysa::ui {
          */
         virtual void setState(State newState);
 
+        /**
+         * Called when a mouse button is pressed; toggles the check state.
+         * @param button The mouse button pressed.
+         * @param x Mouse X coordinate.
+         * @param y Mouse Y coordinate.
+         * @return True if the event was consumed.
+         */
         bool eventMouseDown(MouseButton button, float x, float y) override;
 
     protected:

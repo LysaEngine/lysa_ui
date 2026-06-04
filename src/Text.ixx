@@ -35,7 +35,8 @@ export namespace lysa::ui {
         void setText(const std::string& text);
 
         /**
-         * @param c The new color.
+         * Sets the text color.
+         * @param c The new RGBA color.
          */
         void setTextColor(const float4 &c);
 
@@ -56,6 +57,9 @@ export namespace lysa::ui {
          */
         void getSize(float &width, float &height) const;
 
+        /**
+         * Resizes the widget and updates the text layout.
+         */
         void setSize(float width, float height) override;
 
     // protected:

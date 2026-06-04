@@ -78,8 +78,14 @@ export namespace lysa::ui {
          */
         float4 getDefaultTextColor() const { return textColor; }
 
+        /**
+         * Sets the default font scale.
+         */
         void setDefaultFontScale(const float defaultFontScale) { fontScale = defaultFontScale; }
 
+        /**
+         * Sets the default text color.
+         */
         void setDefaultTextColor(const float4& defaultTextColor) { textColor = defaultTextColor; }
 
         /**

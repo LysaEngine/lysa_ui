@@ -38,6 +38,9 @@ export namespace lysa::ui {
             Item(const std::shared_ptr<Widget>& item) : item{item} {}
         };
 
+        /**
+         * Creates a default TreeView widget.
+         */
         TreeView();
 
         /**

@@ -190,8 +190,14 @@ export namespace lysa::ui {
          */
         void setPos(const float2& pos);
 
+        /**
+         * Returns the X position of the Window, bottom-left.
+         */
         float getX() const { return rect.x; }
 
+        /**
+         * Returns the Y position of the Window, bottom-left.
+         */
         float getY() const { return rect.y; }
 
         /**
@@ -209,6 +215,9 @@ export namespace lysa::ui {
          */
         const auto& getRect() const { return rect; }
 
+        /**
+         * Returns the aspect ratio (width / height) of the Window client area.
+         */
         float getAspectRatio() const;
 
         /**
@@ -380,12 +389,18 @@ export namespace lysa::ui {
         void setFontScale(float fontScale);
 
         /**
-         * Returns the default text color.
+         * chekcheckReturns the default text color.
          */
         auto& getTextColor() const { return textColor; }
 
+        /**
+         * Sets the default text color.
+         */
         void setTextColor(const float4& color) { textColor = color; }
 
+        /**
+         * Forces a full redraw of the Window on the next frame.
+         */
         void refresh() const;
 
         void eventCreate();
@@ -436,6 +451,9 @@ export namespace lysa::ui {
             visibilityChanged = false;
         }
 
+        /**
+         * Returns the 2D renderer associated with this Window.
+         */
         Vector2DRenderer& getRenderer() const;
 
     private:

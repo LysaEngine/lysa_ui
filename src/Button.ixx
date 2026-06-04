@@ -17,6 +17,9 @@ export namespace lysa::ui {
      */
     class Button : public Box {
     public:
+        /**
+         * Creates a default Button widget.
+         */
         Button();
 
     protected:

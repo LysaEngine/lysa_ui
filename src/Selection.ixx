@@ -16,6 +16,9 @@ export namespace lysa::ui {
      */
     class Selection : public Panel {
     public:
+        /**
+         * Creates a default Selection highlight widget.
+         */
         Selection(): Panel{SELECTION} {}
     };
 

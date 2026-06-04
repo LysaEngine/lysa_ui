@@ -21,6 +21,10 @@ export namespace lysa::ui {
         //! Value returned by getSelectedIndex() when nothing is selected.
         static constexpr int32 NO_SELECTION{-1};
 
+        /**
+         * Creates a List widget of the given type.
+         * @param type The concrete widget type (used by subclasses).
+         */
         List(Type type);
 
         /**

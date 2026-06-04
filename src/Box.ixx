@@ -16,6 +16,9 @@ export namespace lysa::ui {
      */
     class Box : public Panel {
     public:
+        /**
+         * Creates a default Box widget.
+         */
         Box(): Panel{BOX} {}
 
     protected:

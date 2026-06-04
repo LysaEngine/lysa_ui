@@ -22,6 +22,9 @@ export namespace lysa::ui {
      */
     class ScrollBox : public Box {
     public:
+        /**
+         * Creates a default ScrollBox widget.
+         */
         ScrollBox();
 
         /**

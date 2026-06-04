@@ -61,6 +61,9 @@ export namespace lysa::ui {
          */
         void setImage(const std::string& uri);
 
+        /**
+         * Resizes the widget; ignored when fixedSize was set at construction.
+         */
         void setSize(float width, float height) override;
 
         /**
