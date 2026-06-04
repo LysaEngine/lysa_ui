@@ -42,14 +42,16 @@ namespace lysa::ui {
         }
     }
 
-    void Window::draw() const {
+    void Window::draw() {
         if (!isVisible()) {
             return;
         }
         Vector2DRenderer& renderer = static_cast<WindowManager*>(windowManager)->getRenderer();
         renderer.setTranslate({rect.x, rect.y});
         renderer.setTransparency(1.0f - transparency);
+        drawSession = renderer.beginDraw(drawSession);
         widget->_draw(renderer);
+        renderer.endDraw();
     }
 
     void Window::unFreeze(const std::shared_ptr<Widget> &widget) {

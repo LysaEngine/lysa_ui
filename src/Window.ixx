@@ -418,7 +418,7 @@ export namespace lysa::ui {
 
         void eventLostFocus();
 
-        void draw() const;
+        void draw();
 
         void attach(void* windowManager);
 
@@ -456,6 +456,7 @@ export namespace lysa::ui {
         bool visibilityChange{false};
         std::shared_ptr<Font> font{nullptr};
         float fontScale{1.0f};
+        unique_id drawSession{INVALID_ID};
 
         void unFreeze(const std::shared_ptr<Widget> &);
     };

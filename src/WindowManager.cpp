@@ -79,7 +79,6 @@ namespace lysa::ui {
         }
         if (!needRedraw) { return; }
         needRedraw = false;
-        renderer.restart();
         for (const auto& window: windows) {
             window->draw();
         }
