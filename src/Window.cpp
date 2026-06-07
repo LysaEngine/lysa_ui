@@ -156,8 +156,7 @@ namespace lysa::ui {
 
         bool consumed = false;
         if (focusedWidget) {
-            focusedWidget->eventKeyDown(K);
-            consumed = true;
+            consumed |= focusedWidget->eventKeyDown(K);
         }
         if (!consumed) {
             consumed |= onKeyDown(K);
@@ -175,8 +174,7 @@ namespace lysa::ui {
 
         bool consumed = false;
         if (focusedWidget) {
-            focusedWidget->eventKeyUp(K);
-            consumed = true;
+            consumed |= focusedWidget->eventKeyUp(K);
         }
         if (!consumed) {
             consumed |= onKeyUp(K);

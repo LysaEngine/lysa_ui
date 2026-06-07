@@ -529,7 +529,7 @@ namespace lysa::ui {
     }
 
     bool Widget::eventKeyDown(const Key key) {
-        if (!enabled) {
+        if (!enabled || !isVisible()) {
             return false;
         }
         ctx().events.push({UIEvent::OnKeyDown, UIEventKeyb{.key = key}, id});
@@ -537,7 +537,7 @@ namespace lysa::ui {
     }
 
     bool Widget::eventKeyUp(const Key key) {
-        if (!enabled) {
+        if (!enabled || !isVisible()) {
             return false;
         }
         if (focused) {
@@ -548,7 +548,7 @@ namespace lysa::ui {
     }
 
     bool Widget::eventMouseDown(const MouseButton button, const float x, const float y) {
-        if (!enabled || !visible || !rect.contains(x, y)) { return false;}
+        if (!enabled || !isVisible() || !rect.contains(x, y)) { return false;}
         pushed = true;
         if (redrawOnMouseEvent) { resizeChildren();   }
         auto consumed = false;
@@ -579,7 +579,7 @@ namespace lysa::ui {
     }
 
     bool Widget::eventMouseUp(const MouseButton button, const float x, const float y) {
-        if (!enabled || !visible || !rect.contains(x, y)) { return false;}
+        if (!enabled || !isVisible() || !rect.contains(x, y)) { return false;}
         pushed = false;
         if (redrawOnMouseEvent) { resizeChildren(); }
         auto consumed = false;
@@ -604,7 +604,7 @@ namespace lysa::ui {
 
     bool Widget::eventMouseMove(const uint32 B, const float x, const float y) {
         auto p = rect.contains(x, y);
-        if (!enabled || !visible || !p) { return false;}
+        if (!enabled || !isVisible() || !p) { return false;}
         auto consumed = false;
         for (const auto &w : children) {
             p = w->getRect().contains(x, y);
