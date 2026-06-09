@@ -20,20 +20,26 @@ namespace lysa::ui {
     Widget::Widget( const Type type) : type{type} {}
 
     void Widget::_draw(Vector2DRenderer &renderer) {
-        if (!isVisible() || (!dirty)) {
+        if (!isVisible()) {
             return;
         }
-        dirty = false;
-        drawSessionBefore = renderer.beginDraw(drawSessionBefore);
-        const auto *s = static_cast<Style *>(style);
-        s->draw(*this, *resource, renderer, true);
-        renderer.endDraw();
-        for (const auto &child : children) {
-            child->_draw(renderer);
+        if (dirty) {
+            dirty = false;
+            drawSessionBefore = renderer.beginDraw(drawSessionBefore);
+            const auto *s = static_cast<Style *>(style);
+            s->draw(*this, *resource, renderer, true);
+            renderer.endDraw();
+            for (const auto &child : children) {
+                child->_draw(renderer);
+            }
+            drawSessionAfter = renderer.beginDraw(drawSessionAfter);
+            s->draw(*this, *resource, renderer, false);
+            renderer.endDraw();
+        } else {
+            for (const auto &child : children) {
+                child->_draw(renderer);
+            }
         }
-        drawSessionAfter = renderer.beginDraw(drawSessionAfter);
-        s->draw(*this, *resource, renderer, false);
-        renderer.endDraw();
     }
 
     void Widget::clearDrawSessions() const {
@@ -72,9 +78,7 @@ namespace lysa::ui {
     void Widget::setVisible(const bool show) {
         if (visible == show) { return; }
         visible = show;
-        // clearDrawSessions();
         changeDrawVisibility();
-
         if (visible) {
             eventShow();
         } else {
@@ -82,10 +86,9 @@ namespace lysa::ui {
         }
     }
 
-    void Widget::enable(const bool isEnabled) {
+    void Widget::setEnabled(const bool isEnabled) {
         if (enabled == isEnabled) { return; }
         enabled = isEnabled;
-        clearDrawSessions();
         if (enabled) {
             eventEnable();
         } else {
@@ -156,7 +159,7 @@ namespace lysa::ui {
         if (focused != F) {
             focused = F;
             if (F) {
-                if (!freeze) {
+                if (!freezed) {
                     refresh();
                 }
                 static_cast<Window*>(window)->setFocusedWidget(shared_from_this());
@@ -193,7 +196,7 @@ namespace lysa::ui {
         child.parent = this;
         static_cast<Style *>(style)->addResource(child, res);
         child.eventCreate();
-        child.freeze = false;
+        child.freezed = false;
         if (static_cast<Window *>(window)->isVisible() && (resource != nullptr)) {
             resizeChildren();
         }
@@ -262,14 +265,14 @@ namespace lysa::ui {
     void Widget::eventEnable() {
         ctx().events.push({UIEvent::OnEnable,  UIEvent{}, id});
         for (const auto &child : children) {
-            child->enable();
+            child->setEnabled();
         }
         refresh();
     }
 
     void Widget::eventDisable() {
         for (const auto &child : children) {
-            child->enable(false);
+            child->setEnabled(false);
         }
         ctx().events.push({UIEvent::OnDisable,  UIEvent{}, id});
         refresh();
@@ -290,19 +293,19 @@ namespace lysa::ui {
     }
 
     void Widget::eventResize() {
-        if (freeze) { return; }
+        if (freezed) { return; }
         if (parent) { parent->resizeChildren(); }
         resizeChildren();
-        freeze = true;
+        freezed = true;
         refresh();
-        freeze = false;
+        freezed = false;
     }
 
     void Widget::resizeChildren() {
-        if (!style || freeze) {
+        if (!style || freezed) {
             return;
         }
-        freeze = true;
+        freezed = true;
         Rect r = getRect();
         static_cast<Style *>(style)->resize(*this, r, *resource);
 
@@ -517,7 +520,7 @@ namespace lysa::ui {
             child->setRect(childRect);
             ++it;
         }
-        freeze = false;
+        freezed = false;
     }
 
     bool Widget::eventTextInput(const std::string& text) {
@@ -659,9 +662,9 @@ namespace lysa::ui {
     }
 
     void Widget::refresh() {
-        if (freeze) { return; }
+        if (freezed) { return; }
         dirty = true;
-        for (auto &w : children) {
+        for (const auto &w : children) {
             w->refresh();
         }
     }
@@ -711,7 +714,7 @@ namespace lysa::ui {
 
     bool Widget::isPushed() const { return pushed; }
 
-    bool Widget::isFreezed() const { return freeze; }
+    bool Widget::isFreezed() const { return freezed; }
 
     bool Widget::isRedrawOnMouseEvent() const { return redrawOnMouseEvent; }
 
@@ -723,7 +726,7 @@ namespace lysa::ui {
 
     void Widget::setVBorder(const float size) {
         vborder = size;
-        if (!freeze) {
+        if (!freezed) {
             resizeChildren();
         }
         refresh();
@@ -731,7 +734,7 @@ namespace lysa::ui {
 
     void Widget::setHBorder(const float size) {
         hborder = size;
-        if (!freeze) {
+        if (!freezed) {
             resizeChildren();
         }
         refresh();

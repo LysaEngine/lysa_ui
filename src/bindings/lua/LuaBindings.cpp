@@ -145,9 +145,7 @@ namespace lysa::ui {
             .addProperty("type", &Widget::getType)
             .addProperty("children", &Widget::getChildren)
             .addProperty("visible", &Widget::isVisible, &Widget::setVisible)
-            .addFunction("is_enabled", &Widget::isEnabled)
-            .addFunction("enable",
-                +[](Widget* self, const bool v = true){ self->enable(v); })
+            .addProperty("enabled", &Widget::isEnabled, &Widget::setEnabled)
             .addFunction("set_pos", &Widget::setPos)
             .addProperty("width", &Widget::getWidth, &Widget::setWidth)
             .addProperty("height", &Widget::getHeight, &Widget::setHeight)

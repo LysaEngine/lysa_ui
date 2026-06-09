@@ -235,20 +235,20 @@ namespace lysa::ui {
         if (widget.isDrawBackground()) {
             if (pushable && widget.isPushed()) {
                 auto fd= fgDown;
-                fd.a  -= 1.0f-widget.getTransparency();
+                fd.a -= 1.0f - widget.getTransparency();
                 renderer.setPenColor(fd);
             } else {
-                auto fu= resources.customColor ? resources.color : fgUp;
-                fu.a  -= 1.0f-widget.getTransparency();
+                auto fu= widget.isEnabled() ? (resources.customColor ? resources.color : fgUp) : shadowDark;
+                fu.a -= 1.0f - widget.getTransparency();
                 renderer.setPenColor(fu);
             }
-            renderer.drawFilledRect(x, y, w, h, INVALID_ID);
+            renderer.drawFilledRect(x, y, w, h);
         }
         if (resources.style != StyleClassicResource::FLAT) {
             auto sb = shadowBright;
-            sb.a    = widget.getTransparency();
+            sb.a = widget.getTransparency();
             auto sd = shadowDark;
-            sd.a    = widget.getTransparency();
+            sd.a = widget.getTransparency();
             switch (resources.style) {
             case StyleClassicResource::LOWERED:
                 renderer.setPenColor(sd);
@@ -311,8 +311,9 @@ namespace lysa::ui {
 
     void StyleClassic::drawText(const Text &widget, const StyleClassicResource &resources, Vector2DRenderer &renderer) const {
         renderer.setPenColor(
-            resources.customColor ? resources.color :
-            float4{widget.getTextColor().r, widget.getTextColor().g, widget.getTextColor().b, widget.getTransparency()});
+            widget.isEnabled() ? (resources.customColor ? resources.color :
+            float4{widget.getTextColor().r, widget.getTextColor().g, widget.getTextColor().b, widget.getTransparency()}) :
+            shadowBright);
         renderer.drawText(
             widget.getText(),
             *widget.getFont(),

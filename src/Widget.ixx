@@ -100,7 +100,7 @@ export namespace lysa::ui {
         /**
          * Enables or disables widget reactions to input events.
          */
-        void enable(bool isEnabled = true);
+        void setEnabled(bool isEnabled = true);
 
         /**
          * Moves the widget to a particular position.
@@ -334,7 +334,7 @@ export namespace lysa::ui {
         /**
          * Sets whether the widget is freezed.
          */
-        void setFreezed(const bool f) { freeze = f; }
+        void setFreezed(const bool f) { freezed = f; }
 
         /**
          * Sets whether the widget is pushed.
@@ -590,7 +590,7 @@ export namespace lysa::ui {
     private:
         bool pushed{false};
         bool pointed{false};
-        bool freeze{true};
+        bool freezed{true};
         bool enabled{true};
         bool visible{true};
         void *userData{nullptr};

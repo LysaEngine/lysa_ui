@@ -109,7 +109,7 @@
 ---@field visible boolean True if the widget is visible; false hides it and all its children.
 ---@field user_data any Lua user data.
 ---@field is_enabled fun(self:lysa.ui.Widget):boolean Returns true if the widget responds to mouse and keyboard input.
----@field enable fun(self:lysa.ui.Widget, enabled:boolean|nil):nil Enables or disables the widget's response to input events (pass nil or true to enable, false to disable).
+---@field enabled boolean Enables or disables the widget's response to input events (pass nil or true to enable, false to disable).
 ---@field set_pos fun(self:lysa.ui.Widget, x:number, y:number):nil Moves the widget to the given position in its parent's coordinate space.
 ---@field width number The widget width in virtual screen units.
 ---@field height number The widget height in virtual screen units.
